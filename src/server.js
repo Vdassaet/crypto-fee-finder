@@ -13,6 +13,7 @@ const YAML = require('yamljs');
 const feesRouter = require('./routes/fees');
 const scannerRouter = require('./routes/scanner');
 const adminRouter = require('./routes/admin');
+const billingRouter = require('./routes/billing');
 const errorHandler = require('./middleware/errorHandler');
 const { apiRateLimiter } = require('./middleware/rateLimiter');
 const { generateWalletJwt } = require('./middleware/authMiddleware');
@@ -75,6 +76,7 @@ app.post('/api/v1/auth/wallet-login', (req, res) => {
 app.use('/api/v1/fees', feesRouter);
 app.use('/api/v1/scanner', scannerRouter);
 app.use('/api/v1/admin', adminRouter);
+app.use('/api/v1/billing', billingRouter);
 
 // Fallback to index.html for Web App SPA
 app.get('*', (req, res, next) => {
@@ -91,7 +93,7 @@ app.use(errorHandler);
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`🚀 ChainRecover AI SaaS Platform running at http://localhost:${PORT}`);
-    console.log(`🔒 Admin Control Panel available at http://localhost:${PORT}/admin.html`);
+    console.log(`💳 SaaS Monetization Engine running at http://localhost:${PORT}/api/v1/billing/tiers`);
     console.log(`📚 OpenAPI Documentation available at http://localhost:${PORT}/api-docs`);
   });
 }

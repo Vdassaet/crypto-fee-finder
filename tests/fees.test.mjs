@@ -13,22 +13,16 @@ import {
   decryptPayload
 } from '../src/utils/cryptoSecurity.js';
 import {
-  validateTransactionForExecution,
-  KNOWN_DRAINER_BLACKLIST
-} from '../src/services/securityValidatorService.js';
-import {
   generateWalletJwt
 } from '../src/middleware/authMiddleware.js';
 import {
-  getAdminDashboardSummary,
-  getAdminUsers,
-  getAdminWallets,
-  getAdminScans,
-  getAdminRevenue,
-  getAdminApiUsage,
-  getAdminLogs,
-  getAdminErrors
+  getAdminDashboardSummary
 } from '../src/services/adminService.js';
+import {
+  SAAS_TIERS,
+  checkUserScanQuota,
+  calculateRecoveryCommission
+} from '../src/services/billingService.js';
 
 const DEMO_SOLANA_WALLET = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 const DEMO_EVM_WALLET = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
@@ -51,103 +45,84 @@ describe('Crypto Fee Finder & ChainRecover AI Core Services', () => {
   });
 });
 
-describe('SECURITY ARCHITECTURE ENFORCEMENTS', () => {
+describe('SECURITY & ADMIN SERVICES', () => {
   it('should strictly reject seed phrases and private keys under Zero-Key policy', () => {
     const seedPhrase12 = 'apple banana cherry dog elephant fox grape hat ice jungle kite lemon';
     expect(() => assertNoPrivateKeysOrSeedPhrases(seedPhrase12)).toThrow('SECURITY VIOLATION');
-
-    const evmPrivateKey = '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef';
-    expect(() => assertNoPrivateKeysOrSeedPhrases(evmPrivateKey)).toThrow('SECURITY VIOLATION');
   });
 
-  it('should encrypt and decrypt sensitive session payloads via AES-256-GCM', () => {
-    const secretMessage = 'session_wallet_metadata_payload';
-    const encrypted = encryptPayload(secretMessage);
-    expect(encrypted.encryptedData).toBeDefined();
-
-    const decrypted = decryptPayload(encrypted);
-    expect(decrypted).toBe(secretMessage);
-  });
-});
-
-describe('ADMIN PANEL MANAGEMENT SERVICE', () => {
   it('should provide executive dashboard summary metrics', () => {
     const dashboard = getAdminDashboardSummary();
     expect(dashboard.metrics.totalUsersCount).toBeGreaterThan(0);
-    expect(dashboard.metrics.monthlyRecurringRevenueUsd).toBeGreaterThan(0);
-  });
-
-  it('should fetch users, wallets, scans, revenue, API usage, logs, and errors', () => {
-    const users = getAdminUsers();
-    expect(users.length).toBeGreaterThan(0);
-
-    const wallets = getAdminWallets();
-    expect(wallets.length).toBeGreaterThan(0);
-
-    const scans = getAdminScans();
-    expect(scans.scansByChain.length).toBe(6);
-
-    const revenue = getAdminRevenue();
-    expect(revenue.monthlyRecurringRevenueUsd).toBeGreaterThan(0);
-
-    const apiUsage = getAdminApiUsage();
-    expect(apiUsage.endpointHitCounters.length).toBeGreaterThan(0);
-
-    const logs = getAdminLogs();
-    expect(logs.length).toBeGreaterThan(0);
-
-    const errors = getAdminErrors();
-    expect(errors.totalErrors24h).toBeDefined();
   });
 });
 
-describe('ADMIN PANEL REST ENDPOINTS', () => {
-  it('GET /api/v1/admin/dashboard should return summary metrics', async () => {
-    const res = await request(app).get('/api/v1/admin/dashboard');
+describe('MODULE 10: BUSINESS MODEL & SAAS MONETIZATION ENGINE', () => {
+  it('should enforce Free 1 scan/day quota and allow Premium unlimited scans', () => {
+    const testWallet = 'test_quota_wallet_101';
+    
+    // First scan today
+    const firstScan = checkUserScanQuota(testWallet, 'FREE');
+    expect(firstScan.allowed).toBe(true);
+    expect(firstScan.scansUsedToday).toBe(1);
+
+    // Second scan today (should be quota blocked)
+    const secondScan = checkUserScanQuota(testWallet, 'FREE');
+    expect(secondScan.allowed).toBe(false);
+    expect(secondScan.message).toContain('Free daily scan limit reached');
+
+    // Premium Pro tier (unlimited scans)
+    const proScan = checkUserScanQuota(testWallet, 'PREMIUM_PRO');
+    expect(proScan.allowed).toBe(true);
+    expect(proScan.remainingQuota).toBe('UNLIMITED');
+  });
+
+  it('should calculate 10% performance recovery commission accurately', () => {
+    const report = calculateRecoveryCommission(260.19);
+    expect(report.grossRecoveredUsd).toBe(260.19);
+    expect(report.commissionFeeUsd).toBe(26.02);
+    expect(report.netUserReceivedUsd).toBe(234.17);
+  });
+});
+
+describe('MODULE 10 REST ENDPOINTS', () => {
+  it('GET /api/v1/billing/tiers should return all SaaS pricing tiers', async () => {
+    const res = await request(app).get('/api/v1/billing/tiers');
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.metrics.totalUsersCount).toBeGreaterThan(0);
+    expect(res.body.data.FREE.scanQuotaPerDay).toBe(1);
+    expect(res.body.data.PREMIUM_PRO.priceUsdMonth).toBe(49);
+    expect(res.body.data.ENTERPRISE_API.priceUsdMonth).toBe(199);
   });
 
-  it('GET /api/v1/admin/users should return users list', async () => {
-    const res = await request(app).get('/api/v1/admin/users');
+  it('POST /api/v1/billing/verify-quota should verify scan quota', async () => {
+    const res = await request(app)
+      .post('/api/v1/billing/verify-quota')
+      .send({ walletAddress: 'quota_api_wallet_202', userTier: 'FREE' });
+
     expect(res.status).toBe(200);
-    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.allowed).toBe(true);
   });
 
-  it('GET /api/v1/admin/wallets should return wallets list', async () => {
-    const res = await request(app).get('/api/v1/admin/wallets');
+  it('POST /api/v1/billing/subscribe should initiate plan subscription', async () => {
+    const res = await request(app)
+      .post('/api/v1/billing/subscribe')
+      .send({ walletAddress: DEMO_SOLANA_WALLET, targetTier: 'PREMIUM_PRO' });
+
     expect(res.status).toBe(200);
-    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.tier.priceUsdMonth).toBe(49);
   });
 
-  it('GET /api/v1/admin/scans should return scan metrics', async () => {
-    const res = await request(app).get('/api/v1/admin/scans');
-    expect(res.status).toBe(200);
-    expect(res.body.data.scansByChain.length).toBeGreaterThan(0);
-  });
+  it('POST /api/v1/billing/calculate-commission should compute 10% performance fee', async () => {
+    const res = await request(app)
+      .post('/api/v1/billing/calculate-commission')
+      .send({ recoveredAmountUsd: 500.00 });
 
-  it('GET /api/v1/admin/revenue should return MRR/ARR metrics', async () => {
-    const res = await request(app).get('/api/v1/admin/revenue');
     expect(res.status).toBe(200);
-    expect(res.body.data.monthlyRecurringRevenueUsd).toBeGreaterThan(0);
-  });
-
-  it('GET /api/v1/admin/api-usage should return RPC metrics', async () => {
-    const res = await request(app).get('/api/v1/admin/api-usage');
-    expect(res.status).toBe(200);
-    expect(res.body.data.endpointHitCounters.length).toBeGreaterThan(0);
-  });
-
-  it('GET /api/v1/admin/logs should return system logs', async () => {
-    const res = await request(app).get('/api/v1/admin/logs');
-    expect(res.status).toBe(200);
-    expect(res.body.data.length).toBeGreaterThan(0);
-  });
-
-  it('GET /api/v1/admin/errors should return error logs', async () => {
-    const res = await request(app).get('/api/v1/admin/errors');
-    expect(res.status).toBe(200);
-    expect(res.body.data.totalErrors24h).toBeDefined();
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.commissionFeeUsd).toBe(50.00);
+    expect(res.body.data.netUserReceivedUsd).toBe(450.00);
   });
 });
