@@ -1,5 +1,5 @@
 /**
- * Crypto Fee Finder API Server Entry Point
+ * ChainRecover AI & Crypto Fee Finder API Server Entry Point
  */
 
 require('dotenv').config();
@@ -10,14 +10,18 @@ const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 
 const feesRouter = require('./routes/fees');
+const scannerRouter = require('./routes/scanner');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enable CORS and JSON parsing
+// Enable CORS and JSON body parsing
 app.use(cors());
 app.use(express.json());
+
+// Serve static frontend assets for ChainRecover AI web app
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -33,24 +37,17 @@ try {
   console.warn('Swagger specification loading skipped:', err.message);
 }
 
-// Base Route & Health Check
-app.get('/', (req, res) => {
-  res.json({
-    name: 'Crypto Fee Finder API',
-    version: '1.0.0',
-    status: 'online',
-    documentation: '/api-docs',
-    endpoints: {
-      gas: '/api/v1/fees/gas',
-      defi: '/api/v1/fees/defi',
-      bridges: '/api/v1/fees/bridges',
-      compare: '/api/v1/fees/compare [POST]'
-    }
-  });
-});
-
 // API Routes
 app.use('/api/v1/fees', feesRouter);
+app.use('/api/v1/scanner', scannerRouter);
+
+// Fallback to index.html for Web App SPA
+app.get('*', (req, res, next) => {
+  if (req.originalUrl.startsWith('/api')) {
+    return next();
+  }
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
 
 // Global Error Handler
 app.use(errorHandler);
@@ -58,7 +55,7 @@ app.use(errorHandler);
 // Start server if run directly
 if (require.main === module) {
   app.listen(PORT, () => {
-    console.log(`🚀 Crypto Fee Finder API running at http://localhost:${PORT}`);
+    console.log(`🚀 ChainRecover AI SaaS Platform running at http://localhost:${PORT}`);
     console.log(`📚 OpenAPI Documentation available at http://localhost:${PORT}/api-docs`);
   });
 }

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainRecover AI | Multi-Chain Crypto Wallet Scanner & Asset Recovery Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#EEF2FF',
+              500: '#6366F1',
+              600: '#4F46E5',
+              900: '#1E1B4B',
+            },
+            solana: '#9945FF',
+            ethereum: '#627EEA',
+            emeraldGlow: '#10B981'
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0A0D14; color: #F3F4F6; }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .glow-emerald {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP NAVIGATION HEADER -->
+  <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/30">
+          ⚡
+        </div>
+        <div>
+          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-400">
+            ChainRecover <span class="text-indigo-400 font-bold">AI</span>
+          </span>
+          <span class="ml-2 text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold">
+            Phase 1 Live
+          </span>
+        </div>
+      </div>
+
+      <!-- Network Ticker -->
+      <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
+        <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Solana: <strong class="text-white font-mono">2,480 TPS</strong></span>
+        </span>
+        <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
+          <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+          <span>Ethereum: <strong class="text-white font-mono">15 Gwei</strong></span>
+        </span>
+      </div>
+
+      <!-- Wallet Action -->
+      <div class="flex items-center space-x-3">
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-indigo-600/20 flex items-center space-x-2">
+          <span>🔗 Connect Wallet</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+    <!-- HERO SCANNER SECTION -->
+    <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span>🔒 100% Non-Custodial & Safe</span>
+        <span class="text-gray-500">•</span>
+        <span>Zero Private Keys Required</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+        Discover & Reclaim Lost Crypto Assets Across <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400">7 Blockchains</span>
+      </h1>
+      <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
+        Scan your wallet for unclosed SPL token accounts (SOL rent reclaim), claimable protocol rewards, dust assets, and fee optimizations.
+      </p>
+
+      <!-- WALLET INPUT & SCAN BUTTON -->
+      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center gap-3">
+        <div class="relative w-full">
+          <input type="text" id="walletInput" placeholder="Paste Solana (base58) or EVM (0x...) Address" 
+            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
+            value="7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY">
+        </div>
+        <button onclick="runScan()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-indigo-600/30 whitespace-nowrap">
+          ⚡ Deep Scan
+        </button>
+      </div>
+
+      <!-- Quick Demo Triggers -->
+      <div class="mt-4 flex flex-wrap justify-center gap-2 text-xs">
+        <span class="text-gray-400">Try Demo Scans:</span>
+        <button onclick="fillDemo('SOL')" class="text-indigo-400 hover:underline">Solana Whale (Rent Reclaim)</button>
+        <span class="text-gray-600">•</span>
+        <button onclick="fillDemo('EVM')" class="text-purple-400 hover:underline">vitalik.eth (EVM Multi-Chain)</button>
+      </div>
+
+      <!-- Chain Badges -->
+      <div class="mt-6 flex flex-wrap justify-center items-center gap-2 pt-4 border-t border-gray-800/60">
+        <span class="text-xs text-gray-400 font-semibold mr-2">Supported Chains:</span>
+        <span class="bg-purple-950/60 border border-purple-800/40 text-purple-300 text-xs px-2.5 py-1 rounded-md font-medium">Solana</span>
+        <span class="bg-blue-950/60 border border-blue-800/40 text-blue-300 text-xs px-2.5 py-1 rounded-md font-medium">Ethereum</span>
+        <span class="bg-blue-900/60 border border-blue-700/40 text-blue-200 text-xs px-2.5 py-1 rounded-md font-medium">Base</span>
+        <span class="bg-sky-950/60 border border-sky-800/40 text-sky-300 text-xs px-2.5 py-1 rounded-md font-medium">Arbitrum</span>
+        <span class="bg-red-950/60 border border-red-800/40 text-red-300 text-xs px-2.5 py-1 rounded-md font-medium">Optimism</span>
+        <span class="bg-purple-900/60 border border-purple-700/40 text-purple-200 text-xs px-2.5 py-1 rounded-md font-medium">Polygon</span>
+        <span class="bg-yellow-950/60 border border-yellow-800/40 text-yellow-300 text-xs px-2.5 py-1 rounded-md font-medium">BNB Chain</span>
+      </div>
+    </div>
+
+    <!-- DASHBOARD RESULTS DISPLAY -->
+    <div id="dashboardSection" class="space-y-6">
+
+      <!-- EXECUTIVE METRICS GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Total Portfolio -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>TOTAL PORTFOLIO</span>
+            <span class="text-indigo-400">💼 Value</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statPortfolio">$3,663.10</div>
+          <div class="text-xs text-gray-400 mt-2">Across 5 token assets</div>
+        </div>
+
+        <!-- Estimated Recoverable Value -->
+        <div class="glass-card rounded-2xl p-5 border-emerald-500/40 glow-emerald relative overflow-hidden">
+          <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
+            <span>RECOVERABLE VALUE</span>
+            <span>⚡ Reclaimable</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statRecoverable">$330.06</div>
+          <div class="text-xs text-emerald-300/80 mt-2 font-medium">Ready for 1-Click Recovery</div>
+        </div>
+
+        <!-- Recoverable Solana Rent -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-purple-400 text-xs font-semibold mb-2">
+            <span>SOLANA RENT RECLAIM</span>
+            <span>0.0102 SOL</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-purple-300 font-mono" id="statSolRent">$1.84</div>
+          <div class="text-xs text-gray-400 mt-2"><span id="statUnclosedCount" class="font-bold text-white">5</span> empty token accounts</div>
+        </div>
+
+        <!-- Wallet Health & Gas Score -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>HEALTH & GAS SCORE</span>
+            <span class="text-emerald-400 font-bold">Grade A</span>
+          </div>
+          <div class="flex items-baseline space-x-2">
+            <span class="text-2xl sm:text-3xl font-extrabold text-white" id="statHealth">88/100</span>
+            <span class="text-xs text-gray-400">(Gas: 74%)</span>
+          </div>
+          <div class="text-xs text-gray-400 mt-2">2 active token approvals</div>
+        </div>
+      </div>
+
+      <!-- RECOVERY & MODULE 1 DETAILS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- MODULE 1: INACTIVE SOLANA TOKEN ACCOUNTS (RENT RECLAIM) -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                <span>⚡ Reclaimable Solana Rent Accounts</span>
+                <span class="bg-purple-500/20 text-purple-300 text-xs px-2 py-0.5 rounded-full border border-purple-500/30">0.002 SOL / Account</span>
+              </h3>
+              <p class="text-xs text-gray-400">Closing empty SPL accounts returns your locked SOL storage deposit directly to your wallet.</p>
+            </div>
+            <button onclick="reclaimRentAction()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-md shadow-emerald-600/20">
+              Claim All Rent ($1.84)
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-900/60 text-gray-400 uppercase font-semibold border-b border-gray-800">
+                <tr>
+                  <th class="py-3 px-3">Account Address</th>
+                  <th class="py-3 px-3">Token Symbol</th>
+                  <th class="py-3 px-3">Balance</th>
+                  <th class="py-3 px-3">Reclaimable SOL</th>
+                  <th class="py-3 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-800/60 font-mono" id="accountsTable">
+                <tr class="hover:bg-gray-800/30">
+                  <td class="py-3 px-3 text-gray-300">7XwK...4pQ1</td>
+                  <td class="py-3 px-3 font-semibold text-purple-300">SRM (Serum)</td>
+                  <td class="py-3 px-3 text-gray-400">0.00</td>
+                  <td class="py-3 px-3 text-emerald-400 font-bold">0.002039 SOL</td>
+                  <td class="py-3 px-3 text-right"><span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-1 rounded">Closeable</span></td>
+                </tr>
+                <tr class="hover:bg-gray-800/30">
+                  <td class="py-3 px-3 text-gray-300">3MmP...8vL9</td>
+                  <td class="py-3 px-3 font-semibold text-purple-300">FTT (FTX)</td>
+                  <td class="py-3 px-3 text-gray-400">0.00</td>
+                  <td class="py-3 px-3 text-emerald-400 font-bold">0.002039 SOL</td>
+                  <td class="py-3 px-3 text-right"><span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-1 rounded">Closeable</span></td>
+                </tr>
+                <tr class="hover:bg-gray-800/30">
+                  <td class="py-3 px-3 text-gray-300">9KqR...2zW4</td>
+                  <td class="py-3 px-3 font-semibold text-purple-300">RAY (Raydium)</td>
+                  <td class="py-3 px-3 text-gray-400">0.00</td>
+                  <td class="py-3 px-3 text-emerald-400 font-bold">0.002039 SOL</td>
+                  <td class="py-3 px-3 text-right"><span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-1 rounded">Closeable</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CLAIMABLE REWARDS & YIELD -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-white mb-2">💎 Claimable Protocol Yield</h3>
+          <p class="text-xs text-gray-400 mb-4">Uncollected fees & yield rewards ready for withdrawal.</p>
+
+          <div class="space-y-3" id="rewardsContainer">
+            <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-white">Uniswap V3 LP Fee</div>
+                <div class="text-xs text-gray-400">ETH/USDC (Arbitrum)</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">$48.50</div>
+                <button onclick="claimSingleReward('Uniswap')" class="text-xs text-indigo-400 hover:underline">Claim</button>
+              </div>
+            </div>
+
+            <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-white">Aave V3 Yield</div>
+                <div class="text-xs text-gray-400">USDC Reserve (Polygon)</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">$14.20</div>
+                <button onclick="claimSingleReward('Aave')" class="text-xs text-indigo-400 hover:underline">Claim</button>
+              </div>
+            </div>
+
+            <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-3.5 flex items-center justify-between">
+              <div>
+                <div class="font-bold text-sm text-white">Liquid Staking Reward</div>
+                <div class="text-xs text-gray-400">Staked Assets</div>
+              </div>
+              <div class="text-right">
+                <div class="font-bold text-sm text-emerald-400">$82.00</div>
+                <button onclick="claimSingleReward('Staking')" class="text-xs text-indigo-400 hover:underline">Claim</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FEE COMPARISON & BRIDGE ENGINE INTEGRATION -->
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-2">🌉 Integrated Cross-Chain Fee Optimizer</h3>
+        <p class="text-xs text-gray-400 mb-4">Calculate optimal cross-chain bridge and DEX swap fees powered by our real-time fee engine.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-4">
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Source Chain</label>
+            <select id="feeSrcChain" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-2.5">
+              <option value="ethereum">Ethereum</option>
+              <option value="arbitrum" selected>Arbitrum</option>
+              <option value="polygon">Polygon</option>
+              <option value="solana">Solana</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Destination Chain</label>
+            <select id="feeDstChain" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-2.5">
+              <option value="ethereum" selected>Ethereum</option>
+              <option value="arbitrum">Arbitrum</option>
+              <option value="optimism">Optimism</option>
+              <option value="solana">Solana</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-400 block mb-1">Amount ($ USD)</label>
+            <input type="number" id="feeAmount" value="1000" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-2.5">
+          </div>
+          <div class="flex items-end">
+            <button onclick="calculateFeeRoutes()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs py-2.5 rounded-xl transition">
+              Find Best Route
+            </button>
+          </div>
+        </div>
+
+        <div id="feeRoutesResult" class="hidden font-mono text-xs bg-gray-950 p-4 rounded-xl border border-gray-800">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
+      <div>ChainRecover AI Platform &copy; 2026 • Production-Ready SaaS Application</div>
+      <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    async function runScan() {
+      const address = document.getElementById('walletInput').value.trim();
+      if (!address) return alert('Please enter a wallet address');
+
+      try {
+        const res = await fetch(`/api/v1/scanner/wallet/${address}`);
+        const data = await res.json();
+        if (data.success) {
+          const s = data.data.summary;
+          document.getElementById('statPortfolio').innerText = `$${s.totalPortfolioUsd.toLocaleString()}`;
+          document.getElementById('statRecoverable').innerText = `$${s.totalEstimatedRecoverableUsd.toLocaleString()}`;
+          document.getElementById('statSolRent').innerText = `$${s.totalRecoverableRentUsd.toLocaleString()}`;
+          document.getElementById('statUnclosedCount').innerText = s.inactiveTokenAccountsCount;
+          document.getElementById('statHealth').innerText = `${s.walletHealthScore}/100`;
+
+          alert(`Deep Scan Complete for ${address.slice(0, 8)}...\nFound $${s.totalEstimatedRecoverableUsd} in recoverable assets!`);
+        } else {
+          alert('Scan failed: ' + data.message);
+        }
+      } catch (err) {
+        alert('Scan Error: ' + err.message);
+      }
+    }
+
+    function fillDemo(type) {
+      if (type === 'SOL') {
+        document.getElementById('walletInput').value = '7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY';
+      } else {
+        document.getElementById('walletInput').value = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
+      }
+      runScan();
+    }
+
+    async function reclaimRentAction() {
+      const address = document.getElementById('walletInput').value.trim();
+      const res = await fetch('/api/v1/scanner/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, actionType: 'RECLAIM_SOLANA_RENT' })
+      });
+      const data = await res.json();
+      alert(`🔑 Wallet Signature Request:\n\nAction: Reclaim 5 empty token accounts (0.0102 SOL)\n\nMessage: ${data.message}\nUnsigned Tx Base64: ${data.data.rawUnsignedTransactionBase64.slice(0, 30)}...`);
+    }
+
+    async function claimSingleReward(name) {
+      const address = document.getElementById('walletInput').value.trim();
+      const res = await fetch('/api/v1/scanner/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, actionType: 'CLAIM_REWARDS' })
+      });
+      const data = await res.json();
+      alert(`🔑 Wallet Signature Request:\n\nAction: Claim ${name} Protocol Yield\n\nMessage: ${data.message}`);
+    }
+
+    async function calculateFeeRoutes() {
+      const sourceChain = document.getElementById('feeSrcChain').value;
+      const destinationChain = document.getElementById('feeDstChain').value;
+      const amountUsd = parseFloat(document.getElementById('feeAmount').value);
+
+      const res = await fetch('/api/v1/fees/compare', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceChain, destinationChain, amountUsd })
+      });
+      const data = await res.json();
+      const resultDiv = document.getElementById('feeRoutesResult');
+      resultDiv.classList.remove('hidden');
+
+      if (data.success && data.data.bestRoute) {
+        const b = data.data.bestRoute;
+        resultDiv.innerHTML = `
+          <div class="text-emerald-400 font-bold mb-1">🏆 Recommended Route: ${b.name} (${b.type})</div>
+          <div class="text-gray-300">Total Fee: <strong class="text-white">$${b.totalFeeUsd}</strong> (${b.feePercentage}) | Net Received: <strong class="text-emerald-300">$${b.netOutputUsd}</strong></div>
+          <div class="text-gray-400 text-xs mt-1">Est. Time: ${b.estimatedTimeMinutes} mins | Total Routes Evaluated: ${data.data.totalRoutesFound}</div>
+        `;
+      } else {
+        resultDiv.innerHTML = `<span class="text-red-400">No direct routes found for specified chains</span>`;
+      }
+    }
+
+    function connectWalletMock() {
+      alert('Wallet Connection:\nSelect Phantom (Solana), MetaMask (EVM), or Coinbase Wallet to sign transactions non-custodially.');
+    }
+  </script>
+</body>
+</html>

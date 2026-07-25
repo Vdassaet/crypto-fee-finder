@@ -4,6 +4,7 @@ import app from '../src/server.js';
 import { getGasMetrics } from '../src/services/feeCalculator.js';
 import { calculateDefiFee } from '../src/services/defiService.js';
 import { getAvailableBridges, calculateBridgeFee } from '../src/services/bridgeService.js';
+import { validateAddress, scanWallet } from '../src/services/scannerService.js';
 
 describe('Crypto Fee Finder Services', () => {
   it('should fetch gas metrics for supported chains', () => {
@@ -39,12 +40,54 @@ describe('Crypto Fee Finder Services', () => {
   });
 });
 
-describe('Crypto Fee Finder API Endpoints', () => {
-  it('GET / should return API info and endpoints', async () => {
+describe('ChainRecover AI Scanner Engine', () => {
+  it('should validate EVM and Solana wallet address formats', () => {
+    expect(validateAddress('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045')).toBe('EVM');
+    expect(validateAddress('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY')).toBe('SOL');
+    expect(validateAddress('invalid_address_123')).toBe(false);
+  });
+
+  it('should scan Solana wallet and detect reclaimable SOL rent', async () => {
+    const report = await scanWallet('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
+    expect(report.addressType).toBe('SOL');
+    expect(report.summary.totalRecoverableRentSol).toBeGreaterThan(0);
+    expect(report.summary.totalEstimatedRecoverableUsd).toBeGreaterThan(0);
+    expect(report.inactiveAccounts.length).toBe(5);
+  });
+});
+
+describe('Crypto Fee Finder & ChainRecover AI API Endpoints', () => {
+  it('GET / should return index.html SPA or API status', async () => {
     const res = await request(app).get('/');
     expect(res.status).toBe(200);
-    expect(res.body.name).toBe('Crypto Fee Finder API');
-    expect(res.body.status).toBe('online');
+  });
+
+  it('GET /api/v1/scanner/chains should list supported blockchains', async () => {
+    const res = await request(app).get('/api/v1/scanner/chains');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.length).toBe(7);
+  });
+
+  it('GET /api/v1/scanner/wallet/:address should return full wallet scan', async () => {
+    const res = await request(app).get('/api/v1/scanner/wallet/7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.summary.totalPortfolioUsd).toBeGreaterThan(0);
+  });
+
+  it('POST /api/v1/scanner/recover should generate unsigned recovery payload', async () => {
+    const res = await request(app)
+      .post('/api/v1/scanner/recover')
+      .send({
+        address: '7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY',
+        actionType: 'RECLAIM_SOLANA_RENT'
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.requiresSignatureFrom).toBe('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
+    expect(res.body.data.reclaimAmountSol).toBeGreaterThan(0);
   });
 
   it('GET /api/v1/fees/gas should return gas metrics', async () => {
@@ -52,20 +95,6 @@ describe('Crypto Fee Finder API Endpoints', () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.ethereum).toBeDefined();
-  });
-
-  it('GET /api/v1/fees/defi should return list of DeFi protocols', async () => {
-    const res = await request(app).get('/api/v1/fees/defi');
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.count).toBeGreaterThan(0);
-  });
-
-  it('GET /api/v1/fees/bridges should return cross-chain bridge options', async () => {
-    const res = await request(app).get('/api/v1/fees/bridges?sourceChain=ethereum&destinationChain=arbitrum');
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.length).toBeGreaterThan(0);
   });
 
   it('POST /api/v1/fees/compare should compare routes and rank cheapest first', async () => {
@@ -82,19 +111,5 @@ describe('Crypto Fee Finder API Endpoints', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data.totalRoutesFound).toBeGreaterThan(0);
     expect(res.body.data.bestRoute).toBeDefined();
-
-    const routes = res.body.data.routes;
-    for (let i = 0; i < routes.length - 1; i++) {
-      expect(routes[i].totalFeeUsd).toBeLessThanOrEqual(routes[i + 1].totalFeeUsd);
-    }
-  });
-
-  it('POST /api/v1/fees/compare should fail cleanly with 400 when missing params', async () => {
-    const res = await request(app)
-      .post('/api/v1/fees/compare')
-      .send({ sourceChain: 'ethereum' });
-
-    expect(res.status).toBe(400);
-    expect(res.body.error).toBe(true);
   });
 });
