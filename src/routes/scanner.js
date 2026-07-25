@@ -1,6 +1,7 @@
 /**
  * Express REST API Routes for ChainRecover AI Scanner:
- * Module 2 (Solana Rent), Module 3 (Dust Consolidation), Module 4 (Reward Scanner), & Module 5 (Approval Revoker)
+ * Module 2 (Solana Rent), Module 3 (Dust Consolidation), Module 4 (Reward Scanner), 
+ * Module 5 (Approval Revoker), & Module 6 (Fee Optimizer)
  */
 
 const express = require('express');
@@ -23,6 +24,9 @@ const {
   buildRevokeTransaction,
   MODULE_5_SUPPORTED_CHAINS
 } = require('../services/approvalService');
+const {
+  analyzeFeeOptimization
+} = require('../services/optimizerService');
 
 /**
  * GET /api/v1/scanner/chains
@@ -123,7 +127,6 @@ router.post('/rewards/claim', (req, res, next) => {
 
 /**
  * MODULE 5: Approval Scanner & Revoker Endpoints
- * Ethereum, Base, Polygon, Arbitrum, Optimism
  */
 router.post('/approvals/search', (req, res, next) => {
   try {
@@ -146,6 +149,25 @@ router.post('/approvals/revoke', (req, res, next) => {
       return res.status(400).json({ error: true, message: 'walletAddress, tokenAddress, and spenderAddress are required' });
     }
     const result = buildRevokeTransaction(walletAddress, tokenAddress, spenderAddress, chain || 'ethereum');
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 6: Fee Optimizer Endpoints
+ * Estimates gas, recommends cheaper time window, recommends RPC node, calculates estimated savings
+ */
+router.post('/optimizer/analyze', (req, res, next) => {
+  try {
+    const { chain, transactionType, txCountPerYear } = req.body;
+    const result = analyzeFeeOptimization({
+      chain: chain || 'ethereum',
+      transactionType: transactionType || 'SWAP',
+      txCountPerYear: txCountPerYear || 120
+    });
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;

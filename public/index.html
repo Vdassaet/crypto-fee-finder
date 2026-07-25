@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Module 5: Token Approval Scanner & Revoker</title>
+  <title>ChainRecover AI | Module 6: Gas & Fee Optimizer Engine</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,8 +34,8 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
-    .glow-red {
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
+    .glow-cyan {
+      box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
     }
   </style>
 </head>
@@ -45,15 +45,15 @@
   <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 via-purple-600 to-indigo-500 flex items-center justify-center font-black text-xl shadow-lg shadow-red-500/20">
-          🛡️
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center font-black text-xl shadow-lg shadow-cyan-500/20">
+          ⚡
         </div>
         <div>
-          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-red-400">
-            ChainRecover <span class="text-red-400 font-bold">AI</span>
+          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyan-400">
+            ChainRecover <span class="text-cyan-400 font-bold">AI</span>
           </span>
-          <span class="ml-2 text-xs bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Module 5 Live: EVM Approval Scanner
+          <span class="ml-2 text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 rounded-full font-semibold">
+            Module 6 Live: Fee Optimizer
           </span>
         </div>
       </div>
@@ -61,15 +61,15 @@
       <!-- Network Ticker -->
       <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
         <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
-          <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
-          <span>5 EVM Chains Monitored</span>
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          <span>MEV Protection Active</span>
         </span>
       </div>
 
       <!-- Wallet Action -->
       <div class="flex items-center space-x-3">
-        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-red-600/20 flex items-center space-x-2">
-          <span>🦊 Connect MetaMask / EVM</span>
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-cyan-600/20 flex items-center space-x-2">
+          <span>🔗 Connect Wallet</span>
         </button>
       </div>
     </div>
@@ -80,141 +80,151 @@
 
     <!-- HERO SCANNER SECTION -->
     <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/20 text-red-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        <span>🛡️ MODULE 5: EVM TOKEN APPROVAL SCANNER & REVOKER</span>
+      <div class="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span>⚡ MODULE 6: GAS & FEE OPTIMIZER ENGINE</span>
         <span class="text-gray-500">•</span>
-        <span>Ethereum, Base, Polygon, Arbitrum, Optimism</span>
+        <span>Gas Estimation, Time Windows, RPC Latency & Savings</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Find & Revoke Dangerous <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-purple-300 to-indigo-400">Unlimited Token Approvals</span>
+        Optimize Gas & Save Up to <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400">60% on Transaction Fees</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Detect active ERC-20 token allowances across 5 EVM networks, evaluate contract security risk, and revoke dangerous permissions in 1-click.
+        Estimate transaction gas, receive low-gwei timing recommendations, connect to high-speed MEV-protected RPC nodes, and track annual USD savings.
       </p>
 
-      <!-- WALLET INPUT & CHAIN SELECTOR -->
-      <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3">
-        <div class="relative w-full">
-          <input type="text" id="walletInput" placeholder="Paste EVM Address (0x...)" 
-            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
-            value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">
-        </div>
-
-        <!-- EVM Chain Selector -->
-        <div class="w-full sm:w-auto">
-          <select id="chainSelect" onchange="scanApprovals()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl px-3 py-3.5 font-semibold outline-none focus:border-red-500">
-            <option value="ALL" selected>All 5 EVM Chains</option>
-            <option value="ethereum">Ethereum (ETH)</option>
-            <option value="base">Base (L2)</option>
-            <option value="polygon">Polygon (POL)</option>
+      <!-- OPTIMIZATION CONTROLS -->
+      <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <!-- Target Chain -->
+        <div>
+          <label class="text-xs text-gray-400 block mb-1 font-semibold text-left">Blockchain Network</label>
+          <select id="optChainSelect" onchange="runFeeOptimization()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-3 font-semibold outline-none focus:border-cyan-500">
+            <option value="ethereum" selected>Ethereum (ETH Mainnet)</option>
+            <option value="solana">Solana (SOL)</option>
             <option value="arbitrum">Arbitrum (L2)</option>
-            <option value="optimism">Optimism (L2)</option>
+            <option value="polygon">Polygon (POL)</option>
           </select>
         </div>
 
-        <button onclick="scanApprovals()" class="w-full sm:w-auto bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-red-600/30 whitespace-nowrap">
-          🛡️ Scan Approvals
-        </button>
+        <!-- Transaction Type -->
+        <div>
+          <label class="text-xs text-gray-400 block mb-1 font-semibold text-left">Transaction Type</label>
+          <select id="optTxTypeSelect" onchange="runFeeOptimization()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-3 font-semibold outline-none focus:border-cyan-500">
+            <option value="TRANSFER">Native Token Transfer</option>
+            <option value="SWAP" selected>DEX Token Swap</option>
+            <option value="NFT_MINT">NFT Mint / Interaction</option>
+            <option value="CONTRACT_DEPLOY">Smart Contract Deploy</option>
+          </select>
+        </div>
+
+        <!-- Action Button -->
+        <div class="flex items-end">
+          <button onclick="runFeeOptimization()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs py-3.5 rounded-xl transition duration-150 shadow-lg shadow-cyan-600/30">
+            ⚡ Run Optimization
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- MODULE 5 DASHBOARD RESULTS -->
+    <!-- MODULE 6 DASHBOARD RESULTS -->
     <div id="dashboardSection" class="space-y-6">
 
-      <!-- METRICS GRID -->
+      <!-- 4 OPTIMIZATION METRICS CARDS -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Active Approvals -->
+        <!-- 1. Gas Cost Estimate -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>ACTIVE APPROVALS</span>
-            <span class="text-red-400">🛡️ Permissions</span>
+            <span>CURRENT GAS ESTIMATE</span>
+            <span class="text-cyan-400">⛽ Gas</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statApprovalCount">5</div>
-          <div class="text-xs text-gray-400 mt-2">Across selected EVM chains</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statCurrentGasUsd">$8.64</div>
+          <div class="text-xs text-gray-400 mt-2"><span id="statGasUnits">150,000</span> gas units</div>
         </div>
 
-        <!-- Unlimited Approvals -->
-        <div class="glass-card rounded-2xl p-5 border-red-500/40 glow-red">
-          <div class="flex items-center justify-between text-red-400 text-xs font-bold mb-2">
-            <span>UNLIMITED APPROVALS</span>
-            <span>⚠️ MaxUint256</span>
+        <!-- 2. Cheaper Time Window -->
+        <div class="glass-card rounded-2xl p-5 border-cyan-500/40 glow-cyan">
+          <div class="flex items-center justify-between text-cyan-400 text-xs font-bold mb-2">
+            <span>OFF-PEAK TIME WINDOW</span>
+            <span class="text-emerald-400" id="statSavingsPercent">Save 61%</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-red-400 font-mono" id="statUnlimitedCount">4</div>
-          <div class="text-xs text-red-300/80 mt-2 font-medium">Recommended to Revoke</div>
+          <div class="text-lg font-bold text-white font-mono" id="statTimeWindow">02:00 - 06:00 UTC</div>
+          <div class="text-xs text-cyan-300 mt-1 font-medium" id="statTargetGasUsd">Target: ~$3.37 USD</div>
         </div>
 
-        <!-- Critical Risk Approvals -->
+        <!-- 3. Recommended Better RPC -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>CRITICAL RISK CONTRACTS</span>
-            <span class="text-red-500 font-bold">🚨 Risk Alert</span>
+            <span>RECOMMENDED RPC NODE</span>
+            <span class="text-purple-400">🚀 MEV Shield</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-red-500 font-mono" id="statCriticalCount">1</div>
-          <div class="text-xs text-gray-400 mt-2">Unverified spender contracts</div>
+          <div class="text-lg font-bold text-purple-300 font-mono" id="statRpcName">Flashbots Protect</div>
+          <div class="text-xs text-gray-400 mt-1"><span id="statRpcLatency" class="text-emerald-400 font-bold">28ms</span> latency | No Frontrunning</div>
         </div>
 
-        <!-- EVM Chains Covered -->
-        <div class="glass-card rounded-2xl p-5">
-          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>EVM NETWORKS</span>
-            <span class="text-indigo-400">🌐 5 Supported</span>
+        <!-- 4. Estimated Savings -->
+        <div class="glass-card rounded-2xl p-5 border-emerald-500/40">
+          <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
+            <span>ESTIMATED ANNUAL SAVINGS</span>
+            <span>💰 Annual</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white">Eth / Base / Poly</div>
-          <div class="text-xs text-gray-400 mt-2">Arbitrum & Optimism</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statAnnualSavings">$632.40</div>
+          <div class="text-xs text-gray-400 mt-2">Based on 120 txs / year</div>
         </div>
       </div>
 
-      <!-- MODULE 5 APPROVALS LIST & REVOKER TABLE -->
-      <div class="glass-card rounded-2xl p-6">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-          <div>
-            <h3 class="text-lg font-bold text-white flex items-center space-x-2">
-              <span>🛡️ Module 5: EVM Token Approvals & Spender Risk Analysis</span>
-            </h3>
-            <p class="text-xs text-gray-400">Setting token allowances to 0 revokes contract access to your wallet funds.</p>
+      <!-- MODULE 6 DETAILS & RPC BENCHMARK TABLE -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- TIME WINDOW ADVICE & GAS CYCLE -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-white mb-2">⏰ Gas Timing Recommendation</h3>
+          <p class="text-xs text-gray-400 mb-4" id="statAdviceText">
+            Execute large swaps or deployments on Sunday early morning UTC when gas drops below 8 Gwei.
+          </p>
+
+          <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 space-y-2 text-xs">
+            <div class="flex justify-between">
+              <span class="text-gray-400">Current Gwei:</span>
+              <strong class="text-white font-mono" id="statCurrentGwei">18 Gwei</strong>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-400">Off-Peak Gwei Target:</span>
+              <strong class="text-emerald-400 font-mono" id="statTargetGwei">7 Gwei</strong>
+            </div>
+            <div class="flex justify-between border-t border-gray-800 pt-2">
+              <span class="text-gray-400">Per-Tx Savings:</span>
+              <strong class="text-emerald-400 font-mono" id="statPerTxSavings">$5.27 USD</strong>
+            </div>
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs">
-            <thead class="bg-gray-900/80 text-gray-400 uppercase font-semibold border-b border-gray-800">
-              <tr>
-                <th class="py-3.5 px-4">Network & Token</th>
-                <th class="py-3.5 px-4">Spender Protocol / Address</th>
-                <th class="py-3.5 px-4">Allowance Granted</th>
-                <th class="py-3.5 px-4">Risk Rating & Reason</th>
-                <th class="py-3.5 px-4 text-right">Revoke Action</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-800/60 font-mono" id="approvalTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </div>
+        <!-- RPC BENCHMARK TABLE -->
+        <div class="lg:col-span-2 glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-white mb-2">🚀 Benchmarked RPC Node Providers</h3>
+          <p class="text-xs text-gray-400 mb-4">Evaluated by latency (ms), node throughput, and MEV sandwich protection.</p>
 
-      <!-- REVOCATION TRANSACTION LOG -->
-      <div id="revokeCard" class="hidden glass-card rounded-2xl p-6">
-        <h3 class="text-md font-bold text-red-400 mb-2 flex items-center space-x-2">
-          <span>✅ Module 5: Unsigned ERC-20 approve(spender, 0) Transaction Payload Ready</span>
-        </h3>
-        <p class="text-xs text-gray-400 mb-3">
-          This non-custodial transaction calls <code class="text-red-300">approve(spender, 0)</code> on the token contract to revoke all access.
-        </p>
-
-        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-red-300 break-all mb-3" id="revokePayloadText">
-          <!-- Calldata hex output -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-gray-900/80 text-gray-400 uppercase font-semibold border-b border-gray-800">
+                <tr>
+                  <th class="py-3 px-3">RPC Provider</th>
+                  <th class="py-3 px-3">Endpoint URL</th>
+                  <th class="py-3 px-3">Latency</th>
+                  <th class="py-3 px-3">MEV Shield</th>
+                  <th class="py-3 px-3 text-right">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-800/60 font-mono" id="rpcTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div class="flex items-center justify-between text-xs text-gray-400">
-          <span>Method: <strong class="text-white font-mono">approve(spender, 0) [0x095ea7b3]</strong></span>
-          <span>Target Contract: <strong class="text-red-400" id="revokeTargetText">0x...</strong></span>
-        </div>
       </div>
 
     </div>
@@ -223,89 +233,64 @@
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
-      <div>ChainRecover AI • Module 5: Approval Scanner & Revoker Engine</div>
+      <div>ChainRecover AI • Module 6: Fee Optimizer Engine</div>
       <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
     </div>
   </footer>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    async function scanApprovals() {
-      const address = document.getElementById('walletInput').value.trim();
-      const chain = document.getElementById('chainSelect').value;
-      if (!address) return alert('Please enter a valid EVM address (0x...)');
+    async function runFeeOptimization() {
+      const chain = document.getElementById('optChainSelect').value;
+      const transactionType = document.getElementById('optTxTypeSelect').value;
 
       try {
-        const res = await fetch('/api/v1/scanner/approvals/search', {
+        const res = await fetch('/api/v1/scanner/optimizer/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address, chain })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-          const s = data.data.summary;
-          document.getElementById('statApprovalCount').innerText = s.totalApprovalsCount;
-          document.getElementById('statUnlimitedCount').innerText = s.unlimitedApprovalsCount;
-          document.getElementById('statCriticalCount').innerText = s.criticalRiskCount;
-
-          const tbody = document.getElementById('approvalTableBody');
-          tbody.innerHTML = data.data.approvals.map(a => `
-            <tr class="hover:bg-gray-800/40 transition">
-              <td class="py-3.5 px-4 font-bold text-white">
-                <span class="text-indigo-300">${a.tokenSymbol}</span> 
-                <span class="text-xs text-gray-500">(${a.chain.toUpperCase()})</span>
-              </td>
-              <td class="py-3.5 px-4 text-gray-300">
-                <div class="font-semibold text-white">${a.spenderName}</div>
-                <div class="text-xs text-gray-500 font-mono">${a.spenderAddress.slice(0, 10)}...${a.spenderAddress.slice(-6)}</div>
-              </td>
-              <td class="py-3.5 px-4 ${a.isUnlimited ? 'text-red-400 font-bold' : 'text-gray-300'}">${a.allowanceFormatted}</td>
-              <td class="py-3.5 px-4">
-                ${a.riskLevel === 'CRITICAL' ? '<span class="bg-red-950 text-red-400 border border-red-800 px-2 py-0.5 rounded font-bold text-xs">🚨 CRITICAL</span>' : ''}
-                ${a.riskLevel === 'HIGH' ? '<span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded font-bold text-xs">⚠️ HIGH</span>' : ''}
-                ${a.riskLevel === 'MEDIUM' ? '<span class="bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded text-xs">MEDIUM</span>' : ''}
-                ${a.riskLevel === 'LOW' ? '<span class="bg-gray-900 text-gray-300 border border-gray-700 px-2 py-0.5 rounded text-xs">LOW</span>' : ''}
-                <div class="text-xs text-gray-400 mt-1 font-sans">${a.riskReason}</div>
-              </td>
-              <td class="py-3.5 px-4 text-right">
-                <button onclick="executeRevoke('${a.tokenAddress}', '${a.spenderAddress}', '${a.chain}')" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg transition shadow">
-                  🛡️ Revoke
-                </button>
-              </td>
-            </tr>
-          `).join('');
-
-          alert(`Module 5 Approval Scan Complete!\nFound ${s.totalApprovalsCount} active approvals (${s.unlimitedApprovalsCount} Unlimited) across selected EVM networks.`);
-        } else {
-          alert('Scan error: ' + data.message);
-        }
-      } catch (err) {
-        alert('Fetch error: ' + err.message);
-      }
-    }
-
-    async function executeRevoke(tokenAddress, spenderAddress, chain) {
-      const address = document.getElementById('walletInput').value.trim();
-      if (!address) return alert('Please enter a wallet address');
-
-      try {
-        const res = await fetch('/api/v1/scanner/approvals/revoke', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address, tokenAddress, spenderAddress, chain })
+          body: JSON.stringify({ chain, transactionType, txCountPerYear: 120 })
         });
         const data = await res.json();
 
         if (data.success && data.data) {
           const d = data.data;
-          document.getElementById('revokeCard').classList.remove('hidden');
-          document.getElementById('revokePayloadText').innerText = d.transactionPayload.data;
-          document.getElementById('revokeTargetText').innerText = d.tokenAddress;
+          const g = d.gasEstimation;
+          const t = d.timeOptimization;
+          const r = d.rpcOptimization;
+          const s = d.savingsEstimate;
 
-          alert(`🛡️ Module 5 Revoke Transaction Payload Ready!\n\nTarget Token: ${d.tokenAddress}\nSpender Revoked: ${d.spenderAddress}\nCalldata: approve(spender, 0)\n\nPayload prepared for non-custodial wallet signature.`);
+          document.getElementById('statCurrentGasUsd').innerText = `$${g.estimatedCurrentGasUsd}`;
+          document.getElementById('statGasUnits').innerText = g.estimatedGasUnits.toLocaleString();
+          document.getElementById('statTimeWindow').innerText = t.optimalTimeWindowUtc;
+          document.getElementById('statSavingsPercent').innerText = `Save ${t.estimatedSavingsPercent}`;
+          document.getElementById('statTargetGasUsd').innerText = `Target: ~$${s.offPeakPerTxGasUsd} USD`;
+          
+          document.getElementById('statRpcName').innerText = r.recommendedRpc.name;
+          document.getElementById('statRpcLatency').innerText = `${r.recommendedRpc.latencyMs}ms`;
+          document.getElementById('statAnnualSavings').innerText = `$${s.annualEstimatedSavingsUsd}`;
+
+          document.getElementById('statAdviceText').innerText = t.advice;
+          document.getElementById('statCurrentGwei').innerText = `${t.currentGwei} Gwei`;
+          document.getElementById('statTargetGwei').innerText = `${t.offPeakGweiTarget} Gwei`;
+          document.getElementById('statPerTxSavings').innerText = `$${s.perTxSavingsUsd} USD`;
+
+          const tbody = document.getElementById('rpcTableBody');
+          tbody.innerHTML = r.allEvaluatedProviders.map(p => `
+            <tr class="hover:bg-gray-800/40 transition">
+              <td class="py-3 px-3 font-bold text-white">${p.name}</td>
+              <td class="py-3 px-3 text-gray-400 font-mono text-xs">${p.url.slice(0, 30)}...</td>
+              <td class="py-3 px-3 font-bold ${p.latencyMs < 30 ? 'text-emerald-400' : 'text-gray-300'}">${p.latencyMs}ms</td>
+              <td class="py-3 px-3 text-purple-300 font-medium">${p.mevProtection}</td>
+              <td class="py-3 px-3 text-right">
+                ${p.status === 'RECOMMENDED_OPTIMAL' 
+                  ? '<span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded text-xs font-bold">🏆 Recommended</span>' 
+                  : '<span class="bg-gray-900 text-gray-400 border border-gray-800 px-2 py-0.5 rounded text-xs">Standard</span>'
+                }
+              </td>
+            </tr>
+          `).join('');
         } else {
-          alert('Revoke error: ' + data.message);
+          alert('Optimization error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
@@ -313,10 +298,10 @@
     }
 
     function connectWalletMock() {
-      alert('Wallet Connection:\nConnect MetaMask or Coinbase Wallet to sign approve(spender, 0) revocation transactions.');
+      alert('Wallet Connection:\nConnect your wallet to configure optimal RPC node routing.');
     }
 
-    window.onload = () => scanApprovals();
+    window.onload = () => runFeeOptimization();
   </script>
 </body>
 </html>
