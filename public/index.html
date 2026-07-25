@@ -139,229 +139,343 @@
     /* Hide scrollbar */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Terminal Styles */
+    .terminal-card {
+      background: #0D0D0D;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .tabular-nums { font-variant-numeric: tabular-nums; }
+    
+    .view-section {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.4s ease-in-out;
+    }
+    .view-section.active {
+        display: block;
+        opacity: 1;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-white selection:text-black antialiased relative z-0 font-sans">
 
   <!-- BACKGROUND: Animated 3D Grayscale Shapes -->
   <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#050505]">
-    
-    <!-- Ambient Glassmorphism Blobs (Grayscale) -->
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-white/[0.015] blur-[120px] animate-float-slow"></div>
     <div class="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-white/[0.01] blur-[140px] animate-float-medium"></div>
     <div class="absolute top-[40%] left-[30%] w-[40vw] h-[40vw] rounded-full bg-white/[0.015] blur-[150px] animate-float-fast"></div>
-    
-    <!-- 3D Triangle 1 (Top Right) -->
     <svg class="absolute top-[10%] right-[15%] w-64 h-64 opacity-[0.04] animate-float-medium" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50 10L90 80H10L50 10Z" fill="url(#grad1)"/>
-      <path d="M50 10L90 80H50V10Z" fill="url(#grad2)"/>
+      <path d="M50 10L90 80H10L50 10Z" fill="url(#grad1)"/><path d="M50 10L90 80H50V10Z" fill="url(#grad2)"/>
     </svg>
-
-    <!-- 3D Triangle 2 (Bottom Left) -->
     <svg class="absolute bottom-[15%] left-[10%] w-72 h-72 opacity-[0.03] animate-float-slow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-35deg);">
-      <path d="M50 90L10 20H90L50 90Z" fill="url(#grad3)"/>
-      <path d="M50 90L10 20H50V90Z" fill="url(#grad4)"/>
+      <path d="M50 90L10 20H90L50 90Z" fill="url(#grad3)"/><path d="M50 90L10 20H50V90Z" fill="url(#grad4)"/>
     </svg>
-
-    <!-- 3D Triangle 3 (Center Right) -->
-    <svg class="absolute top-[45%] right-[5%] w-48 h-48 opacity-[0.03] animate-float-fast" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(65deg);">
-      <path d="M50 10L90 80H10L50 10Z" fill="url(#grad1)"/>
-      <path d="M50 10L90 80H50V10Z" fill="url(#grad2)"/>
-    </svg>
-
-    <!-- 3D Oval 1 (Center Left) -->
-    <svg class="absolute top-[60%] left-[20%] w-32 h-64 opacity-[0.025] animate-float-slow" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(45deg);">
-      <ellipse cx="50" cy="100" rx="40" ry="90" fill="url(#grad5)"/>
-    </svg>
-
-    <!-- Global Gradients Definitions (Strictly Grayscale) -->
     <svg width="0" height="0" class="absolute">
       <defs>
-        <linearGradient id="grad1" x1="10" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffffff" stop-opacity="0.9"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/>
-        </linearGradient>
-        <linearGradient id="grad2" x1="90" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#000000" stop-opacity="0.7"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.25"/>
-        </linearGradient>
-        <linearGradient id="grad3" x1="10" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffffff" stop-opacity="0.7"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
-        </linearGradient>
-        <linearGradient id="grad4" x1="90" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#000000" stop-opacity="0.85"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.15"/>
-        </linearGradient>
-        <linearGradient id="grad5" x1="10" y1="10" x2="90" y2="190" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffffff" stop-opacity="1"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-        </linearGradient>
+        <linearGradient id="grad1" x1="10" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0.9"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/></linearGradient>
+        <linearGradient id="grad2" x1="90" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse"><stop stop-color="#000000" stop-opacity="0.7"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.25"/></linearGradient>
+        <linearGradient id="grad3" x1="10" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0.7"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/></linearGradient>
+        <linearGradient id="grad4" x1="90" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#000000" stop-opacity="0.85"/><stop offset="1" stop-color="#ffffff" stop-opacity="0.15"/></linearGradient>
       </defs>
     </svg>
   </div>
 
   <!-- HEADER -->
-  <header class="fixed top-0 inset-x-0 z-50 px-6 py-6 transition-all duration-300 bg-transparent">
+  <header class="fixed top-0 inset-x-0 z-50 px-6 py-6 transition-all duration-300 bg-transparent" id="main-header">
     <div class="max-w-[1600px] mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center font-bold text-lg bg-black/40 backdrop-blur-md">
-          CR
-        </div>
+      <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('view-marketing')">
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center font-bold text-lg bg-black/40 backdrop-blur-md">CR</div>
         <span class="font-bold text-xl tracking-tight hidden sm:block">ChainRecover AI</span>
       </div>
-      <nav class="hidden md:flex space-x-10">
+      
+      <!-- Marketing Nav -->
+      <nav id="nav-marketing" class="hidden md:flex space-x-10">
         <a href="#platform" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Platform</a>
         <a href="#technology" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Technology</a>
         <a href="#security" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Security</a>
       </nav>
+
+      <!-- App Nav (Hidden by default) -->
+      <div id="nav-app" class="hidden lg:flex items-center space-x-6 text-xs font-mono text-brand-silver">
+        <div class="flex items-center space-x-2">
+          <span>RPC LATENCY:</span>
+          <span class="flex items-center space-x-1 text-white"><span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span><span>Solana: 12ms</span></span>
+          <span class="text-white">ETH: 48ms</span>
+        </div>
+        <div class="flex items-center space-x-2 border-l border-white/10 pl-6 text-white">
+          <span class="w-1.5 h-1.5 rounded-full bg-white"></span>
+          <span class="font-semibold uppercase tracking-wider text-[10px]">SECURITY: ACTIVE</span>
+        </div>
+      </div>
+
       <div class="flex items-center space-x-4">
-        <a href="/admin.html" class="text-sm font-medium text-brand-silver hover:text-white hidden sm:block">Admin</a>
-        <button class="btn-premium py-3 px-6 text-sm">
-          Launch App
+        <button onclick="navigateTo('view-admin')" class="text-sm font-medium text-brand-silver hover:text-white hidden sm:block">Admin</button>
+        <button id="btn-launch" onclick="navigateTo('view-app')" class="btn-premium py-2.5 px-6 text-sm">Launch App</button>
+        <button id="btn-connect" onclick="openWalletModal()" class="hidden bg-white text-black font-mono font-bold text-xs py-2 px-4 rounded-full transition shadow-md flex items-center space-x-2">
+          <span>Connect Wallet</span>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN HERO -->
-  <main class="flex-grow pt-32 pb-20 px-6 relative flex flex-col items-center justify-center min-h-screen text-center">
+  <!-- ========================================== -->
+  <!-- VIEW 1: MARKETING (Landing Page)           -->
+  <!-- ========================================== -->
+  <div id="view-marketing" class="view-section active flex-grow">
     
-    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-12">
-      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-      <span class="text-xs font-mono text-brand-silver uppercase tracking-widest">System Operational v2.0</span>
+    <main class="pt-32 pb-20 px-6 relative flex flex-col items-center justify-center min-h-[85vh] text-center">
+      <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-12">
+        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+        <span class="text-xs font-mono text-brand-silver uppercase tracking-widest">System Operational v2.0</span>
+      </div>
+      <h1 class="text-display-giant font-black mb-8 max-w-[1400px] mx-auto">
+        EMPOWERING <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-silver to-gray-500">ASSET RECOVERY</span>
+      </h1>
+      <p class="text-xl md:text-2xl text-brand-silver max-w-3xl mx-auto mb-16 font-light leading-relaxed">
+        Surgical intelligence to discover, optimize, and reclaim lost capital across the Web3 ecosystem. Non-custodial, high-performance architecture.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <button onclick="navigateTo('view-app')" class="btn-premium text-lg px-8 py-4">Start Scanning Now</button>
+      </div>
+    </main>
+
+    <div class="border-y border-white/10 py-6 overflow-hidden bg-brand-dark flex whitespace-nowrap">
+      <div class="animate-marquee flex gap-12 items-center">
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
+        <span class="text-2xl text-white">✦</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
+        <span class="text-2xl text-white">✦</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
+        <span class="text-2xl text-white">✦</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
+        <span class="text-2xl text-white">✦</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
+      </div>
+    </div>
+    <style>.text-stroke-white { -webkit-text-stroke: 1px rgba(255,255,255,0.8); color: transparent; }</style>
+
+    <section id="platform" class="py-32 px-6 max-w-[1600px] mx-auto w-full">
+      <div class="text-center mb-24">
+        <h2 class="text-display-medium font-bold mb-6">INTELLIGENCE SUITE</h2>
+        <p class="text-xl text-brand-silver max-w-2xl mx-auto">Proprietary engines built for maximum value extraction with uncompromising security standards.</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="glass-card p-10 flex flex-col h-full group">
+          <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg></div>
+          <h3 class="text-3xl font-display font-bold mb-4">Solana Rent</h3>
+          <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">Instantly detect and reclaim SOL locked in empty token accounts, unused serum orders, and abandoned programs.</p>
+        </div>
+        <div class="glass-card p-10 flex flex-col h-full group">
+          <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg></div>
+          <h3 class="text-3xl font-display font-bold mb-4">Cross-Chain</h3>
+          <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">Unified scanning architecture covering Ethereum, Arbitrum, Optimism, Base, and BSC for forgotten liquidity.</p>
+        </div>
+        <div class="glass-card p-10 flex flex-col h-full group">
+          <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div>
+          <h3 class="text-3xl font-display font-bold mb-4">Zero Trust</h3>
+          <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">Absolute cryptographic security. We never ask for seed phrases. Every transaction is constructed for manual wallet approval.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- VIEW 2: APP TERMINAL                       -->
+  <!-- ========================================== -->
+  <div id="view-app" class="view-section pt-32 pb-20 max-w-[1440px] mx-auto w-full px-4 sm:px-6 flex-grow">
+    
+    <!-- Executive Hero Metrics -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div class="terminal-card p-5 text-left border-l-4 border-l-white">
+        <div class="text-xs font-mono text-brand-silver mb-2 uppercase">TOTAL TRACKED NET WORTH</div>
+        <div class="text-3xl font-bold text-white font-mono tabular-nums">$14,143.10</div>
+      </div>
+      <div class="terminal-card p-5 text-left border-l-4 border-l-brand-silver">
+        <div class="text-xs font-mono text-white mb-2 uppercase font-bold">CAPITAL NET RECOVERABLE</div>
+        <div class="text-3xl font-bold text-white font-mono tabular-nums">$260.19</div>
+      </div>
+      <div class="terminal-card p-5 text-left border-l-4 border-l-gray-400">
+        <div class="text-xs font-mono text-brand-silver mb-2 uppercase">WALLET HEALTH INDEX</div>
+        <div class="text-3xl font-bold text-white font-mono tabular-nums">94 / 100</div>
+      </div>
+      <div class="terminal-card p-5 text-left border-l-4 border-l-gray-600">
+        <div class="text-xs font-mono text-gray-300 mb-2 uppercase font-bold">ALLOWANCES FLAGGED</div>
+        <div class="text-3xl font-bold text-white font-mono tabular-nums">4 Flagged</div>
+      </div>
     </div>
 
-    <h1 class="text-display-giant font-black mb-8 max-w-[1400px] mx-auto">
-      EMPOWERING <br>
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-silver to-gray-500">
-        ASSET RECOVERY
-      </span>
-    </h1>
-
-    <p class="text-xl md:text-2xl text-brand-silver max-w-3xl mx-auto mb-16 font-light leading-relaxed">
-      Surgical intelligence to discover, optimize, and reclaim lost capital across the Web3 ecosystem. Non-custodial, high-performance architecture.
-    </p>
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-      <button class="btn-premium text-lg px-8 py-4">
-        Start Scanning Now
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-      </button>
-      <button class="btn-outline text-lg px-8 py-4">
-        View Enterprise API
-      </button>
+    <!-- Scanner Bar -->
+    <div class="terminal-card p-5 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+        <div class="md:col-span-5">
+          <label class="block text-xs font-mono text-brand-silver uppercase mb-2">Solana Public Key (Base58)</label>
+          <input type="text" id="solanaAddrInput" value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" class="w-full bg-[#111111] border border-white/10 text-white font-mono text-sm px-4 py-3 rounded-lg outline-none focus:border-white">
+        </div>
+        <div class="md:col-span-5">
+          <label class="block text-xs font-mono text-brand-silver uppercase mb-2">EVM Account Address (0x...)</label>
+          <input type="text" id="evmAddrInput" value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" class="w-full bg-[#111111] border border-white/10 text-brand-silver font-mono text-sm px-4 py-3 rounded-lg outline-none focus:border-white">
+        </div>
+        <div class="md:col-span-2">
+          <button onclick="executeTerminalScan()" class="w-full bg-white hover:bg-gray-200 text-black font-mono font-bold text-sm py-3 rounded-lg transition shadow-md">
+            SCAN
+          </button>
+        </div>
+      </div>
     </div>
-  </main>
 
-  <!-- INFINITE MARQUEE -->
-  <div class="border-y border-white/10 py-6 overflow-hidden bg-brand-dark flex whitespace-nowrap">
-    <div class="animate-marquee flex gap-12 items-center">
-      <!-- Group 1 -->
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Automated Yield</span>
-      <span class="text-2xl text-white">✦</span>
-      <!-- Duplicate for smooth loop -->
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
-      <span class="text-2xl text-white">✦</span>
-      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Automated Yield</span>
-      <span class="text-2xl text-white">✦</span>
+    <!-- Module Switcher -->
+    <div class="flex items-center space-x-2 border-b border-white/10 overflow-x-auto no-scrollbar font-mono text-xs pb-2 mb-6">
+      <button onclick="switchTerminalTab('overview')" id="tab-overview" class="bg-white text-black font-bold px-4 py-2 rounded-lg transition">OVERVIEW</button>
+      <button onclick="switchTerminalTab('solana')" id="tab-solana" class="text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition">SOLANA RENT RECLAIM</button>
+      <button onclick="switchTerminalTab('approvals')" id="tab-approvals" class="text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition">APPROVAL REVOKER</button>
+      <button onclick="switchTerminalTab('ai')" id="tab-ai" class="text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition">AI ASSISTANT</button>
+    </div>
+
+    <div id="terminalDisplayArea" class="space-y-6 mb-6">
+      <!-- Populated via JS -->
+    </div>
+
+    <!-- Logs -->
+    <div class="bg-black/90 border border-white/10 rounded-lg p-4 font-mono text-[11px] space-y-2">
+      <div class="flex items-center justify-between text-gray-500 border-b border-white/10 pb-2 mb-3">
+        <span>SYSTEM AUDIT CONSOLE & EXECUTION STREAM</span>
+        <span>STATUS: 200 OK</span>
+      </div>
+      <div class="text-gray-300">[2026-07-25T02:08:40Z] [AUDIT: LOGGED] Pre-execution simulation passed 100/100.</div>
+      <div class="text-white">[2026-07-25T02:08:41Z] [SOLANA RENT] 5 empty SPL accounts detected. Ready.</div>
+    </div>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- VIEW 3: ADMIN DASHBOARD                    -->
+  <!-- ========================================== -->
+  <div id="view-admin" class="view-section pt-32 pb-20 max-w-7xl mx-auto w-full px-4 sm:px-6 flex-grow">
+    <div class="flex items-center space-x-3 mb-8">
+      <h2 class="text-2xl font-bold text-white">ChainRecover AI <span class="text-brand-silver">Admin Console</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="terminal-card p-5 rounded-xl"><div class="text-xs text-brand-silver mb-1">TOTAL USERS</div><div class="text-3xl font-mono text-white">1,420</div></div>
+      <div class="terminal-card p-5 rounded-xl"><div class="text-xs text-brand-silver mb-1">WALLETS SCANNED</div><div class="text-3xl font-mono text-white">3,850</div></div>
+      <div class="terminal-card p-5 rounded-xl"><div class="text-xs text-white font-bold mb-1">VALUE RECOVERED</div><div class="text-3xl font-mono text-white">$142,500</div></div>
+      <div class="terminal-card p-5 rounded-xl"><div class="text-xs text-brand-silver mb-1">MRR</div><div class="text-3xl font-mono text-white">$18,400</div></div>
+    </div>
+    <div class="terminal-card p-6">
+      <h3 class="text-lg font-bold mb-4">Recent System Logs</h3>
+      <div class="space-y-2 font-mono text-xs text-gray-300">
+        <div class="p-3 bg-black rounded border border-white/5">User registered: admin@chainrecover.com</div>
+        <div class="p-3 bg-black rounded border border-white/5">API Rate limit healthy (42%)</div>
+      </div>
     </div>
   </div>
-  <style>
-    .text-stroke-white {
-      -webkit-text-stroke: 1px rgba(255,255,255,0.8);
-      color: transparent;
-    }
-  </style>
 
-  <!-- PLATFORM FEATURES -->
-  <section id="platform" class="py-32 px-6 max-w-[1600px] mx-auto w-full">
-    <div class="text-center mb-24">
-      <h2 class="text-display-medium font-bold mb-6">INTELLIGENCE SUITE</h2>
-      <p class="text-xl text-brand-silver max-w-2xl mx-auto">Proprietary engines built for maximum value extraction with uncompromising security standards.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-      <!-- Feature 1 -->
-      <div class="glass-card p-10 flex flex-col h-full group">
-        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-        </div>
-        <h3 class="text-3xl font-display font-bold mb-4">Solana Rent</h3>
-        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
-          Instantly detect and reclaim SOL locked in empty token accounts, unused serum orders, and abandoned programs.
-        </p>
-        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
-          <span>Explore Engine</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-        </a>
-      </div>
-
-      <!-- Feature 2 -->
-      <div class="glass-card p-10 flex flex-col h-full group">
-        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-        </div>
-        <h3 class="text-3xl font-display font-bold mb-4">Cross-Chain</h3>
-        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
-          Unified scanning architecture covering Ethereum, Arbitrum, Optimism, Base, and BSC for forgotten liquidity.
-        </p>
-        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
-          <span>View Coverage</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-        </a>
-      </div>
-
-      <!-- Feature 3 -->
-      <div class="glass-card p-10 flex flex-col h-full group">
-        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
-          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-        </div>
-        <h3 class="text-3xl font-display font-bold mb-4">Zero Trust</h3>
-        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
-          Absolute cryptographic security. We never ask for seed phrases. Every transaction is constructed for manual wallet approval.
-        </p>
-        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
-          <span>Security Protocol</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-        </a>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CALL TO ACTION -->
-  <section class="py-32 px-6 border-t border-white/5 bg-brand-gray/30">
-    <div class="max-w-[1200px] mx-auto text-center">
-      <h2 class="text-display-medium font-bold mb-10">THE NEW ERA OF WEALTH OPTIMIZATION</h2>
-      <button class="btn-premium text-xl px-12 py-5 shadow-2xl shadow-white/10">
-        Initialize Terminal
-      </button>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="py-12 px-6 border-t border-white/10 bg-brand-dark">
-    <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-sm font-mono text-brand-silver">
+  <!-- Unified Footer -->
+  <footer class="py-8 px-6 border-t border-white/10 bg-black mt-auto">
+    <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-xs font-mono text-brand-silver">
       <p>© 2026 ChainRecover AI. All rights reserved.</p>
       <div class="flex space-x-6 mt-4 md:mt-0">
         <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
         <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
-        <a href="#" class="hover:text-white transition-colors">API Documentation</a>
       </div>
     </div>
   </footer>
 
+  <!-- SPA Routing & Terminal Logic -->
+  <script>
+    function navigateTo(viewId) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.getElementById(viewId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Update header state
+      const header = document.getElementById('main-header');
+      if(viewId === 'view-marketing') {
+        header.classList.add('bg-transparent');
+        header.classList.remove('bg-black/90', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+        document.getElementById('nav-marketing').classList.remove('hidden');
+        document.getElementById('nav-app').classList.add('hidden');
+        document.getElementById('btn-launch').classList.remove('hidden');
+        document.getElementById('btn-connect').classList.add('hidden');
+      } else {
+        header.classList.remove('bg-transparent');
+        header.classList.add('bg-black/90', 'backdrop-blur-xl', 'border-b', 'border-white/10');
+        document.getElementById('nav-marketing').classList.add('hidden');
+        if(viewId === 'view-app') {
+          document.getElementById('nav-app').classList.remove('hidden');
+          document.getElementById('btn-connect').classList.remove('hidden');
+        } else {
+          document.getElementById('nav-app').classList.add('hidden');
+          document.getElementById('btn-connect').classList.add('hidden');
+        }
+        document.getElementById('btn-launch').classList.add('hidden');
+      }
+    }
+
+    // Terminal logic (adapted for grayscale)
+    async function switchTerminalTab(tabName) {
+      document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+        btn.className = 'text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition';
+      });
+      document.getElementById(`tab-${tabName}`).className = 'bg-white text-black font-bold px-4 py-2 rounded-lg transition shadow-sm';
+
+      const container = document.getElementById('terminalDisplayArea');
+      container.innerHTML = '<div class="terminal-card p-6 text-center font-mono text-xs text-brand-silver">Querying Blockchain Nodes...</div>';
+
+      const solanaAddress = document.getElementById('solanaAddrInput').value.trim();
+      const evmAddress = document.getElementById('evmAddrInput').value.trim();
+
+      // Dummy data for SPA preview without needing backend immediately
+      setTimeout(() => {
+        if (tabName === 'overview') {
+          container.innerHTML = `
+            <div class="terminal-card p-6 text-left font-mono text-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <div class="font-bold text-sm text-white uppercase">INSTITUTIONAL PORTFOLIO CONSOLE</div>
+                </div>
+                <button class="bg-white text-black font-bold px-4 py-2 rounded-lg transition shadow-md">
+                  1-Click Master Recover ($260.19)
+                </button>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div class="bg-[#111] p-4 rounded-lg border border-white/10">
+                  <div class="text-[10px] text-brand-silver uppercase">Tracked Assets</div>
+                  <div class="text-lg font-bold text-white">$14,143.10</div>
+                </div>
+                <div class="bg-[#111] p-4 rounded-lg border border-white/40">
+                  <div class="text-[10px] text-white font-bold uppercase">Recoverable Capital</div>
+                  <div class="text-lg font-bold text-white">$260.19</div>
+                </div>
+              </div>
+            </div>`;
+        } else if (tabName === 'solana') {
+          container.innerHTML = `
+            <div class="terminal-card p-6 font-mono text-xs space-y-4">
+              <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                <div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div>
+                <button class="bg-white text-black font-bold px-4 py-2 rounded-lg">Reclaim 0.0102 SOL</button>
+              </div>
+              <div class="bg-[#111] p-4 rounded-lg border border-white/10">5 Empty Accounts Found.</div>
+            </div>`;
+        } else {
+          container.innerHTML = `<div class="terminal-card p-6 text-brand-silver font-mono">Module Active.</div>`;
+        }
+      }, 300);
+    }
+    
+    function executeTerminalScan() { switchTerminalTab('overview'); }
+    function openWalletModal() { alert('Connect Wallet Modal Triggered'); }
+
+    // Init
+    window.onload = () => {
+      // Setup Initial View
+      navigateTo('view-marketing');
+      switchTerminalTab('overview');
+    };
+  </script>
 </body>
 </html>
