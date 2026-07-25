@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Module 2: Solana Rent & Module 3: Dust Consolidation Platform</title>
+  <title>ChainRecover AI | Module 4: Reward Scanner & Harvester</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -37,11 +37,8 @@
     .glow-emerald {
       box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
     }
-    .glow-purple {
-      box-shadow: 0 0 25px rgba(153, 69, 255, 0.25);
-    }
-    .glow-amber {
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+    .glow-indigo {
+      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
     }
   </style>
 </head>
@@ -51,15 +48,15 @@
   <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-purple-600 to-indigo-500 flex items-center justify-center font-black text-xl shadow-lg shadow-amber-500/20">
-          ✨
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20">
+          💎
         </div>
         <div>
-          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-amber-400">
-            ChainRecover <span class="text-amber-400 font-bold">AI</span>
+          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-400">
+            ChainRecover <span class="text-indigo-400 font-bold">AI</span>
           </span>
-          <span class="ml-2 text-xs bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Module 3 Live: Dust Consolidation
+          <span class="ml-2 text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold">
+            Module 4 Live: Reward Scanner
           </span>
         </div>
       </div>
@@ -67,14 +64,14 @@
       <!-- Network Ticker -->
       <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
         <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
-          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-          <span>Dust Threshold: <strong class="text-white font-mono" id="headerThresholdText">&lt; $5.00 USD</strong></span>
+          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+          <span>5 Reward Categories Active</span>
         </span>
       </div>
 
       <!-- Wallet Action -->
       <div class="flex items-center space-x-3">
-        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-amber-600 to-purple-600 hover:from-amber-500 hover:to-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-amber-600/20 flex items-center space-x-2">
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-indigo-600/20 flex items-center space-x-2">
           <span>🔗 Connect Wallet</span>
         </button>
       </div>
@@ -86,143 +83,140 @@
 
     <!-- HERO SCANNER SECTION -->
     <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        <span>✨ MODULE 3: DUST CONSOLIDATION ENGINE</span>
+      <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span>💎 MODULE 4: REWARD SCANNER & HARVESTER</span>
         <span class="text-gray-500">•</span>
-        <span>Swap / Bridge / Transfer / Consolidate</span>
+        <span>Staking, Validators, LPs, DAO, Airdrops</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Consolidate Micro-Token Dust Balances into <span class="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-purple-300 to-emerald-400">Native Coins</span>
+        Harvest Unclaimed Rewards Across <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">5 Categories</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Scans for token balances below your custom USD threshold and provides 4 smart consolidation strategies evaluating gas profitability.
+        Scans multi-chain protocols for unclaimed staking yield, validator commission, LP fees, governance rewards, and eligible airdrop allocations.
       </p>
 
-      <!-- WALLET INPUT & THRESHOLD SELECTOR -->
-      <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3">
+      <!-- WALLET INPUT & SCAN BUTTON -->
+      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center gap-3">
         <div class="relative w-full">
-          <input type="text" id="walletInput" placeholder="Paste Solana or EVM Address" 
-            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
+          <input type="text" id="walletInput" placeholder="Paste Solana or EVM Wallet Address" 
+            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
             value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
         </div>
-        
-        <!-- Threshold Selector -->
-        <div class="w-full sm:w-auto">
-          <select id="dustThresholdSelect" onchange="updateThresholdText()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl px-3 py-3.5 font-semibold outline-none focus:border-amber-500">
-            <option value="1">Threshold: < $1.00 USD</option>
-            <option value="5" selected>Threshold: < $5.00 USD</option>
-            <option value="10">Threshold: < $10.00 USD</option>
-            <option value="25">Threshold: < $25.00 USD</option>
-            <option value="50">Threshold: < $50.00 USD</option>
-          </select>
-        </div>
-
-        <button onclick="analyzeDust()" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-amber-600/30 whitespace-nowrap">
-          ✨ Scan Dust
+        <button onclick="scanRewards()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-indigo-600/30 whitespace-nowrap">
+          💎 Scan Rewards
         </button>
       </div>
     </div>
 
-    <!-- MODULE 3 DASHBOARD RESULTS -->
+    <!-- MODULE 4 DASHBOARD RESULTS -->
     <div id="dashboardSection" class="space-y-6">
 
       <!-- METRICS GRID -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Total Dust Tokens -->
+        <!-- Total Claimable Items -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>DETECTED DUST TOKENS</span>
-            <span class="text-amber-400">✨ Assets</span>
+            <span>CLAIMABLE REWARDS</span>
+            <span class="text-indigo-400">🎁 Items</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statDustCount">7</div>
-          <div class="text-xs text-gray-400 mt-2">Below <span id="statThresholdLabel">$5.00</span> USD</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statRewardCount">3</div>
+          <div class="text-xs text-gray-400 mt-2">Across 3 protocol categories</div>
         </div>
 
-        <!-- Total Dust Value -->
-        <div class="glass-card rounded-2xl p-5">
-          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>GROSS DUST VALUE</span>
-            <span class="text-indigo-400">💰 Portfolio</span>
-          </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-mono" id="statGrossDustValue">$8.42</div>
-          <div class="text-xs text-gray-400 mt-2">Across 4 blockchains</div>
-        </div>
-
-        <!-- Gas Profitable Dust -->
+        <!-- Total Gross Claimable USD -->
         <div class="glass-card rounded-2xl p-5 border-emerald-500/40 glow-emerald">
           <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
-            <span>PROFITABLE TO CONSOLIDATE</span>
-            <span>⚡ Net Value</span>
+            <span>GROSS CLAIMABLE VALUE</span>
+            <span>💎 Total Rewards</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statProfitableDustValue">$7.85</div>
-          <div class="text-xs text-emerald-300/80 mt-2 font-medium">After gas deduction</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statGrossRewardUsd">$250.50</div>
+          <div class="text-xs text-emerald-300/80 mt-2 font-medium">Ready for 1-Click Harvest</div>
         </div>
 
-        <!-- 4 Strategy Overview -->
-        <div class="glass-card rounded-2xl p-5 border-amber-500/40 glow-amber">
-          <div class="flex items-center justify-between text-amber-400 text-xs font-bold mb-2">
-            <span>STRATEGIES READY</span>
-            <span>🔄 4 Actions</span>
+        <!-- Net Claimable Value -->
+        <div class="glass-card rounded-2xl p-5 border-indigo-500/40 glow-indigo">
+          <div class="flex items-center justify-between text-indigo-400 text-xs font-bold mb-2">
+            <span>NET VALUE (AFTER GAS)</span>
+            <span>🟣 Your Wallet</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-amber-300">Swap/Bridge</div>
-          <div class="text-xs text-gray-400 mt-2">Transfer & 1-Click Batch</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-mono" id="statNetRewardUsd">$250.49</div>
+          <div class="text-xs text-gray-400 mt-2">Gas fee deducted</div>
+        </div>
+
+        <!-- Categories Covered -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>ACTIVE CATEGORIES</span>
+            <span class="text-purple-400">⚡ 5/5 Supported</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white">Staking / DAO</div>
+          <div class="text-xs text-gray-400 mt-2">LP, Validator & Airdrops</div>
         </div>
       </div>
 
-      <!-- MODULE 3 DETAILED DUST TOKENS & STRATEGIES -->
+      <!-- MODULE 4 CATEGORIES BREAKDOWN & TABLE -->
       <div class="glass-card rounded-2xl p-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
           <div>
             <h3 class="text-lg font-bold text-white flex items-center space-x-2">
-              <span>✨ Module 3: Micro-Balance Dust Assets & Strategy Recommender</span>
+              <span>💎 Module 4: 5-Category Unclaimed Rewards breakdown</span>
             </h3>
-            <p class="text-xs text-gray-400">Review gas cost profitability for each micro-balance and select your preferred consolidation strategy.</p>
+            <p class="text-xs text-gray-400">Itemized list of all detected rewards ready for non-custodial wallet harvest.</p>
           </div>
-          <button onclick="executeBatchConsolidation()" class="w-full sm:w-auto bg-gradient-to-r from-amber-600 to-purple-600 hover:from-amber-500 hover:to-purple-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition shadow-lg shadow-amber-600/30 flex items-center justify-center space-x-2">
-            <span>⚡ 1-Click Batch Consolidate All Dust</span>
+          <button onclick="executeHarvestAll()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2">
+            <span>💎 1-Click Harvest All Rewards</span>
           </button>
+        </div>
+
+        <!-- Category Badges Bar -->
+        <div class="flex flex-wrap gap-2 mb-4 pb-3 border-b border-gray-800">
+          <span class="bg-indigo-950 text-indigo-300 border border-indigo-800 text-xs px-3 py-1 rounded-lg font-medium">🥩 Staking</span>
+          <span class="bg-purple-950 text-purple-300 border border-purple-800 text-xs px-3 py-1 rounded-lg font-medium">🛡️ Validator Commission</span>
+          <span class="bg-blue-950 text-blue-300 border border-blue-800 text-xs px-3 py-1 rounded-lg font-medium">💧 LP Mining Fees</span>
+          <span class="bg-amber-950 text-amber-300 border border-amber-800 text-xs px-3 py-1 rounded-lg font-medium">🏛️ Governance DAO</span>
+          <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs px-3 py-1 rounded-lg font-medium">🪂 Airdrops</span>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
             <thead class="bg-gray-900/80 text-gray-400 uppercase font-semibold border-b border-gray-800">
               <tr>
-                <th class="py-3.5 px-4">Token & Network</th>
-                <th class="py-3.5 px-4">Balance</th>
-                <th class="py-3.5 px-4">USD Value</th>
-                <th class="py-3.5 px-4">Est. Gas</th>
-                <th class="py-3.5 px-4">Recommended Strategies</th>
-                <th class="py-3.5 px-4 text-right">Profitability</th>
+                <th class="py-3.5 px-4">Category</th>
+                <th class="py-3.5 px-4">Protocol & Network</th>
+                <th class="py-3.5 px-4">Reward Asset</th>
+                <th class="py-3.5 px-4">Amount</th>
+                <th class="py-3.5 px-4">Claimable USD</th>
+                <th class="py-3.5 px-4 text-right">Status</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-800/60 font-mono" id="dustTableBody">
+            <tbody class="divide-y divide-gray-800/60 font-mono" id="rewardTableBody">
               <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- BATCH CONSOLIDATION TRANSACTION LOG -->
-      <div id="batchConsolidateCard" class="hidden glass-card rounded-2xl p-6">
-        <h3 class="text-md font-bold text-amber-400 mb-2 flex items-center space-x-2">
-          <span>✅ Module 3: Unsigned Batch Consolidation Transaction Payload Ready</span>
+      <!-- HARVEST TRANSACTION LOG -->
+      <div id="harvestCard" class="hidden glass-card rounded-2xl p-6">
+        <h3 class="text-md font-bold text-emerald-400 mb-2 flex items-center space-x-2">
+          <span>✅ Module 4: Unsigned Reward Harvest Transaction Payload Ready</span>
         </h3>
         <p class="text-xs text-gray-400 mb-3">
-          This single batched transaction will swap/consolidate selected dust tokens directly into native coins on each chain.
+          This single non-custodial transaction harvests all selected staking, validator, LP fees, governance, and airdrop rewards.
         </p>
 
-        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-amber-300 break-all mb-3" id="batchPayloadText">
+        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-emerald-300 break-all mb-3" id="harvestPayloadText">
           <!-- Base64 output -->
         </div>
 
         <div class="flex items-center justify-between text-xs text-gray-400">
-          <span>Strategy: <strong class="text-white font-mono" id="batchStrategyName">BATCH_SWAP_CONSOLIDATION</strong></span>
-          <span>Estimated Net Output: <strong class="text-emerald-400" id="batchNetOutput">$7.85 USD</strong></span>
+          <span>Action: <strong class="text-white font-mono" id="harvestActionText">HARVEST_ALL_REWARDS</strong></span>
+          <span>Estimated Net Harvest: <strong class="text-emerald-400" id="harvestNetText">$250.49 USD</strong></span>
         </div>
       </div>
 
@@ -232,94 +226,76 @@
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
-      <div>ChainRecover AI • Module 3: Dust Consolidation Engine</div>
+      <div>ChainRecover AI • Module 4: Reward Scanner & Harvester</div>
       <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
     </div>
   </footer>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    function updateThresholdText() {
-      const val = document.getElementById('dustThresholdSelect').value;
-      document.getElementById('headerThresholdText').innerText = `< $${val}.00 USD`;
-      document.getElementById('statThresholdLabel').innerText = `$${val}.00`;
-    }
-
-    async function analyzeDust() {
+    async function scanRewards() {
       const address = document.getElementById('walletInput').value.trim();
-      const thresholdUsd = parseFloat(document.getElementById('dustThresholdSelect').value);
       if (!address) return alert('Please enter a wallet address');
 
       try {
-        const res = await fetch('/api/v1/scanner/dust/analyze', {
+        const res = await fetch('/api/v1/scanner/rewards/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address, thresholdUsd })
+          body: JSON.stringify({ walletAddress: address })
         });
         const data = await res.json();
 
         if (data.success) {
-          const d = data.data;
-          document.getElementById('statDustCount').innerText = d.totalDustCount;
-          document.getElementById('statGrossDustValue').innerText = `$${d.summary.totalDustUsd}`;
-          document.getElementById('statProfitableDustValue').innerText = `$${d.summary.totalProfitableDustUsd}`;
+          const s = data.data.summary;
+          document.getElementById('statRewardCount').innerText = s.totalClaimableItems;
+          document.getElementById('statGrossRewardUsd').innerText = `$${s.totalClaimableUsd}`;
+          document.getElementById('statNetRewardUsd').innerText = `$${s.netClaimableUsd}`;
 
-          const tbody = document.getElementById('dustTableBody');
-          tbody.innerHTML = d.dustTokens.map(t => `
+          const tbody = document.getElementById('rewardTableBody');
+          tbody.innerHTML = data.data.rewards.map(r => `
             <tr class="hover:bg-gray-800/40 transition">
-              <td class="py-3.5 px-4 font-bold text-white">
-                <span class="text-amber-400">${t.symbol}</span> 
-                <span class="text-xs text-gray-500">(${t.chain.toUpperCase()})</span>
-              </td>
-              <td class="py-3.5 px-4 text-gray-300">${t.balance.toLocaleString()}</td>
-              <td class="py-3.5 px-4 font-bold text-amber-300">$${t.totalUsd.toFixed(2)}</td>
-              <td class="py-3.5 px-4 text-gray-400">$${t.estimatedGasUsd.toFixed(2)}</td>
-              <td class="py-3.5 px-4 space-x-1">
-                <span class="bg-indigo-950 text-indigo-300 border border-indigo-800 px-2 py-0.5 rounded text-xs">🔄 Swap</span>
-                <span class="bg-purple-950 text-purple-300 border border-purple-800 px-2 py-0.5 rounded text-xs">🌉 Bridge</span>
-                <span class="bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded text-xs">↗️ Transfer</span>
-                <span class="bg-amber-950 text-amber-300 border border-amber-800 px-2 py-0.5 rounded text-xs">⚡ Batch</span>
-              </td>
+              <td class="py-3.5 px-4 font-bold text-indigo-300">${r.categoryName}</td>
+              <td class="py-3.5 px-4 text-white font-semibold">${r.protocol} <span class="text-xs text-gray-500">(${r.chain.toUpperCase()})</span></td>
+              <td class="py-3.5 px-4 text-purple-300 font-bold">${r.rewardAsset}</td>
+              <td class="py-3.5 px-4 text-gray-300">${r.amount}</td>
+              <td class="py-3.5 px-4 text-emerald-400 font-bold">$${r.totalUsd.toFixed(2)}</td>
               <td class="py-3.5 px-4 text-right">
-                ${t.isProfitable 
-                  ? `<span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-lg text-xs font-bold">✓ Profitable ($${t.netValueAfterGasUsd.toFixed(2)})</span>`
-                  : `<span class="bg-red-950 text-red-300 border border-red-800 px-2.5 py-1 rounded-lg text-xs font-bold">⚠️ High Gas Fee</span>`
-                }
+                <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-lg text-xs font-bold">Ready to Claim</span>
               </td>
             </tr>
           `).join('');
 
-          alert(`Module 3 Dust Scan Complete!\nFound ${d.totalDustCount} tokens worth $${d.summary.totalDustUsd} USD below threshold ($${thresholdUsd}).`);
+          alert(`Module 4 Reward Scan Complete!\nFound ${s.totalClaimableItems} rewards worth $${s.totalClaimableUsd} USD across 5 categories.`);
         } else {
-          alert('Dust scan error: ' + data.message);
+          alert('Scan error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
       }
     }
 
-    async function executeBatchConsolidation() {
+    async function executeHarvestAll() {
       const address = document.getElementById('walletInput').value.trim();
       if (!address) return alert('Please enter a wallet address');
 
       try {
-        const res = await fetch('/api/v1/scanner/dust/consolidate', {
+        const res = await fetch('/api/v1/scanner/rewards/claim', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address, strategy: 'SWAP' })
+          body: JSON.stringify({ walletAddress: address, category: 'ALL' })
         });
         const data = await res.json();
 
         if (data.success && data.data) {
           const d = data.data;
-          document.getElementById('batchConsolidateCard').classList.remove('hidden');
-          document.getElementById('batchPayloadText').innerText = d.batchTransactionPayload.rawUnsignedTransactionBase64;
-          document.getElementById('batchStrategyName').innerText = `BATCH_${d.strategy}_CONSOLIDATION`;
-          document.getElementById('batchNetOutput').innerText = `$${d.estimatedNetReclaimedUsd} USD`;
+          document.getElementById('harvestCard').classList.remove('hidden');
+          document.getElementById('harvestPayloadText').innerText = d.claimTransactionPayload.rawUnsignedTransactionBase64;
+          document.getElementById('harvestActionText').innerText = d.claimTransactionPayload.action;
+          document.getElementById('harvestNetText').innerText = `$${d.estimatedNetClaimUsd} USD`;
 
-          alert(`✨ Module 3 Batch Consolidation Payload Ready!\n\nWallet: ${d.walletAddress}\nTokens Consolidated: ${d.tokensConsolidatedCount}\nEstimated Net Output: $${d.estimatedNetReclaimedUsd} USD\n\nPayload prepared for non-custodial wallet signature.`);
+          alert(`💎 Module 4 Reward Harvest Payload Ready!\n\nWallet: ${d.walletAddress}\nRewards Claimed: ${d.rewardsClaimedCount}\nEstimated Net Harvest: $${d.estimatedNetClaimUsd} USD\n\nPayload prepared for non-custodial wallet signature.`);
         } else {
-          alert('Consolidation error: ' + data.message);
+          alert('Harvest error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
@@ -327,10 +303,10 @@
     }
 
     function connectWalletMock() {
-      alert('Wallet Connection:\nConnect your wallet to sign non-custodial dust consolidation transactions.');
+      alert('Wallet Connection:\nConnect Phantom or MetaMask to harvest unclaimed rewards non-custodially.');
     }
 
-    window.onload = () => analyzeDust();
+    window.onload = () => scanRewards();
   </script>
 </body>
 </html>

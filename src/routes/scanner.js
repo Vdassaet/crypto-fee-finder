@@ -1,5 +1,6 @@
 /**
- * Express REST API Routes for ChainRecover AI Scanner, Module 2 (Solana Rent) & Module 3 (Dust Consolidation)
+ * Express REST API Routes for ChainRecover AI Scanner:
+ * Module 2 (Solana Rent), Module 3 (Dust Consolidation), & Module 4 (Reward Scanner)
  */
 
 const express = require('express');
@@ -13,17 +14,20 @@ const {
   analyzeDustBalances,
   buildDustConsolidationTransaction
 } = require('../services/dustService');
+const {
+  searchClaimableRewards,
+  buildClaimTransaction
+} = require('../services/rewardService');
 
 /**
  * GET /api/v1/scanner/chains
- * List supported chains
  */
 router.get('/chains', (req, res) => {
   res.json({ success: true, data: SUPPORTED_CHAINS });
 });
 
 /**
- * MODULE 2: GET /api/v1/scanner/solana/rent/:address
+ * MODULE 2: Solana Rent Endpoints
  */
 router.get('/solana/rent/:address', async (req, res, next) => {
   try {
@@ -36,9 +40,6 @@ router.get('/solana/rent/:address', async (req, res, next) => {
   }
 });
 
-/**
- * MODULE 2: POST /api/v1/scanner/solana/build-close-tx
- */
 router.post('/solana/build-close-tx', (req, res, next) => {
   try {
     const { walletAddress, accountAddresses } = req.body;
@@ -54,8 +55,7 @@ router.post('/solana/build-close-tx', (req, res, next) => {
 });
 
 /**
- * MODULE 3: POST /api/v1/scanner/dust/analyze
- * Detect balances below user-defined threshold and generate 4 consolidation strategies (Swap, Bridge, Transfer, Consolidate)
+ * MODULE 3: Dust Consolidation Endpoints
  */
 router.post('/dust/analyze', (req, res, next) => {
   try {
@@ -71,10 +71,6 @@ router.post('/dust/analyze', (req, res, next) => {
   }
 });
 
-/**
- * MODULE 3: POST /api/v1/scanner/dust/consolidate
- * Generate unsigned batch transaction payload for dust consolidation
- */
 router.post('/dust/consolidate', (req, res, next) => {
   try {
     const { walletAddress, tokenIds, strategy } = req.body;
@@ -90,8 +86,39 @@ router.post('/dust/consolidate', (req, res, next) => {
 });
 
 /**
+ * MODULE 4: Reward Scanner Endpoints
+ * Search 5 categories: Unclaimed Staking, Validator, LP Mining, Governance, Airdrops
+ */
+router.post('/rewards/search', (req, res, next) => {
+  try {
+    const { walletAddress } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    const result = searchClaimableRewards(walletAddress);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+router.post('/rewards/claim', (req, res, next) => {
+  try {
+    const { walletAddress, rewardIds, category } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    const result = buildClaimTransaction(walletAddress, rewardIds || [], category || 'ALL');
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
  * GET /api/v1/scanner/wallet/:address
- * Deep scan wallet across all supported chains
  */
 router.get('/wallet/:address', async (req, res, next) => {
   try {
