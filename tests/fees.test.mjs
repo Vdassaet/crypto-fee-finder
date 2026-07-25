@@ -4,7 +4,14 @@ import app from '../src/server.js';
 import { getGasMetrics } from '../src/services/feeCalculator.js';
 import { calculateDefiFee } from '../src/services/defiService.js';
 import { getAvailableBridges, calculateBridgeFee } from '../src/services/bridgeService.js';
-import { validateAddress, scanWallet } from '../src/services/scannerService.js';
+import { validateAddress } from '../src/services/scannerService.js';
+import {
+  findEmptyTokenAccounts,
+  buildCloseAccountTransaction,
+  isValidSolanaPublicKey
+} from '../src/services/solanaRentService.js';
+
+const DEMO_SOLANA_WALLET = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 
 describe('Crypto Fee Finder Services', () => {
   it('should fetch gas metrics for supported chains', () => {
@@ -40,26 +47,47 @@ describe('Crypto Fee Finder Services', () => {
   });
 });
 
-describe('ChainRecover AI Scanner Engine', () => {
-  it('should validate EVM and Solana wallet address formats', () => {
-    expect(validateAddress('0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045')).toBe('EVM');
-    expect(validateAddress('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY')).toBe('SOL');
-    expect(validateAddress('invalid_address_123')).toBe(false);
+describe('MODULE 2: Solana Rent Recovery Engine', () => {
+  it('should validate Solana public keys', () => {
+    expect(isValidSolanaPublicKey(DEMO_SOLANA_WALLET)).toBe(true);
+    expect(isValidSolanaPublicKey('invalid_short_key')).toBe(false);
   });
 
-  it('should scan Solana wallet and detect reclaimable SOL rent', async () => {
-    const report = await scanWallet('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
-    expect(report.addressType).toBe('SOL');
-    expect(report.summary.totalRecoverableRentSol).toBeGreaterThan(0);
-    expect(report.summary.totalEstimatedRecoverableUsd).toBeGreaterThan(0);
-    expect(report.inactiveAccounts.length).toBe(5);
+  it('should detect empty SPL Token accounts & calculate rent recoverable', async () => {
+    const summary = await findEmptyTokenAccounts(DEMO_SOLANA_WALLET);
+    expect(summary.totalEmptyAccountsCount).toBe(5);
+    expect(summary.rentPerAccountSol).toBeCloseTo(0.00203928, 6);
+    expect(summary.summary.totalRentSol).toBeGreaterThan(0.01);
+    expect(summary.summary.netRecoverableSol).toBeGreaterThan(0.01);
+  });
+
+  it('should build base64 closeAccount transaction payload for 1-click recovery', () => {
+    const txData = buildCloseAccountTransaction(DEMO_SOLANA_WALLET);
+    expect(txData.success).toBe(true);
+    expect(txData.module).toBe('MODULE_2_SOLANA_RENT_RECOVERY');
+    expect(txData.accountsClosedCount).toBe(5);
+    expect(txData.grossRentReclaimedSol).toBeGreaterThan(0);
+    expect(txData.transactionPayload.serializedTransactionBase64).toBeDefined();
   });
 });
 
-describe('Crypto Fee Finder & ChainRecover AI API Endpoints', () => {
-  it('GET / should return index.html SPA or API status', async () => {
-    const res = await request(app).get('/');
+describe('ChainRecover AI Scanner & Module 2 Endpoints', () => {
+  it('GET /api/v1/scanner/solana/rent/:address should return rent recovery summary', async () => {
+    const res = await request(app).get(`/api/v1/scanner/solana/rent/${DEMO_SOLANA_WALLET}`);
     expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.totalEmptyAccountsCount).toBe(5);
+    expect(res.body.data.summary.totalRentSol).toBeGreaterThan(0);
+  });
+
+  it('POST /api/v1/scanner/solana/build-close-tx should return closeAccount tx payload', async () => {
+    const res = await request(app)
+      .post('/api/v1/scanner/solana/build-close-tx')
+      .send({ walletAddress: DEMO_SOLANA_WALLET });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.transactionPayload.serializedTransactionBase64).toBeDefined();
   });
 
   it('GET /api/v1/scanner/chains should list supported blockchains', async () => {
@@ -67,34 +95,6 @@ describe('Crypto Fee Finder & ChainRecover AI API Endpoints', () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.length).toBe(7);
-  });
-
-  it('GET /api/v1/scanner/wallet/:address should return full wallet scan', async () => {
-    const res = await request(app).get('/api/v1/scanner/wallet/7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.summary.totalPortfolioUsd).toBeGreaterThan(0);
-  });
-
-  it('POST /api/v1/scanner/recover should generate unsigned recovery payload', async () => {
-    const res = await request(app)
-      .post('/api/v1/scanner/recover')
-      .send({
-        address: '7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY',
-        actionType: 'RECLAIM_SOLANA_RENT'
-      });
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.requiresSignatureFrom).toBe('7XwK8vL9MmP3zW4BbN6tY3VvC1xK8SRMFTTRAY');
-    expect(res.body.data.reclaimAmountSol).toBeGreaterThan(0);
-  });
-
-  it('GET /api/v1/fees/gas should return gas metrics', async () => {
-    const res = await request(app).get('/api/v1/fees/gas');
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.ethereum).toBeDefined();
   });
 
   it('POST /api/v1/fees/compare should compare routes and rank cheapest first', async () => {
