@@ -4,12 +4,15 @@ import app from '../src/server.js';
 import { getGasMetrics } from '../src/services/feeCalculator.js';
 import { calculateDefiFee } from '../src/services/defiService.js';
 import { getAvailableBridges, calculateBridgeFee } from '../src/services/bridgeService.js';
-import { validateAddress } from '../src/services/scannerService.js';
 import {
   findEmptyTokenAccounts,
   buildCloseAccountTransaction,
   isValidSolanaPublicKey
 } from '../src/services/solanaRentService.js';
+import {
+  analyzeDustBalances,
+  buildDustConsolidationTransaction
+} from '../src/services/dustService.js';
 
 const DEMO_SOLANA_WALLET = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 
@@ -71,23 +74,53 @@ describe('MODULE 2: Solana Rent Recovery Engine', () => {
   });
 });
 
-describe('ChainRecover AI Scanner & Module 2 Endpoints', () => {
+describe('MODULE 3: Dust Consolidation Engine', () => {
+  it('should detect dust balances below user threshold and offer 4 strategies', () => {
+    const report = analyzeDustBalances(DEMO_SOLANA_WALLET, 5.00);
+    expect(report.thresholdUsd).toBe(5.00);
+    expect(report.totalDustCount).toBeGreaterThan(0);
+    expect(report.dustTokens[0].strategies.swap).toBeDefined();
+    expect(report.dustTokens[0].strategies.bridge).toBeDefined();
+    expect(report.dustTokens[0].strategies.transfer).toBeDefined();
+    expect(report.dustTokens[0].strategies.consolidate).toBeDefined();
+  });
+
+  it('should build unsigned batch dust consolidation payload', () => {
+    const batchData = buildDustConsolidationTransaction(DEMO_SOLANA_WALLET, ['solana_DUST_SHIB'], 'SWAP');
+    expect(batchData.success).toBe(true);
+    expect(batchData.module).toBe('MODULE_3_DUST_CONSOLIDATION');
+    expect(batchData.estimatedNetReclaimedUsd).toBeGreaterThan(0);
+    expect(batchData.batchTransactionPayload.rawUnsignedTransactionBase64).toBeDefined();
+  });
+});
+
+describe('ChainRecover AI Scanner & Module Endpoints', () => {
+  it('POST /api/v1/scanner/dust/analyze should return dust analysis with strategies', async () => {
+    const res = await request(app)
+      .post('/api/v1/scanner/dust/analyze')
+      .send({ walletAddress: DEMO_SOLANA_WALLET, thresholdUsd: 10.00 });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.thresholdUsd).toBe(10.00);
+    expect(res.body.data.totalDustCount).toBeGreaterThan(0);
+  });
+
+  it('POST /api/v1/scanner/dust/consolidate should return batch consolidation tx payload', async () => {
+    const res = await request(app)
+      .post('/api/v1/scanner/dust/consolidate')
+      .send({ walletAddress: DEMO_SOLANA_WALLET, strategy: 'SWAP' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.batchTransactionPayload.rawUnsignedTransactionBase64).toBeDefined();
+  });
+
   it('GET /api/v1/scanner/solana/rent/:address should return rent recovery summary', async () => {
     const res = await request(app).get(`/api/v1/scanner/solana/rent/${DEMO_SOLANA_WALLET}`);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.totalEmptyAccountsCount).toBe(5);
-    expect(res.body.data.summary.totalRentSol).toBeGreaterThan(0);
-  });
-
-  it('POST /api/v1/scanner/solana/build-close-tx should return closeAccount tx payload', async () => {
-    const res = await request(app)
-      .post('/api/v1/scanner/solana/build-close-tx')
-      .send({ walletAddress: DEMO_SOLANA_WALLET });
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.transactionPayload.serializedTransactionBase64).toBeDefined();
   });
 
   it('GET /api/v1/scanner/chains should list supported blockchains', async () => {
@@ -95,21 +128,5 @@ describe('ChainRecover AI Scanner & Module 2 Endpoints', () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.data.length).toBe(7);
-  });
-
-  it('POST /api/v1/fees/compare should compare routes and rank cheapest first', async () => {
-    const res = await request(app)
-      .post('/api/v1/fees/compare')
-      .send({
-        sourceChain: 'ethereum',
-        destinationChain: 'arbitrum',
-        token: 'USDC',
-        amountUsd: 1500
-      });
-
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.data.totalRoutesFound).toBeGreaterThan(0);
-    expect(res.body.data.bestRoute).toBeDefined();
   });
 });

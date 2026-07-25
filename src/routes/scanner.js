@@ -1,5 +1,5 @@
 /**
- * Express REST API Routes for ChainRecover AI Scanner & Module 2 Solana Rent Recovery
+ * Express REST API Routes for ChainRecover AI Scanner, Module 2 (Solana Rent) & Module 3 (Dust Consolidation)
  */
 
 const express = require('express');
@@ -9,6 +9,10 @@ const {
   findEmptyTokenAccounts,
   buildCloseAccountTransaction
 } = require('../services/solanaRentService');
+const {
+  analyzeDustBalances,
+  buildDustConsolidationTransaction
+} = require('../services/dustService');
 
 /**
  * GET /api/v1/scanner/chains
@@ -20,7 +24,6 @@ router.get('/chains', (req, res) => {
 
 /**
  * MODULE 2: GET /api/v1/scanner/solana/rent/:address
- * Detect empty SPL Token Accounts & closable ATAs with exact rent metrics
  */
 router.get('/solana/rent/:address', async (req, res, next) => {
   try {
@@ -35,17 +38,50 @@ router.get('/solana/rent/:address', async (req, res, next) => {
 
 /**
  * MODULE 2: POST /api/v1/scanner/solana/build-close-tx
- * Generate close account instructions & base64 transaction payload for 1-click recovery
  */
 router.post('/solana/build-close-tx', (req, res, next) => {
   try {
     const { walletAddress, accountAddresses } = req.body;
-
     if (!walletAddress) {
       return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
     }
-
     const result = buildCloseAccountTransaction(walletAddress, accountAddresses || []);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 3: POST /api/v1/scanner/dust/analyze
+ * Detect balances below user-defined threshold and generate 4 consolidation strategies (Swap, Bridge, Transfer, Consolidate)
+ */
+router.post('/dust/analyze', (req, res, next) => {
+  try {
+    const { walletAddress, thresholdUsd } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    const result = analyzeDustBalances(walletAddress, thresholdUsd);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 3: POST /api/v1/scanner/dust/consolidate
+ * Generate unsigned batch transaction payload for dust consolidation
+ */
+router.post('/dust/consolidate', (req, res, next) => {
+  try {
+    const { walletAddress, tokenIds, strategy } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    const result = buildDustConsolidationTransaction(walletAddress, tokenIds || [], strategy || 'SWAP');
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;
@@ -70,12 +106,10 @@ router.get('/wallet/:address', async (req, res, next) => {
 
 /**
  * POST /api/v1/scanner/recover
- * Generate unsigned recovery transaction payload for user wallet approval
  */
 router.post('/recover', (req, res, next) => {
   try {
     const { address, actionType, targetAccounts } = req.body;
-
     if (!address || !actionType) {
       return res.status(400).json({ error: true, message: 'address and actionType are required' });
     }
