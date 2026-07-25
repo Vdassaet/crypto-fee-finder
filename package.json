@@ -1,0 +1,36 @@
+{
+  "name": "crypto-fee-finder",
+  "version": "1.0.0",
+  "description": "REST API Backend to fetch, compute, and compare crypto transaction, DeFi protocol, and Cross-Chain bridge fees.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "vitest run tests/fees.test.mjs"
+  },
+  "keywords": [
+    "crypto",
+    "fees",
+    "defi",
+    "bridge",
+    "uniswap",
+    "aave",
+    "gas",
+    "ethereum",
+    "arbitrum",
+    "solana"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0",
+    "vitest": "^3.0.0"
+  }
+}

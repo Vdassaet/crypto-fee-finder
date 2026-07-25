@@ -1,0 +1,98 @@
+openapi: 3.0.0
+info:
+  title: Crypto Fee Finder API
+  description: REST API Backend for searching, calculating, and comparing crypto transaction fees, DEX swap fees, and Cross-Chain Bridge fees.
+  version: 1.0.0
+paths:
+  /api/v1/fees/gas:
+    get:
+      summary: Get current gas metrics across supported networks
+      parameters:
+        - name: chain
+          in: query
+          description: Optional chain filter (e.g. ethereum, arbitrum, polygon, solana)
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Gas price metrics in Gwei and native USD token prices
+  /api/v1/fees/defi:
+    get:
+      summary: Get DeFi protocols and fee calculations
+      parameters:
+        - name: protocol
+          in: query
+          description: Protocol ID (e.g., uniswap_v3, curve, aave_v3)
+          required: false
+          schema:
+            type: string
+        - name: amountUsd
+          in: query
+          description: Transaction amount in USD for fee calculation
+          required: false
+          schema:
+            type: number
+            default: 1000
+      responses:
+        '200':
+          description: Protocol fee details and calculated costs
+  /api/v1/fees/bridges:
+    get:
+      summary: Get available cross-chain bridges and fee estimates
+      parameters:
+        - name: sourceChain
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: destinationChain
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: token
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: amountUsd
+          in: query
+          required: false
+          schema:
+            type: number
+      responses:
+        '200':
+          description: List of bridge routes or calculated bridge fees
+  /api/v1/fees/compare:
+    post:
+      summary: Compare fee routes and find the cheapest transfer/swap option
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - sourceChain
+                - destinationChain
+                - amountUsd
+              properties:
+                sourceChain:
+                  type: string
+                  example: ethereum
+                destinationChain:
+                  type: string
+                  example: arbitrum
+                token:
+                  type: string
+                  example: USDC
+                amountUsd:
+                  type: number
+                  example: 1500
+                maxBridgeTimeMinutes:
+                  type: integer
+                  example: 10
+      responses:
+        '200':
+          description: Sorted fee routes recommendations (cheapest first)
