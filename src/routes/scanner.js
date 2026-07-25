@@ -2,7 +2,7 @@
  * Express REST API Routes for ChainRecover AI Scanner:
  * Module 2 (Solana Rent), Module 3 (Dust Consolidation), Module 4 (Reward Scanner), 
  * Module 5 (Approval Revoker), Module 6 (Fee Optimizer), Module 7 (Cross-chain Merged), 
- * & Module 8 (AI Assistant)
+ * Module 8 (AI Assistant), & Module 9 (Analytics & Charts)
  */
 
 const express = require('express');
@@ -35,6 +35,9 @@ const {
 const {
   askAiAssistant
 } = require('../services/aiAssistantService');
+const {
+  generateAnalyticsReport
+} = require('../services/analyticsService');
 
 /**
  * GET /api/v1/scanner/chains
@@ -183,7 +186,7 @@ router.post('/optimizer/analyze', (req, res, next) => {
 });
 
 /**
- * MODULE 7: Cross-chain Scanner & Merged Dashboard Endpoints
+ * MODULE 7: Cross-chain Scanner Endpoints
  */
 router.post('/cross-chain/merged', async (req, res, next) => {
   try {
@@ -209,7 +212,6 @@ router.post('/cross-chain/master-recover', (req, res, next) => {
 
 /**
  * MODULE 8: AI Assistant Endpoint
- * Answers natural language questions ("What can I recover?", "How much rent do I have?", "Why should I close these accounts?", "Which wallet is healthiest?")
  */
 router.post('/ai/chat', async (req, res, next) => {
   try {
@@ -218,6 +220,21 @@ router.post('/ai/chat', async (req, res, next) => {
       return res.status(400).json({ error: true, message: 'query parameter is required' });
     }
     const result = await askAiAssistant(walletAddress, query);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 9: Analytics & Visual Charts Endpoint
+ * Portfolio Allocation, Recoverable Assets, Savings Over Time, Fees Avoided, Wallet Activity
+ */
+router.post('/analytics/report', (req, res, next) => {
+  try {
+    const { walletAddress } = req.body;
+    const result = generateAnalyticsReport(walletAddress);
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;

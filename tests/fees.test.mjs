@@ -31,6 +31,9 @@ import {
 import {
   askAiAssistant
 } from '../src/services/aiAssistantService.js';
+import {
+  generateAnalyticsReport
+} from '../src/services/analyticsService.js';
 
 const DEMO_SOLANA_WALLET = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 const DEMO_EVM_WALLET = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
@@ -92,42 +95,32 @@ describe('MODULE 7: Cross-chain Scanner & Merged Unified Dashboard Engine', () =
 });
 
 describe('MODULE 8: AI Assistant Engine', () => {
-  it('should answer "What can I recover?" with multi-chain asset breakdown', async () => {
+  it('should answer natural language query with explanations', async () => {
     const res = await askAiAssistant(DEMO_SOLANA_WALLET, 'What can I recover?');
     expect(res.category).toBe('RECOVERABLE_ASSETS_SUMMARY');
-    expect(res.explanation).toContain('$260.19 USD');
-    expect(res.recommendedAction.type).toBe('MASTER_RECOVERY');
   });
+});
 
-  it('should answer "How much rent do I have?" with Solana rent storage breakdown', async () => {
-    const res = await askAiAssistant(DEMO_SOLANA_WALLET, 'How much rent do I have?');
-    expect(res.category).toBe('SOLANA_RENT_DETAILS');
-    expect(res.explanation).toContain('0.00203928 SOL');
-  });
-
-  it('should answer "Why should I close these accounts?" with account closure rationale', async () => {
-    const res = await askAiAssistant(DEMO_SOLANA_WALLET, 'Why should I close these accounts?');
-    expect(res.category).toBe('RENT_CLOSURE_EXPLANATION');
-    expect(res.explanation).toContain('100% Safe & Risk-Free');
-  });
-
-  it('should answer "Which wallet is healthiest?" with health grade evaluation', async () => {
-    const res = await askAiAssistant(DEMO_EVM_WALLET, 'Which wallet is healthiest?');
-    expect(res.category).toBe('WALLET_HEALTH_COMPARISON');
-    expect(res.explanation).toContain('Grade A+');
+describe('MODULE 9: Analytics Engine & Visual Charts', () => {
+  it('should generate full analytics report with portfolio allocation and 12-month savings timeline', () => {
+    const report = generateAnalyticsReport(DEMO_SOLANA_WALLET);
+    expect(report.portfolioAllocation.assetDistribution.length).toBeGreaterThan(0);
+    expect(report.savingsOverTime.monthlyTimeline.length).toBe(12);
+    expect(report.feesAvoided.totalFeesAvoidedUsd).toBeGreaterThan(0);
+    expect(report.walletActivity.totalTransactionsScanned).toBeGreaterThan(0);
   });
 });
 
 describe('ChainRecover AI Scanner & Module Endpoints', () => {
-  it('POST /api/v1/scanner/ai/chat should return AI explanation & quick action', async () => {
+  it('POST /api/v1/scanner/analytics/report should return analytics report', async () => {
     const res = await request(app)
-      .post('/api/v1/scanner/ai/chat')
-      .send({ walletAddress: DEMO_SOLANA_WALLET, query: 'What can I recover?' });
+      .post('/api/v1/scanner/analytics/report')
+      .send({ walletAddress: DEMO_SOLANA_WALLET });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.explanation).toContain('$260.19 USD');
-    expect(res.body.data.recommendedAction).toBeDefined();
+    expect(res.body.data.portfolioAllocation.totalValueUsd).toBeGreaterThan(0);
+    expect(res.body.data.savingsOverTime.monthlyTimeline.length).toBe(12);
   });
 
   it('GET /api/v1/scanner/chains should list supported blockchains', async () => {

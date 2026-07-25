@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Module 8: AI Assistant & Natural Language Engine</title>
+  <title>ChainRecover AI | Module 9: Analytics & Visual Charts Engine</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -37,6 +37,9 @@
     .glow-indigo {
       box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
     }
+    .glow-emerald {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
@@ -46,14 +49,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20">
-          🤖
+          📊
         </div>
         <div>
           <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-400">
             ChainRecover <span class="text-indigo-400 font-bold">AI</span>
           </span>
           <span class="ml-2 text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Module 8 Live: AI Assistant
+            Module 9 Live: Analytics & Charts
           </span>
         </div>
       </div>
@@ -62,7 +65,7 @@
       <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
         <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>AI Architect Active</span>
+          <span>12-Month Analytics Active</span>
         </span>
       </div>
 
@@ -81,83 +84,128 @@
     <!-- HERO SCANNER SECTION -->
     <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
       <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
       <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        <span>🤖 MODULE 8: AI ASSISTANT ENGINE</span>
+        <span>📊 MODULE 9: ANALYTICS & VISUAL CHARTS ENGINE</span>
         <span class="text-gray-500">•</span>
-        <span>Natural Language Explanations & Action Recommendations</span>
+        <span>Portfolio Allocation, Savings Over Time, Fees Avoided, Activity</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Ask Your <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">AI Blockchain Architect</span> Anything
+        Multi-Chain Wallet <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">Analytics & Savings Visualizer</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Get instant explanations about your recoverable assets, rent storage economics, security risks, and wallet health metrics.
+        Visualize your portfolio asset allocation, itemized recoverable breakdown, 12-month historical savings timeline, and avoided MEV/bridge fees.
       </p>
 
-      <!-- WALLET INPUT & CHAT BOX -->
-      <div class="max-w-3xl mx-auto space-y-3">
-        <input type="text" id="walletInput" placeholder="Paste Wallet Address (Solana or EVM)" 
+      <!-- WALLET INPUT -->
+      <div class="max-w-xl mx-auto flex items-center gap-3">
+        <input type="text" id="walletInput" placeholder="Paste Wallet Address" 
           class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 text-white placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono"
           value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
 
-        <div class="flex flex-col sm:flex-row items-center gap-2">
-          <input type="text" id="aiQueryInput" placeholder="Ask: 'What can I recover?' or 'How much rent do I have?'" 
-            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none font-mono"
-            value="What can I recover?">
-
-          <button onclick="sendAiQuery()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition shadow-lg shadow-indigo-600/30 whitespace-nowrap">
-            🤖 Ask AI
-          </button>
-        </div>
-
-        <!-- 4 PRESET QUICK PROMPT BUTTONS -->
-        <div class="flex flex-wrap justify-center gap-2 pt-2 text-xs">
-          <button onclick="askPreset('What can I recover?')" class="bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 px-3 py-1.5 rounded-lg font-medium transition">
-            💬 "What can I recover?"
-          </button>
-          <button onclick="askPreset('How much rent do I have?')" class="bg-purple-950/80 hover:bg-purple-900 text-purple-300 border border-purple-800/60 px-3 py-1.5 rounded-lg font-medium transition">
-            ⚡ "How much rent do I have?"
-          </button>
-          <button onclick="askPreset('Why should I close these accounts?')" class="bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-800/60 px-3 py-1.5 rounded-lg font-medium transition">
-            ❓ "Why should I close these accounts?"
-          </button>
-          <button onclick="askPreset('Which wallet is healthiest?')" class="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 px-3 py-1.5 rounded-lg font-medium transition">
-            🛡️ "Which wallet is healthiest?"
-          </button>
-        </div>
+        <button onclick="loadAnalyticsReport()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-6 py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 whitespace-nowrap">
+          📊 Load Analytics
+        </button>
       </div>
     </div>
 
-    <!-- MODULE 8 AI RESPONSE CARD -->
+    <!-- MODULE 9 DASHBOARD RESULTS -->
     <div id="dashboardSection" class="space-y-6">
 
-      <div class="glass-card rounded-2xl p-6 border-indigo-500/40 glow-indigo">
-        <div class="flex items-center justify-between mb-4 border-b border-gray-800 pb-3">
-          <div class="flex items-center space-x-2">
-            <span class="text-xl">🤖</span>
-            <h3 class="text-lg font-bold text-white">AI Assistant Response</h3>
-            <span class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2 py-0.5 rounded-full font-mono" id="aiEngineLabel">
-              ChainRecover AI Engine
-            </span>
+      <!-- 4 EXECUTIVE METRICS CARDS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Total Portfolio -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>TOTAL PORTFOLIO</span>
+            <span class="text-indigo-400">💼 Assets</span>
           </div>
-          <span class="text-xs text-gray-400 font-mono" id="aiQueryDisplay">Query: "What can I recover?"</span>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statTotalNetWorth">$14,143.10</div>
+          <div class="text-xs text-gray-400 mt-2">Across 8 token asset classes</div>
         </div>
 
-        <div class="prose prose-invert max-w-none text-sm text-gray-200 leading-relaxed font-sans whitespace-pre-line mb-6" id="aiExplanationText">
-          <!-- Dynamically populated AI Explanation -->
+        <!-- 12-Month Cumulative Savings -->
+        <div class="glass-card rounded-2xl p-5 border-emerald-500/40 glow-emerald">
+          <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
+            <span>12-MONTH CUMULATIVE SAVINGS</span>
+            <span>💰 Timeline</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="stat12mSavings">$712.40</div>
+          <div class="text-xs text-emerald-300/80 mt-2 font-medium">Gas & Rent Reclaims Saved</div>
         </div>
 
-        <!-- EMBEDDED RECOMMENDED ACTION BUTTON -->
-        <div id="aiActionBox" class="bg-gray-900/90 border border-gray-800 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div>
-            <div class="text-xs text-gray-400 uppercase font-semibold">Recommended Instant Action</div>
-            <div class="text-sm font-bold text-emerald-400" id="aiActionTitle">🌐 Execute 1-Click Master Recovery ($260.19 USD)</div>
+        <!-- Total Fees Avoided -->
+        <div class="glass-card rounded-2xl p-5 border-indigo-500/40 glow-indigo">
+          <div class="flex items-center justify-between text-indigo-400 text-xs font-bold mb-2">
+            <span>TOTAL FEES AVOIDED</span>
+            <span>🛡️ MEV Shield</span>
           </div>
-          <button onclick="triggerAiAction()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20 whitespace-nowrap">
-            ⚡ Execute Recommended Action
-          </button>
+          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-mono" id="statFeesAvoided">$945.70</div>
+          <div class="text-xs text-gray-400 mt-2">DEX slippage, bridge & MEV</div>
+        </div>
+
+        <!-- Total Transactions & Score -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>WALLET ACTIVITY & SCORE</span>
+            <span class="text-emerald-400 font-bold">Grade A+</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statTxCount">1,306 Txs</div>
+          <div class="text-xs text-gray-400 mt-2">Gas spent: $1,420.50 USD</div>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO ALLOCATION & 12-MONTH SAVINGS TIMELINE -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- PORTFOLIO ASSET ALLOCATION CHARTS -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-white mb-2">📊 Portfolio Asset Allocation</h3>
+          <p class="text-xs text-gray-400 mb-4">Percentage breakdown of holdings across tokens & stablecoins.</p>
+
+          <div class="space-y-3" id="assetAllocationContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- 12-MONTH SAVINGS TIMELINE -->
+        <div class="glass-card rounded-2xl p-6">
+          <h3 class="text-lg font-bold text-white mb-2">📈 12-Month Cumulative Savings Over Time</h3>
+          <p class="text-xs text-gray-400 mb-4">Historical growth curve of gas savings and rent refunds ($ USD).</p>
+
+          <div class="space-y-2 font-mono text-xs" id="timelineContainer">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FEES AVOIDED BREAKDOWN & ITEMIZATION -->
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-2">🛡️ Itemized Fees Avoided Breakdown</h3>
+        <p class="text-xs text-gray-400 mb-4">Quantifies costs saved via MEV frontrunning shielding, DEX route optimization, and bridge efficiency.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
+          <div class="bg-gray-900/90 border border-gray-800 p-4 rounded-xl">
+            <div class="text-indigo-400 font-bold text-sm mb-1">🔄 DEX Slippage & Protocol Fees</div>
+            <div class="text-2xl font-extrabold text-white" id="statDexFeesAvoided">$340.50 USD</div>
+            <div class="text-gray-400 text-xs mt-1">Optimal DEX route execution</div>
+          </div>
+
+          <div class="bg-gray-900/90 border border-gray-800 p-4 rounded-xl">
+            <div class="text-purple-400 font-bold text-sm mb-1">🌉 Bridge Relayer Overhead</div>
+            <div class="text-2xl font-extrabold text-white" id="statBridgeFeesAvoided">$185.20 USD</div>
+            <div class="text-gray-400 text-xs mt-1">Cross-chain relayer optimization</div>
+          </div>
+
+          <div class="bg-gray-900/90 border border-gray-800 p-4 rounded-xl border-emerald-500/40">
+            <div class="text-emerald-400 font-bold text-sm mb-1">🛡️ MEV Sandwich Attacks Blocked</div>
+            <div class="text-2xl font-extrabold text-emerald-400" id="statMevBlocked">$420.00 USD</div>
+            <div class="text-emerald-300/80 text-xs mt-1">Flashbots Protect RPC shield</div>
+          </div>
         </div>
       </div>
 
@@ -167,60 +215,75 @@
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
-      <div>ChainRecover AI Platform &copy; 2026 • Module 8: AI Assistant & Natural Language Engine</div>
+      <div>ChainRecover AI Platform &copy; 2026 • Module 9: Analytics & Visual Charts Engine</div>
       <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
     </div>
   </footer>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    async function sendAiQuery() {
+    async function loadAnalyticsReport() {
       const walletAddress = document.getElementById('walletInput').value.trim();
-      const query = document.getElementById('aiQueryInput').value.trim();
-      if (!query) return alert('Please enter a question');
 
       try {
-        const res = await fetch('/api/v1/scanner/ai/chat', {
+        const res = await fetch('/api/v1/scanner/analytics/report', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress, query })
+          body: JSON.stringify({ walletAddress })
         });
         const data = await res.json();
 
         if (data.success && data.data) {
           const d = data.data;
-          document.getElementById('aiEngineLabel').innerText = d.aiEngine;
-          document.getElementById('aiQueryDisplay').innerText = `Query: "${d.query}"`;
-          document.getElementById('aiExplanationText').innerText = d.explanation;
+          const p = d.portfolioAllocation;
+          const s = d.savingsOverTime;
+          const f = d.feesAvoided;
+          const a = d.walletActivity;
 
-          if (d.recommendedAction) {
-            document.getElementById('aiActionBox').classList.remove('hidden');
-            document.getElementById('aiActionTitle').innerText = d.recommendedAction.label;
-          } else {
-            document.getElementById('aiActionBox').classList.add('hidden');
-          }
+          document.getElementById('statTotalNetWorth').innerText = `$${p.totalValueUsd.toLocaleString()}`;
+          document.getElementById('stat12mSavings').innerText = `$${s.total12MonthSavingsUsd}`;
+          document.getElementById('statFeesAvoided').innerText = `$${f.totalFeesAvoidedUsd}`;
+          document.getElementById('statTxCount').innerText = `${a.totalTransactionsScanned} Txs`;
+
+          document.getElementById('statDexFeesAvoided').innerText = `$${f.breakdown.dexSlippageAndFeesAvoidedUsd}`;
+          document.getElementById('statBridgeFeesAvoided').innerText = `$${f.breakdown.bridgeRelayerOverheadAvoidedUsd}`;
+          document.getElementById('statMevBlocked').innerText = `$${f.breakdown.mevFrontrunningSandwichBlockedUsd}`;
+
+          // Populate Asset Allocation Progress Bars
+          const assetContainer = document.getElementById('assetAllocationContainer');
+          assetContainer.innerHTML = p.assetDistribution.map(asset => `
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-white">${asset.symbol} <span class="text-gray-500 font-normal">(${asset.category})</span></span>
+                <span class="text-gray-400 font-mono">$${asset.valueUsd.toLocaleString()} (${asset.percentage}%)</span>
+              </div>
+              <div class="w-full bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-800">
+                <div class="h-2 rounded-full" style="width: ${asset.percentage}%; background-color: ${asset.color}"></div>
+              </div>
+            </div>
+          `).join('');
+
+          // Populate 12-Month Savings Timeline
+          const timelineContainer = document.getElementById('timelineContainer');
+          timelineContainer.innerHTML = s.monthlyTimeline.map(t => `
+            <div class="flex items-center justify-between bg-gray-900/60 p-2 rounded-lg border border-gray-800/80">
+              <span class="text-gray-400 font-sans">${t.month}</span>
+              <span class="text-emerald-400 font-bold">$${t.cumulativeSavingsUsd.toFixed(2)} USD</span>
+            </div>
+          `).join('');
         } else {
-          alert('AI Error: ' + data.message);
+          alert('Analytics error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
       }
     }
 
-    function askPreset(presetText) {
-      document.getElementById('aiQueryInput').value = presetText;
-      sendAiQuery();
-    }
-
-    function triggerAiAction() {
-      alert('⚡ Executing AI Recommended Action:\n\nPayload constructed non-custodially and ready for wallet signature.');
-    }
-
     function connectWalletMock() {
-      alert('Wallet Connection:\nConnect your wallet to enable personal AI recovery insights.');
+      alert('Wallet Connection:\nConnect your wallet to generate custom historical analytics.');
     }
 
-    window.onload = () => sendAiQuery();
+    window.onload = () => loadAnalyticsReport();
   </script>
 </body>
 </html>
