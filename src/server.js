@@ -12,6 +12,7 @@ const YAML = require('yamljs');
 
 const feesRouter = require('./routes/fees');
 const scannerRouter = require('./routes/scanner');
+const adminRouter = require('./routes/admin');
 const errorHandler = require('./middleware/errorHandler');
 const { apiRateLimiter } = require('./middleware/rateLimiter');
 const { generateWalletJwt } = require('./middleware/authMiddleware');
@@ -38,7 +39,7 @@ app.use((req, res, next) => {
 // Apply Rate Limiting to Scanner API
 app.use('/api/v1/scanner', apiRateLimiter);
 
-// Serve static frontend assets for ChainRecover AI web app
+// Serve static frontend assets for ChainRecover AI web app & Admin Panel
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Request logging middleware
@@ -73,6 +74,7 @@ app.post('/api/v1/auth/wallet-login', (req, res) => {
 // API Routes
 app.use('/api/v1/fees', feesRouter);
 app.use('/api/v1/scanner', scannerRouter);
+app.use('/api/v1/admin', adminRouter);
 
 // Fallback to index.html for Web App SPA
 app.get('*', (req, res, next) => {
@@ -89,7 +91,7 @@ app.use(errorHandler);
 if (require.main === module) {
   app.listen(PORT, () => {
     console.log(`🚀 ChainRecover AI SaaS Platform running at http://localhost:${PORT}`);
-    console.log(`🔒 Security Architecture Enforced (Zero Keys, Rate Limited, JWT Auth, AES-256)`);
+    console.log(`🔒 Admin Control Panel available at http://localhost:${PORT}/admin.html`);
     console.log(`📚 OpenAPI Documentation available at http://localhost:${PORT}/api-docs`);
   });
 }

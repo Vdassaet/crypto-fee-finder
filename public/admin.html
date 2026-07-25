@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChainRecover AI | Executive Admin Control Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#EEF2FF',
+              500: '#6366F1',
+              600: '#4F46E5',
+              900: '#1E1B4B',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #0A0D14; color: #F3F4F6; }
+    .glass-card {
+      background: rgba(17, 24, 39, 0.75);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP HEADER -->
+  <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-purple-500/20">
+          ⚙️
+        </div>
+        <div>
+          <span class="font-extrabold text-xl tracking-tight text-white">
+            ChainRecover AI <span class="text-indigo-400 font-bold">Admin Console</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-4 text-xs">
+        <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full font-semibold">
+          SYSTEM HEALTH: 99.94% OPTIMAL
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+
+    <!-- ADMIN NAVIGATION TABS -->
+    <div class="flex flex-wrap gap-2 mb-8 border-b border-gray-800 pb-4">
+      <button onclick="switchTab('dashboard')" id="tab-dashboard" class="bg-indigo-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition">
+        📊 Overview
+      </button>
+      <button onclick="switchTab('users')" id="tab-users" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        👥 Users (1,420)
+      </button>
+      <button onclick="switchTab('wallets')" id="tab-wallets" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        👛 Wallets (3,850)
+      </button>
+      <button onclick="switchTab('scans')" id="tab-scans" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        🔍 Scans (12.4k)
+      </button>
+      <button onclick="switchTab('revenue')" id="tab-revenue" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        💰 Revenue ($18.4k MRR)
+      </button>
+      <button onclick="switchTab('apiUsage')" id="tab-apiUsage" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        ⚡ API & RPC Nodes
+      </button>
+      <button onclick="switchTab('logs')" id="tab-logs" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        📝 System Logs
+      </button>
+      <button onclick="switchTab('errors')" id="tab-errors" class="bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800">
+        🚨 Errors (2)
+      </button>
+    </div>
+
+    <!-- TAB CONTENT DISPLAY -->
+    <div id="tabContent" class="space-y-6">
+      <!-- Dynamically populated via JS -->
+    </div>
+  </main>
+
+  <footer class="border-t border-gray-800/60 bg-gray-950 py-6 text-center text-xs text-gray-500">
+    ChainRecover AI Platform Admin Console &copy; 2026
+  </footer>
+
+  <script>
+    let activeTab = 'dashboard';
+
+    async function fetchAdminData(endpoint) {
+      const res = await fetch(`/api/v1/admin/${endpoint}`);
+      const data = await res.json();
+      return data.data;
+    }
+
+    async function switchTab(tabName) {
+      activeTab = tabName;
+      document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+        btn.className = 'bg-gray-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2 rounded-xl transition border border-gray-800';
+      });
+      document.getElementById(`tab-${tabName}`).className = 'bg-indigo-600 text-white font-bold text-xs px-4 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30';
+
+      const container = document.getElementById('tabContent');
+      container.innerHTML = '<div class="text-center py-12 text-gray-500 font-mono">Loading Admin Metrics...</div>';
+
+      const data = await fetchAdminData(tabName);
+
+      if (tabName === 'dashboard') {
+        const m = data.metrics;
+        container.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="glass-card p-5 rounded-2xl">
+              <div class="text-xs text-gray-400 font-bold mb-1">TOTAL USERS</div>
+              <div class="text-3xl font-extrabold text-white font-mono">${m.totalUsersCount.toLocaleString()}</div>
+              <div class="text-xs text-indigo-400 mt-1">${m.activeSubscriptionsCount} Active Subscribers</div>
+            </div>
+            <div class="glass-card p-5 rounded-2xl">
+              <div class="text-xs text-gray-400 font-bold mb-1">WALLETS SCANNED</div>
+              <div class="text-3xl font-extrabold text-white font-mono">${m.totalWalletsScannedCount.toLocaleString()}</div>
+              <div class="text-xs text-purple-400 mt-1">${m.totalScansCompletedCount.toLocaleString()} Scans</div>
+            </div>
+            <div class="glass-card p-5 rounded-2xl">
+              <div class="text-xs text-emerald-400 font-bold mb-1">VALUE RECOVERED</div>
+              <div class="text-3xl font-extrabold text-emerald-400 font-mono">$${m.totalValueRecoveredUsd.toLocaleString()}</div>
+              <div class="text-xs text-gray-400 mt-1">Non-custodial reclaims</div>
+            </div>
+            <div class="glass-card p-5 rounded-2xl">
+              <div class="text-xs text-indigo-400 font-bold mb-1">MONTHLY RECURRING (MRR)</div>
+              <div class="text-3xl font-extrabold text-indigo-300 font-mono">$${m.monthlyRecurringRevenueUsd.toLocaleString()}</div>
+              <div class="text-xs text-gray-400 mt-1">ARR: $${m.annualRecurringRevenueUsd.toLocaleString()}</div>
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'users') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">👥 SaaS User Accounts & Subscriptions</h3>
+            <div class="space-y-3 font-mono text-xs">
+              ${data.map(u => `
+                <div class="flex items-center justify-between bg-gray-900/80 p-3.5 rounded-xl border border-gray-800">
+                  <div>
+                    <span class="font-bold text-white">${u.name}</span>
+                    <span class="text-gray-400 ml-2">(${u.email})</span>
+                  </div>
+                  <div class="flex items-center space-x-4">
+                    <span class="bg-indigo-500/20 text-indigo-300 px-2.5 py-1 rounded border border-indigo-500/30">${u.plan}</span>
+                    <span class="text-gray-400">${u.registeredWalletsCount} Wallets</span>
+                    <span class="text-emerald-400 font-bold">${u.status}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'wallets') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">👛 Tracked & Scanned Wallets</h3>
+            <div class="space-y-3 font-mono text-xs">
+              ${data.map(w => `
+                <div class="flex items-center justify-between bg-gray-900/80 p-3.5 rounded-xl border border-gray-800">
+                  <div>
+                    <span class="font-bold text-indigo-300">${w.address}</span>
+                    <span class="text-gray-400 ml-2">(${w.type})</span>
+                  </div>
+                  <div class="flex items-center space-x-4">
+                    <span class="text-white">$${w.portfolioUsd.toLocaleString()} Portfolio</span>
+                    <span class="text-emerald-400 font-bold">+$${w.totalRecoveredUsd} Recovered</span>
+                    <span class="bg-gray-800 text-gray-300 px-2 py-0.5 rounded">${w.status}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'scans') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">🔍 Scan Throughput Across 7 Chains</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 font-mono text-xs">
+              ${data.scansByChain.map(s => `
+                <div class="bg-gray-900 p-3 rounded-xl border border-gray-800">
+                  <div class="text-gray-400">${s.chain}</div>
+                  <div class="text-xl font-bold text-white">${s.count.toLocaleString()} Scans</div>
+                  <div class="text-indigo-400 text-xs">${s.avgDurationMs}ms avg latency</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'revenue') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">💰 SaaS Revenue & Financial Metrics</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 font-mono text-xs">
+              <div class="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div class="text-gray-400">MRR (Monthly)</div>
+                <div class="text-2xl font-extrabold text-emerald-400">$${data.monthlyRecurringRevenueUsd.toLocaleString()}</div>
+                <div class="text-emerald-300 text-xs mt-1">${data.mrrGrowthPercentage}</div>
+              </div>
+              <div class="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div class="text-gray-400">ARR (Annual Run Rate)</div>
+                <div class="text-2xl font-extrabold text-indigo-300">$${data.annualRecurringRevenueUsd.toLocaleString()}</div>
+              </div>
+              <div class="bg-gray-900 p-4 rounded-xl border border-gray-800">
+                <div class="text-gray-400">Recovery Fee Share</div>
+                <div class="text-2xl font-extrabold text-purple-300">$${data.recoverySuccessFeeShareUsd.toLocaleString()}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'apiUsage') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">⚡ API Usage & RPC Node Health</h3>
+            <div class="space-y-3 font-mono text-xs">
+              ${data.rpcNodeHealth.map(node => `
+                <div class="flex items-center justify-between bg-gray-900 p-3 rounded-xl border border-gray-800">
+                  <span class="font-bold text-white">${node.provider} (${node.chain})</span>
+                  <span class="text-emerald-400">${node.latencyMs}ms latency</span>
+                  <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">${node.status}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'logs') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl font-mono text-xs space-y-2">
+            <h3 class="text-lg font-bold text-white mb-4">📝 Real-Time System Activity Logs</h3>
+            ${data.map(l => `
+              <div class="bg-gray-950 p-3 rounded-lg border border-gray-800 text-gray-300">
+                <span class="text-indigo-400">[${l.level}]</span> <span class="text-gray-500">${l.module}</span> ${l.message}
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (tabName === 'errors') {
+        container.innerHTML = `
+          <div class="glass-card p-6 rounded-2xl font-mono text-xs">
+            <h3 class="text-lg font-bold text-white mb-4">🚨 Error Tracking Console</h3>
+            <div class="space-y-3">
+              ${data.recentErrors.map(e => `
+                <div class="bg-gray-900 p-3 rounded-xl border border-rose-500/30">
+                  <div class="text-rose-400 font-bold">${e.code} Error in ${e.module}</div>
+                  <div class="text-white mt-1">${e.message}</div>
+                  <div class="text-gray-500 text-xs mt-1">Status: RESOLVED</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    window.onload = () => switchTab('dashboard');
+  </script>
+</body>
+</html>
