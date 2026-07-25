@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Module 4: Reward Scanner & Harvester</title>
+  <title>ChainRecover AI | Module 5: Token Approval Scanner & Revoker</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,11 +34,8 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
-    .glow-emerald {
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
-    }
-    .glow-indigo {
-      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+    .glow-red {
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.25);
     }
   </style>
 </head>
@@ -48,15 +45,15 @@
   <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20">
-          💎
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-red-600 via-purple-600 to-indigo-500 flex items-center justify-center font-black text-xl shadow-lg shadow-red-500/20">
+          🛡️
         </div>
         <div>
-          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-400">
-            ChainRecover <span class="text-indigo-400 font-bold">AI</span>
+          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-red-400">
+            ChainRecover <span class="text-red-400 font-bold">AI</span>
           </span>
-          <span class="ml-2 text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Module 4 Live: Reward Scanner
+          <span class="ml-2 text-xs bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full font-semibold">
+            Module 5 Live: EVM Approval Scanner
           </span>
         </div>
       </div>
@@ -64,15 +61,15 @@
       <!-- Network Ticker -->
       <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
         <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
-          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-          <span>5 Reward Categories Active</span>
+          <span class="w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+          <span>5 EVM Chains Monitored</span>
         </span>
       </div>
 
       <!-- Wallet Action -->
       <div class="flex items-center space-x-3">
-        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-indigo-600/20 flex items-center space-x-2">
-          <span>🔗 Connect Wallet</span>
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-red-600 to-indigo-600 hover:from-red-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-red-600/20 flex items-center space-x-2">
+          <span>🦊 Connect MetaMask / EVM</span>
         </button>
       </div>
     </div>
@@ -83,140 +80,140 @@
 
     <!-- HERO SCANNER SECTION -->
     <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        <span>💎 MODULE 4: REWARD SCANNER & HARVESTER</span>
+      <div class="inline-flex items-center space-x-2 bg-red-500/10 border border-red-500/20 text-red-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span>🛡️ MODULE 5: EVM TOKEN APPROVAL SCANNER & REVOKER</span>
         <span class="text-gray-500">•</span>
-        <span>Staking, Validators, LPs, DAO, Airdrops</span>
+        <span>Ethereum, Base, Polygon, Arbitrum, Optimism</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Harvest Unclaimed Rewards Across <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">5 Categories</span>
+        Find & Revoke Dangerous <span class="bg-clip-text text-transparent bg-gradient-to-r from-red-400 via-purple-300 to-indigo-400">Unlimited Token Approvals</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Scans multi-chain protocols for unclaimed staking yield, validator commission, LP fees, governance rewards, and eligible airdrop allocations.
+        Detect active ERC-20 token allowances across 5 EVM networks, evaluate contract security risk, and revoke dangerous permissions in 1-click.
       </p>
 
-      <!-- WALLET INPUT & SCAN BUTTON -->
-      <div class="max-w-2xl mx-auto flex flex-col sm:flex-row items-center gap-3">
+      <!-- WALLET INPUT & CHAIN SELECTOR -->
+      <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-3">
         <div class="relative w-full">
-          <input type="text" id="walletInput" placeholder="Paste Solana or EVM Wallet Address" 
-            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
-            value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
+          <input type="text" id="walletInput" placeholder="Paste EVM Address (0x...)" 
+            class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-white placeholder-gray-500 text-sm rounded-xl px-4 py-3.5 outline-none transition font-mono"
+            value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">
         </div>
-        <button onclick="scanRewards()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-indigo-600/30 whitespace-nowrap">
-          💎 Scan Rewards
+
+        <!-- EVM Chain Selector -->
+        <div class="w-full sm:w-auto">
+          <select id="chainSelect" onchange="scanApprovals()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl px-3 py-3.5 font-semibold outline-none focus:border-red-500">
+            <option value="ALL" selected>All 5 EVM Chains</option>
+            <option value="ethereum">Ethereum (ETH)</option>
+            <option value="base">Base (L2)</option>
+            <option value="polygon">Polygon (POL)</option>
+            <option value="arbitrum">Arbitrum (L2)</option>
+            <option value="optimism">Optimism (L2)</option>
+          </select>
+        </div>
+
+        <button onclick="scanApprovals()" class="w-full sm:w-auto bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-6 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-red-600/30 whitespace-nowrap">
+          🛡️ Scan Approvals
         </button>
       </div>
     </div>
 
-    <!-- MODULE 4 DASHBOARD RESULTS -->
+    <!-- MODULE 5 DASHBOARD RESULTS -->
     <div id="dashboardSection" class="space-y-6">
 
       <!-- METRICS GRID -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- Total Claimable Items -->
+        <!-- Active Approvals -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>CLAIMABLE REWARDS</span>
-            <span class="text-indigo-400">🎁 Items</span>
+            <span>ACTIVE APPROVALS</span>
+            <span class="text-red-400">🛡️ Permissions</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statRewardCount">3</div>
-          <div class="text-xs text-gray-400 mt-2">Across 3 protocol categories</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statApprovalCount">5</div>
+          <div class="text-xs text-gray-400 mt-2">Across selected EVM chains</div>
         </div>
 
-        <!-- Total Gross Claimable USD -->
-        <div class="glass-card rounded-2xl p-5 border-emerald-500/40 glow-emerald">
-          <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
-            <span>GROSS CLAIMABLE VALUE</span>
-            <span>💎 Total Rewards</span>
+        <!-- Unlimited Approvals -->
+        <div class="glass-card rounded-2xl p-5 border-red-500/40 glow-red">
+          <div class="flex items-center justify-between text-red-400 text-xs font-bold mb-2">
+            <span>UNLIMITED APPROVALS</span>
+            <span>⚠️ MaxUint256</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statGrossRewardUsd">$250.50</div>
-          <div class="text-xs text-emerald-300/80 mt-2 font-medium">Ready for 1-Click Harvest</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-red-400 font-mono" id="statUnlimitedCount">4</div>
+          <div class="text-xs text-red-300/80 mt-2 font-medium">Recommended to Revoke</div>
         </div>
 
-        <!-- Net Claimable Value -->
-        <div class="glass-card rounded-2xl p-5 border-indigo-500/40 glow-indigo">
-          <div class="flex items-center justify-between text-indigo-400 text-xs font-bold mb-2">
-            <span>NET VALUE (AFTER GAS)</span>
-            <span>🟣 Your Wallet</span>
-          </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-300 font-mono" id="statNetRewardUsd">$250.49</div>
-          <div class="text-xs text-gray-400 mt-2">Gas fee deducted</div>
-        </div>
-
-        <!-- Categories Covered -->
+        <!-- Critical Risk Approvals -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>ACTIVE CATEGORIES</span>
-            <span class="text-purple-400">⚡ 5/5 Supported</span>
+            <span>CRITICAL RISK CONTRACTS</span>
+            <span class="text-red-500 font-bold">🚨 Risk Alert</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white">Staking / DAO</div>
-          <div class="text-xs text-gray-400 mt-2">LP, Validator & Airdrops</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-red-500 font-mono" id="statCriticalCount">1</div>
+          <div class="text-xs text-gray-400 mt-2">Unverified spender contracts</div>
+        </div>
+
+        <!-- EVM Chains Covered -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>EVM NETWORKS</span>
+            <span class="text-indigo-400">🌐 5 Supported</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white">Eth / Base / Poly</div>
+          <div class="text-xs text-gray-400 mt-2">Arbitrum & Optimism</div>
         </div>
       </div>
 
-      <!-- MODULE 4 CATEGORIES BREAKDOWN & TABLE -->
+      <!-- MODULE 5 APPROVALS LIST & REVOKER TABLE -->
       <div class="glass-card rounded-2xl p-6">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
           <div>
             <h3 class="text-lg font-bold text-white flex items-center space-x-2">
-              <span>💎 Module 4: 5-Category Unclaimed Rewards breakdown</span>
+              <span>🛡️ Module 5: EVM Token Approvals & Spender Risk Analysis</span>
             </h3>
-            <p class="text-xs text-gray-400">Itemized list of all detected rewards ready for non-custodial wallet harvest.</p>
+            <p class="text-xs text-gray-400">Setting token allowances to 0 revokes contract access to your wallet funds.</p>
           </div>
-          <button onclick="executeHarvestAll()" class="w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-extrabold text-sm px-6 py-3 rounded-xl transition shadow-lg shadow-emerald-600/30 flex items-center justify-center space-x-2">
-            <span>💎 1-Click Harvest All Rewards</span>
-          </button>
-        </div>
-
-        <!-- Category Badges Bar -->
-        <div class="flex flex-wrap gap-2 mb-4 pb-3 border-b border-gray-800">
-          <span class="bg-indigo-950 text-indigo-300 border border-indigo-800 text-xs px-3 py-1 rounded-lg font-medium">🥩 Staking</span>
-          <span class="bg-purple-950 text-purple-300 border border-purple-800 text-xs px-3 py-1 rounded-lg font-medium">🛡️ Validator Commission</span>
-          <span class="bg-blue-950 text-blue-300 border border-blue-800 text-xs px-3 py-1 rounded-lg font-medium">💧 LP Mining Fees</span>
-          <span class="bg-amber-950 text-amber-300 border border-amber-800 text-xs px-3 py-1 rounded-lg font-medium">🏛️ Governance DAO</span>
-          <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 text-xs px-3 py-1 rounded-lg font-medium">🪂 Airdrops</span>
         </div>
 
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs">
             <thead class="bg-gray-900/80 text-gray-400 uppercase font-semibold border-b border-gray-800">
               <tr>
-                <th class="py-3.5 px-4">Category</th>
-                <th class="py-3.5 px-4">Protocol & Network</th>
-                <th class="py-3.5 px-4">Reward Asset</th>
-                <th class="py-3.5 px-4">Amount</th>
-                <th class="py-3.5 px-4">Claimable USD</th>
-                <th class="py-3.5 px-4 text-right">Status</th>
+                <th class="py-3.5 px-4">Network & Token</th>
+                <th class="py-3.5 px-4">Spender Protocol / Address</th>
+                <th class="py-3.5 px-4">Allowance Granted</th>
+                <th class="py-3.5 px-4">Risk Rating & Reason</th>
+                <th class="py-3.5 px-4 text-right">Revoke Action</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-800/60 font-mono" id="rewardTableBody">
+            <tbody class="divide-y divide-gray-800/60 font-mono" id="approvalTableBody">
               <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- HARVEST TRANSACTION LOG -->
-      <div id="harvestCard" class="hidden glass-card rounded-2xl p-6">
-        <h3 class="text-md font-bold text-emerald-400 mb-2 flex items-center space-x-2">
-          <span>✅ Module 4: Unsigned Reward Harvest Transaction Payload Ready</span>
+      <!-- REVOCATION TRANSACTION LOG -->
+      <div id="revokeCard" class="hidden glass-card rounded-2xl p-6">
+        <h3 class="text-md font-bold text-red-400 mb-2 flex items-center space-x-2">
+          <span>✅ Module 5: Unsigned ERC-20 approve(spender, 0) Transaction Payload Ready</span>
         </h3>
         <p class="text-xs text-gray-400 mb-3">
-          This single non-custodial transaction harvests all selected staking, validator, LP fees, governance, and airdrop rewards.
+          This non-custodial transaction calls <code class="text-red-300">approve(spender, 0)</code> on the token contract to revoke all access.
         </p>
 
-        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-emerald-300 break-all mb-3" id="harvestPayloadText">
-          <!-- Base64 output -->
+        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-red-300 break-all mb-3" id="revokePayloadText">
+          <!-- Calldata hex output -->
         </div>
 
         <div class="flex items-center justify-between text-xs text-gray-400">
-          <span>Action: <strong class="text-white font-mono" id="harvestActionText">HARVEST_ALL_REWARDS</strong></span>
-          <span>Estimated Net Harvest: <strong class="text-emerald-400" id="harvestNetText">$250.49 USD</strong></span>
+          <span>Method: <strong class="text-white font-mono">approve(spender, 0) [0x095ea7b3]</strong></span>
+          <span>Target Contract: <strong class="text-red-400" id="revokeTargetText">0x...</strong></span>
         </div>
       </div>
 
@@ -226,46 +223,60 @@
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
-      <div>ChainRecover AI • Module 4: Reward Scanner & Harvester</div>
+      <div>ChainRecover AI • Module 5: Approval Scanner & Revoker Engine</div>
       <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
     </div>
   </footer>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    async function scanRewards() {
+    async function scanApprovals() {
       const address = document.getElementById('walletInput').value.trim();
-      if (!address) return alert('Please enter a wallet address');
+      const chain = document.getElementById('chainSelect').value;
+      if (!address) return alert('Please enter a valid EVM address (0x...)');
 
       try {
-        const res = await fetch('/api/v1/scanner/rewards/search', {
+        const res = await fetch('/api/v1/scanner/approvals/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address })
+          body: JSON.stringify({ walletAddress: address, chain })
         });
         const data = await res.json();
 
         if (data.success) {
           const s = data.data.summary;
-          document.getElementById('statRewardCount').innerText = s.totalClaimableItems;
-          document.getElementById('statGrossRewardUsd').innerText = `$${s.totalClaimableUsd}`;
-          document.getElementById('statNetRewardUsd').innerText = `$${s.netClaimableUsd}`;
+          document.getElementById('statApprovalCount').innerText = s.totalApprovalsCount;
+          document.getElementById('statUnlimitedCount').innerText = s.unlimitedApprovalsCount;
+          document.getElementById('statCriticalCount').innerText = s.criticalRiskCount;
 
-          const tbody = document.getElementById('rewardTableBody');
-          tbody.innerHTML = data.data.rewards.map(r => `
+          const tbody = document.getElementById('approvalTableBody');
+          tbody.innerHTML = data.data.approvals.map(a => `
             <tr class="hover:bg-gray-800/40 transition">
-              <td class="py-3.5 px-4 font-bold text-indigo-300">${r.categoryName}</td>
-              <td class="py-3.5 px-4 text-white font-semibold">${r.protocol} <span class="text-xs text-gray-500">(${r.chain.toUpperCase()})</span></td>
-              <td class="py-3.5 px-4 text-purple-300 font-bold">${r.rewardAsset}</td>
-              <td class="py-3.5 px-4 text-gray-300">${r.amount}</td>
-              <td class="py-3.5 px-4 text-emerald-400 font-bold">$${r.totalUsd.toFixed(2)}</td>
+              <td class="py-3.5 px-4 font-bold text-white">
+                <span class="text-indigo-300">${a.tokenSymbol}</span> 
+                <span class="text-xs text-gray-500">(${a.chain.toUpperCase()})</span>
+              </td>
+              <td class="py-3.5 px-4 text-gray-300">
+                <div class="font-semibold text-white">${a.spenderName}</div>
+                <div class="text-xs text-gray-500 font-mono">${a.spenderAddress.slice(0, 10)}...${a.spenderAddress.slice(-6)}</div>
+              </td>
+              <td class="py-3.5 px-4 ${a.isUnlimited ? 'text-red-400 font-bold' : 'text-gray-300'}">${a.allowanceFormatted}</td>
+              <td class="py-3.5 px-4">
+                ${a.riskLevel === 'CRITICAL' ? '<span class="bg-red-950 text-red-400 border border-red-800 px-2 py-0.5 rounded font-bold text-xs">🚨 CRITICAL</span>' : ''}
+                ${a.riskLevel === 'HIGH' ? '<span class="bg-amber-950 text-amber-400 border border-amber-800 px-2 py-0.5 rounded font-bold text-xs">⚠️ HIGH</span>' : ''}
+                ${a.riskLevel === 'MEDIUM' ? '<span class="bg-blue-950 text-blue-300 border border-blue-800 px-2 py-0.5 rounded text-xs">MEDIUM</span>' : ''}
+                ${a.riskLevel === 'LOW' ? '<span class="bg-gray-900 text-gray-300 border border-gray-700 px-2 py-0.5 rounded text-xs">LOW</span>' : ''}
+                <div class="text-xs text-gray-400 mt-1 font-sans">${a.riskReason}</div>
+              </td>
               <td class="py-3.5 px-4 text-right">
-                <span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2.5 py-1 rounded-lg text-xs font-bold">Ready to Claim</span>
+                <button onclick="executeRevoke('${a.tokenAddress}', '${a.spenderAddress}', '${a.chain}')" class="bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-3.5 py-1.5 rounded-lg transition shadow">
+                  🛡️ Revoke
+                </button>
               </td>
             </tr>
           `).join('');
 
-          alert(`Module 4 Reward Scan Complete!\nFound ${s.totalClaimableItems} rewards worth $${s.totalClaimableUsd} USD across 5 categories.`);
+          alert(`Module 5 Approval Scan Complete!\nFound ${s.totalApprovalsCount} active approvals (${s.unlimitedApprovalsCount} Unlimited) across selected EVM networks.`);
         } else {
           alert('Scan error: ' + data.message);
         }
@@ -274,28 +285,27 @@
       }
     }
 
-    async function executeHarvestAll() {
+    async function executeRevoke(tokenAddress, spenderAddress, chain) {
       const address = document.getElementById('walletInput').value.trim();
       if (!address) return alert('Please enter a wallet address');
 
       try {
-        const res = await fetch('/api/v1/scanner/rewards/claim', {
+        const res = await fetch('/api/v1/scanner/approvals/revoke', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: address, category: 'ALL' })
+          body: JSON.stringify({ walletAddress: address, tokenAddress, spenderAddress, chain })
         });
         const data = await res.json();
 
         if (data.success && data.data) {
           const d = data.data;
-          document.getElementById('harvestCard').classList.remove('hidden');
-          document.getElementById('harvestPayloadText').innerText = d.claimTransactionPayload.rawUnsignedTransactionBase64;
-          document.getElementById('harvestActionText').innerText = d.claimTransactionPayload.action;
-          document.getElementById('harvestNetText').innerText = `$${d.estimatedNetClaimUsd} USD`;
+          document.getElementById('revokeCard').classList.remove('hidden');
+          document.getElementById('revokePayloadText').innerText = d.transactionPayload.data;
+          document.getElementById('revokeTargetText').innerText = d.tokenAddress;
 
-          alert(`💎 Module 4 Reward Harvest Payload Ready!\n\nWallet: ${d.walletAddress}\nRewards Claimed: ${d.rewardsClaimedCount}\nEstimated Net Harvest: $${d.estimatedNetClaimUsd} USD\n\nPayload prepared for non-custodial wallet signature.`);
+          alert(`🛡️ Module 5 Revoke Transaction Payload Ready!\n\nTarget Token: ${d.tokenAddress}\nSpender Revoked: ${d.spenderAddress}\nCalldata: approve(spender, 0)\n\nPayload prepared for non-custodial wallet signature.`);
         } else {
-          alert('Harvest error: ' + data.message);
+          alert('Revoke error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
@@ -303,10 +313,10 @@
     }
 
     function connectWalletMock() {
-      alert('Wallet Connection:\nConnect Phantom or MetaMask to harvest unclaimed rewards non-custodially.');
+      alert('Wallet Connection:\nConnect MetaMask or Coinbase Wallet to sign approve(spender, 0) revocation transactions.');
     }
 
-    window.onload = () => scanRewards();
+    window.onload = () => scanApprovals();
   </script>
 </body>
 </html>

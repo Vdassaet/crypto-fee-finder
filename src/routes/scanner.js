@@ -1,6 +1,6 @@
 /**
  * Express REST API Routes for ChainRecover AI Scanner:
- * Module 2 (Solana Rent), Module 3 (Dust Consolidation), & Module 4 (Reward Scanner)
+ * Module 2 (Solana Rent), Module 3 (Dust Consolidation), Module 4 (Reward Scanner), & Module 5 (Approval Revoker)
  */
 
 const express = require('express');
@@ -18,6 +18,11 @@ const {
   searchClaimableRewards,
   buildClaimTransaction
 } = require('../services/rewardService');
+const {
+  searchTokenApprovals,
+  buildRevokeTransaction,
+  MODULE_5_SUPPORTED_CHAINS
+} = require('../services/approvalService');
 
 /**
  * GET /api/v1/scanner/chains
@@ -87,7 +92,6 @@ router.post('/dust/consolidate', (req, res, next) => {
 
 /**
  * MODULE 4: Reward Scanner Endpoints
- * Search 5 categories: Unclaimed Staking, Validator, LP Mining, Governance, Airdrops
  */
 router.post('/rewards/search', (req, res, next) => {
   try {
@@ -110,6 +114,38 @@ router.post('/rewards/claim', (req, res, next) => {
       return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
     }
     const result = buildClaimTransaction(walletAddress, rewardIds || [], category || 'ALL');
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 5: Approval Scanner & Revoker Endpoints
+ * Ethereum, Base, Polygon, Arbitrum, Optimism
+ */
+router.post('/approvals/search', (req, res, next) => {
+  try {
+    const { walletAddress, chain } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    const result = searchTokenApprovals(walletAddress, chain || 'ALL');
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+router.post('/approvals/revoke', (req, res, next) => {
+  try {
+    const { walletAddress, tokenAddress, spenderAddress, chain } = req.body;
+    if (!walletAddress || !tokenAddress || !spenderAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress, tokenAddress, and spenderAddress are required' });
+    }
+    const result = buildRevokeTransaction(walletAddress, tokenAddress, spenderAddress, chain || 'ethereum');
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;
