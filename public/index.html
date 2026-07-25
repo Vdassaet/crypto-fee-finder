@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Business Model & SaaS Pricing Engine</title>
+  <title>ChainRecover AI | Apple-Quality Multi-Chain Asset Recovery Platform</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -25,212 +25,407 @@
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0A0D14; color: #F3F4F6; }
-    .glass-card {
-      background: rgba(17, 24, 39, 0.75);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #07090E;
+      color: #F3F4F6;
+      overflow-x: hidden;
     }
-    .glow-indigo {
-      box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+    .apple-glass {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    .apple-glass-pill {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .animated-card {
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .animated-card:hover {
+      transform: translateY(-4px) scale(1.005);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.18);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .shimmer-progress {
+      background: linear-gradient(90deg, #4F46E5 0%, #10B981 50%, #6366F1 100%);
+      background-size: 200% 100%;
+      animation: shimmer 3s infinite linear;
+    }
+    .skeleton-loader {
+      background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite ease-in-out;
     }
   </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-  <!-- TOP NAVIGATION HEADER -->
-  <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
+  <!-- TOP APPLE-STYLE GLASS HEADER -->
+  <header class="border-b border-white/10 bg-slate-950/70 backdrop-blur-2xl sticky top-0 z-50 transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-indigo-600 to-purple-600 flex items-center justify-center font-black text-xl shadow-lg shadow-emerald-500/20">
-          💎
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-emerald-400 flex items-center justify-center font-black text-xl shadow-lg shadow-indigo-500/20 transform hover:rotate-6 transition duration-300">
+          ⚡
         </div>
         <div>
-          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-indigo-400">
+          <span class="font-extrabold text-xl tracking-tight text-white">
             ChainRecover <span class="text-indigo-400 font-bold">AI</span>
           </span>
-          <span class="ml-2 text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Freemium & Pro SaaS Active
+          <span class="ml-2 text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">
+            Apple-Quality UI v2.0
           </span>
         </div>
       </div>
 
-      <!-- Quota Status -->
-      <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
-        <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg text-emerald-400" id="quotaBadge">
+      <!-- Live Security Badge -->
+      <div class="hidden lg:flex items-center space-x-3 text-xs font-medium text-gray-400">
+        <span class="flex items-center space-x-1.5 apple-glass-pill px-3 py-1.5 rounded-full text-emerald-400">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Free Tier: 1 Scan / Day Quota</span>
+          <span>Zero Private Key Guarantee • Non-Custodial</span>
         </span>
       </div>
 
-      <!-- Upgrade Button -->
+      <!-- Connect Wallet Action -->
       <div class="flex items-center space-x-3">
-        <button onclick="scrollToPricing()" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-indigo-600/20">
-          ⚡ Upgrade to Pro ($49/mo)
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs px-5 py-2.5 rounded-xl transition duration-300 shadow-lg shadow-indigo-600/20 flex items-center space-x-2">
+          <span>🔒 Connect Wallet</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
-    <!-- HERO SECTION -->
-    <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Freemium <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">SaaS Monetization Engine</span>
+    <!-- HERO SCANNER CONTAINER -->
+    <div class="apple-glass rounded-3xl p-6 sm:p-10 mb-8 text-center relative overflow-hidden">
+      <div class="absolute -top-32 -right-32 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="inline-flex items-center space-x-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 shadow-sm">
+        <span>✨ MULTI-CHAIN ASSET RECOVERY & RENT RECLAIM SAAS</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight mb-4 leading-tight">
+        Discover & Recover <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-emerald-400">Hidden Crypto Assets</span>
       </h1>
-      <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Free daily wallet scans or upgrade to Premium Pro for unlimited scans, priority RPC execution, and multi-wallet dashboards.
+      <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-normal">
+        Scan Solana and EVM wallets across 7 blockchains to reclaim SOL rent deposits, unclaimed protocol rewards, consolidatable dust, and dangerous token approvals.
       </p>
 
-      <!-- WALLET INPUT -->
-      <div class="max-w-xl mx-auto flex items-center gap-3">
-        <input type="text" id="walletInput" placeholder="Paste Wallet Address" 
-          class="w-full bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 text-white placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono"
-          value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
+      <!-- DUAL INPUT FORM -->
+      <div class="max-w-3xl mx-auto space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Solana Wallet Address</label>
+            <input type="text" id="solanaInput" placeholder="Base58 Solana Address" 
+              class="w-full bg-slate-900/90 border border-white/10 focus:border-indigo-500 text-white placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono transition"
+              value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
+          </div>
+          <div>
+            <label class="block text-left text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">EVM Wallet Address</label>
+            <input type="text" id="evmInput" placeholder="0x... Ethereum / L2 Address" 
+              class="w-full bg-slate-900/90 border border-white/10 focus:border-indigo-500 text-indigo-300 placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono transition"
+              value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">
+          </div>
+        </div>
 
-        <button onclick="verifyQuotaAndScan()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-6 py-3 rounded-xl transition shadow-lg shadow-indigo-600/30 whitespace-nowrap">
-          ⚡ Run Scan
+        <button onclick="runFullScan()" class="w-full bg-gradient-to-r from-indigo-600 via-purple-600 to-emerald-500 hover:opacity-95 text-white font-extrabold text-sm py-4 rounded-xl transition duration-300 shadow-xl shadow-indigo-600/30 flex items-center justify-center space-x-2">
+          <span>🌐 Execute Multi-Chain Deep Scan</span>
         </button>
       </div>
     </div>
 
-    <!-- SAAS PRICING TIERS SECTION -->
-    <div id="pricingSection" class="space-y-6">
-      <div class="text-center mb-8">
-        <h2 class="text-2xl font-extrabold text-white">Simple, Transparent Pricing Tiers</h2>
-        <p class="text-gray-400 text-xs mt-1">Start free, upgrade for unlimited scans, or opt for 10% performance fee on recovered funds.</p>
-      </div>
+    <!-- MODULE NAVIGATION TABS BAR -->
+    <div class="flex items-center space-x-2 overflow-x-auto pb-3 mb-8 no-scrollbar scroll-smooth">
+      <button onclick="switchTab('merged')" id="tab-merged" class="bg-indigo-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition shadow-lg shadow-indigo-600/30">
+        🌐 Unified Dashboard
+      </button>
+      <button onclick="switchTab('rent')" id="tab-rent" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        ⚡ Solana Rent
+      </button>
+      <button onclick="switchTab('dust')" id="tab-dust" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        ✨ Dust Assets
+      </button>
+      <button onclick="switchTab('rewards')" id="tab-rewards" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        💎 Claimable Yield
+      </button>
+      <button onclick="switchTab('approvals')" id="tab-approvals" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        🛡️ Token Approvals
+      </button>
+      <button onclick="switchTab('optimizer')" id="tab-optimizer" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        ⛽ Fee Optimizer
+      </button>
+      <button onclick="switchTab('ai')" id="tab-ai" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        🤖 AI Assistant
+      </button>
+      <button onclick="switchTab('analytics')" id="tab-analytics" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        📊 Analytics
+      </button>
+      <button onclick="switchTab('pricing')" id="tab-pricing" class="bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5">
+        💳 SaaS Pricing
+      </button>
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-        <!-- FREE TIER -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-gray-800">
-          <div>
-            <div class="text-xs font-bold text-gray-400 uppercase">Freemium</div>
-            <h3 class="text-xl font-extrabold text-white mt-1">Free Tier</h3>
-            <div class="text-3xl font-extrabold text-white my-3 font-mono">$0 <span class="text-xs font-normal text-gray-400">/ month</span></div>
-            <ul class="text-xs text-gray-300 space-y-2 mb-6">
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> 1 scan per day limit</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Solana Rent detection</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Basic Dust & Reward scan</li>
-            </ul>
-          </div>
-          <button class="w-full bg-gray-800 text-gray-300 font-bold text-xs py-3 rounded-xl cursor-default">Current Tier</button>
-        </div>
-
-        <!-- PREMIUM PRO TIER (RECOMMENDED) -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-indigo-500/60 glow-indigo relative">
-          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-extrabold text-[10px] uppercase px-3 py-1 rounded-full">MOST POPULAR</div>
-          <div>
-            <div class="text-xs font-bold text-indigo-400 uppercase">SaaS Pro</div>
-            <h3 class="text-xl font-extrabold text-white mt-1">Premium Pro</h3>
-            <div class="text-3xl font-extrabold text-indigo-300 my-3 font-mono">$49 <span class="text-xs font-normal text-gray-400">/ month</span></div>
-            <ul class="text-xs text-gray-200 space-y-2 mb-6">
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> <strong>Unlimited scans across 7 chains</strong></li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Advanced 12-month analytics</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Priority MEV-protected RPC nodes</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Multi-wallet merged dashboard</li>
-            </ul>
-          </div>
-          <button onclick="subscribe('PREMIUM_PRO')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs py-3 rounded-xl transition shadow-lg shadow-indigo-600/30">Upgrade to Pro ($49/mo)</button>
-        </div>
-
-        <!-- ENTERPRISE API TIER -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-purple-500/40">
-          <div>
-            <div class="text-xs font-bold text-purple-400 uppercase">Enterprise</div>
-            <h3 class="text-xl font-extrabold text-white mt-1">Enterprise API</h3>
-            <div class="text-3xl font-extrabold text-purple-300 my-3 font-mono">$199 <span class="text-xs font-normal text-gray-400">/ month</span></div>
-            <ul class="text-xs text-gray-300 space-y-2 mb-6">
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> High-throughput REST API key</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Dedicated private RPC nodes</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Unlimited team seats</li>
-            </ul>
-          </div>
-          <button onclick="subscribe('ENTERPRISE_API')" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs py-3 rounded-xl transition">Get API Key ($199/mo)</button>
-        </div>
-
-        <!-- 10% SUCCESS FEE MODEL -->
-        <div class="glass-card rounded-2xl p-6 flex flex-col justify-between border-emerald-500/40">
-          <div>
-            <div class="text-xs font-bold text-emerald-400 uppercase">Performance</div>
-            <h3 class="text-xl font-extrabold text-white mt-1">10% Success Fee</h3>
-            <div class="text-3xl font-extrabold text-emerald-400 my-3 font-mono">10% <span class="text-xs font-normal text-gray-400">on recovered</span></div>
-            <ul class="text-xs text-gray-300 space-y-2 mb-6">
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> $0 upfront cost</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Pay only when funds are recovered</li>
-              <li class="flex items-center"><span class="text-emerald-400 mr-2">✓</span> Deducted strictly upon wallet signature</li>
-            </ul>
-          </div>
-          <button onclick="calculateCommissionDemo()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs py-3 rounded-xl transition">Calculate 10% Cut</button>
-        </div>
-
-      </div>
+    <!-- DYNAMIC TAB CONTAINER WITH SKELETON LOADERS -->
+    <div id="tabDisplayContainer" class="space-y-6">
+      <!-- Dynamically populated via JS -->
     </div>
   </main>
 
-  <footer class="border-t border-gray-800/60 bg-gray-950 py-6 text-center text-xs text-gray-500">
-    ChainRecover AI Platform &copy; 2026 • Module 10: Business Model & SaaS Pricing Engine
+  <!-- FOOTER -->
+  <footer class="border-t border-white/10 bg-slate-950 py-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
+      <div>ChainRecover AI SaaS Platform &copy; 2026 • Apple-Quality Glassmorphism Design System</div>
+      <div>Security Guarantee: All transactions require client-side wallet signatures. Private keys are never touched.</div>
+    </div>
   </footer>
 
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    async function verifyQuotaAndScan() {
-      const walletAddress = document.getElementById('walletInput').value.trim();
+    let currentTab = 'merged';
 
-      const res = await fetch('/api/v1/billing/verify-quota', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ walletAddress, userTier: 'FREE' })
+    function renderSkeleton() {
+      return `
+        <div class="apple-glass rounded-2xl p-6 space-y-4">
+          <div class="h-6 w-1/3 skeleton-loader rounded-lg"></div>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="h-24 skeleton-loader rounded-xl"></div>
+            <div class="h-24 skeleton-loader rounded-xl"></div>
+            <div class="h-24 skeleton-loader rounded-xl"></div>
+            <div class="h-24 skeleton-loader rounded-xl"></div>
+          </div>
+          <div class="h-40 skeleton-loader rounded-xl"></div>
+        </div>
+      `;
+    }
+
+    async function switchTab(tabName) {
+      currentTab = tabName;
+      document.querySelectorAll('[id^="tab-"]').forEach(btn => {
+        btn.className = 'bg-slate-900 text-gray-400 hover:text-white font-semibold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition border border-white/5';
       });
-      const data = await res.json();
+      document.getElementById(`tab-${tabName}`).className = 'bg-indigo-600 text-white font-bold text-xs px-4 py-2.5 rounded-xl whitespace-nowrap transition shadow-lg shadow-indigo-600/30';
 
-      if (data.success) {
-        const q = data.data;
-        if (q.allowed) {
-          alert(`⚡ Free Scan Allowed!\n\n${q.message}\nRemaining today: ${q.remainingQuota}`);
-        } else {
-          alert(`🚫 Quota Exceeded:\n\n${q.message}\n\nPlease upgrade to Premium Pro ($49/mo) for unlimited scans.`);
-        }
+      const container = document.getElementById('tabDisplayContainer');
+      container.innerHTML = renderSkeleton();
+
+      const solanaAddress = document.getElementById('solanaInput').value.trim();
+      const evmAddress = document.getElementById('evmInput').value.trim();
+
+      if (tabName === 'merged') {
+        const res = await fetch('/api/v1/scanner/cross-chain/merged', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ solanaAddress, evmAddress })
+        });
+        const data = await res.json();
+        const d = data.data;
+
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6 animated-card">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <div>
+                <h3 class="text-xl font-extrabold text-white">🌐 Merged Multi-Chain Executive Dashboard</h3>
+                <p class="text-xs text-gray-400 mt-1">Aggregated assets & recoverable value across all 7 supported blockchains</p>
+              </div>
+              <button onclick="triggerMasterRecover()" class="bg-gradient-to-r from-emerald-500 to-indigo-600 hover:opacity-90 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-500/20">
+                🌐 1-Click Master Recovery ($${d.unifiedSummary.totalMergedRecoverableUsd.toFixed(2)})
+              </button>
+            </div>
+
+            <!-- EXECUTIVE METRICS -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6">
+              <div class="bg-slate-900/90 border border-white/10 p-4 rounded-xl">
+                <div class="text-xs text-gray-400 font-semibold mb-1">TOTAL MERGED NET WORTH</div>
+                <div class="text-2xl font-extrabold text-white font-mono">$${d.unifiedSummary.totalMergedPortfolioUsd.toLocaleString()} USD</div>
+              </div>
+              <div class="bg-slate-900/90 border border-emerald-500/40 p-4 rounded-xl">
+                <div class="text-xs text-emerald-400 font-bold mb-1">MASTER RECOVERABLE VALUE</div>
+                <div class="text-2xl font-extrabold text-emerald-400 font-mono">$${d.unifiedSummary.totalMergedRecoverableUsd.toFixed(2)} USD</div>
+              </div>
+              <div class="bg-slate-900/90 border border-white/10 p-4 rounded-xl">
+                <div class="text-xs text-indigo-400 font-semibold mb-1">SOLANA RENT REFUND</div>
+                <div class="text-2xl font-extrabold text-indigo-300 font-mono">${d.unifiedSummary.solanaRentRecoverableSol} SOL</div>
+              </div>
+              <div class="bg-slate-900/90 border border-white/10 p-4 rounded-xl">
+                <div class="text-xs text-purple-400 font-semibold mb-1">UNCLAIMED PROTOCOL YIELD</div>
+                <div class="text-2xl font-extrabold text-purple-300 font-mono">$${d.unifiedSummary.unclaimedRewardsUsd} USD</div>
+              </div>
+            </div>
+
+            <!-- SHIMMER PROGRESS BARS PER CHAIN -->
+            <h4 class="text-sm font-bold text-white mb-3">Portfolio Allocation & Health per Blockchain</h4>
+            <div class="space-y-3 font-mono text-xs">
+              ${d.chainDistribution.map(c => `
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span class="text-white font-sans font-bold">${c.chain}</span>
+                    <span class="text-gray-400">$${c.valueUsd.toLocaleString()} USD (${c.percentage}%)</span>
+                  </div>
+                  <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-white/5">
+                    <div class="h-2.5 rounded-full shimmer-progress" style="width: ${c.percentage}%"></div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'rent') {
+        const res = await fetch(`/api/v1/scanner/solana/rent/${solanaAddress}`);
+        const data = await res.json();
+        const d = data.data;
+
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6 animated-card">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <div>
+                <h3 class="text-xl font-extrabold text-white">⚡ Solana Rent Storage Recovery Engine</h3>
+                <p class="text-xs text-gray-400 mt-1">Reclaim 0.00203928 SOL per empty SPL token storage account</p>
+              </div>
+              <button onclick="reclaimRent()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-emerald-600/30">
+                ⚡ Reclaim ${d.netRefundSol} SOL ($${d.netRefundUsd} USD)
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 font-mono text-xs">
+              <div class="bg-slate-900 p-4 rounded-xl border border-white/10">
+                <div class="text-gray-400 mb-1">Empty Accounts Found</div>
+                <div class="text-2xl font-extrabold text-white">${d.totalEmptyAccountsCount} Accounts</div>
+              </div>
+              <div class="bg-slate-900 p-4 rounded-xl border border-white/10">
+                <div class="text-gray-400 mb-1">Gross Rent Deposit</div>
+                <div class="text-2xl font-extrabold text-indigo-300">${d.totalRentDepositSol} SOL</div>
+              </div>
+              <div class="bg-slate-900 p-4 rounded-xl border border-emerald-500/40">
+                <div class="text-emerald-400 font-bold mb-1">Net SOL Refund</div>
+                <div class="text-2xl font-extrabold text-emerald-400">${d.netRefundSol} SOL ($${d.netRefundUsd})</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'ai') {
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6 animated-card space-y-4">
+            <h3 class="text-xl font-extrabold text-white">🤖 AI Architect Assistant</h3>
+            <div class="flex gap-2">
+              <input type="text" id="aiQuery" placeholder="Ask: 'What can I recover?' or 'Which wallet is healthiest?'" class="w-full bg-slate-900 border border-white/10 text-white text-xs rounded-xl px-4 py-3 outline-none font-mono">
+              <button onclick="runAiChat()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-6 py-3 rounded-xl transition">Ask AI</button>
+            </div>
+            <div id="aiResponseText" class="bg-slate-950 p-4 rounded-xl border border-white/10 text-xs text-gray-200 font-sans leading-relaxed whitespace-pre-line">
+              Click 'Ask AI' or enter any question above.
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'analytics') {
+        const res = await fetch('/api/v1/scanner/analytics/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ walletAddress: solanaAddress })
+        });
+        const data = await res.json();
+        const d = data.data;
+
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6 animated-card">
+            <h3 class="text-xl font-extrabold text-white mb-2">📊 Analytics & Visual Growth Charts</h3>
+            <p class="text-xs text-gray-400 mb-6">12-Month Cumulative Savings & Fees Avoided Metrics</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs mb-6">
+              <div class="bg-slate-900 p-4 rounded-xl border border-white/10">
+                <div class="text-gray-400">12-Month Savings</div>
+                <div class="text-2xl font-extrabold text-emerald-400">$${d.savingsOverTime.total12MonthSavingsUsd} USD</div>
+              </div>
+              <div class="bg-slate-900 p-4 rounded-xl border border-white/10">
+                <div class="text-gray-400">Total Fees Avoided</div>
+                <div class="text-2xl font-extrabold text-indigo-300">$${d.feesAvoided.totalFeesAvoidedUsd} USD</div>
+              </div>
+              <div class="bg-slate-900 p-4 rounded-xl border border-white/10">
+                <div class="text-gray-400">Wallet Activity</div>
+                <div class="text-2xl font-extrabold text-purple-300">${d.walletActivity.totalTransactionsScanned} Txs</div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (tabName === 'pricing') {
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6 animated-card">
+            <h3 class="text-xl font-extrabold text-white mb-6 text-center">💎 SaaS Monetization & Pricing Tiers</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 font-sans">
+              <div class="bg-slate-900/90 border border-white/10 p-6 rounded-2xl">
+                <div class="text-xs text-gray-400 font-bold">FREEMIUM</div>
+                <div class="text-2xl font-extrabold text-white my-2">$0 / mo</div>
+                <p class="text-xs text-gray-400 mb-4">1 scan/day quota</p>
+                <button class="w-full bg-slate-800 text-gray-300 font-bold text-xs py-2.5 rounded-xl">Current Tier</button>
+              </div>
+              <div class="bg-slate-900/90 border border-indigo-500 p-6 rounded-2xl glow-indigo">
+                <div class="text-xs text-indigo-400 font-bold">PREMIUM PRO</div>
+                <div class="text-2xl font-extrabold text-indigo-300 my-2">$49 / mo</div>
+                <p class="text-xs text-gray-300 mb-4">Unlimited scans across 7 chains</p>
+                <button onclick="alert('Upgrade Initiated!')" class="w-full bg-indigo-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg">Upgrade Now</button>
+              </div>
+              <div class="bg-slate-900/90 border border-emerald-500 p-6 rounded-2xl">
+                <div class="text-xs text-emerald-400 font-bold">10% SUCCESS FEE</div>
+                <div class="text-2xl font-extrabold text-emerald-400 my-2">10% Cut</div>
+                <p class="text-xs text-gray-300 mb-4">Charged ONLY upon successful recovery</p>
+                <button onclick="alert('Success Fee Enabled!')" class="w-full bg-emerald-600 text-white font-bold text-xs py-2.5 rounded-xl shadow-lg">Select Success Fee</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="apple-glass rounded-2xl p-6">
+            <h3 class="text-lg font-bold text-white">Module Display</h3>
+            <p class="text-xs text-gray-400 mt-2">Active scanner scanning targets non-custodially.</p>
+          </div>
+        `;
       }
     }
 
-    async function subscribe(targetTier) {
-      const walletAddress = document.getElementById('walletInput').value.trim();
+    async function runAiChat() {
+      const query = document.getElementById('aiQuery').value || 'What can I recover?';
+      const solanaAddress = document.getElementById('solanaInput').value.trim();
 
-      const res = await fetch('/api/v1/billing/subscribe', {
+      const res = await fetch('/api/v1/scanner/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ walletAddress, targetTier })
+        body: JSON.stringify({ walletAddress: solanaAddress, query })
       });
       const data = await res.json();
-
       if (data.success) {
-        alert(`🎉 Subscription Initiated!\n\nTier: ${data.data.tier.name}\nPrice: $${data.data.tier.priceUsdMonth}/mo\n\nSignature request prepared for wallet: ${walletAddress}`);
+        document.getElementById('aiResponseText').innerText = data.data.explanation;
       }
     }
 
-    async function calculateCommissionDemo() {
-      const res = await fetch('/api/v1/billing/calculate-commission', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recoveredAmountUsd: 260.19 })
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        const c = data.data;
-        alert(`💰 10% Performance Fee Calculation:\n\nGross Recovered: $${c.grossRecoveredUsd} USD\nPerformance Fee (10%): $${c.commissionFeeUsd} USD\nNet User Received: $${c.netUserReceivedUsd} USD\n\n${c.policy}`);
-      }
+    function runFullScan() {
+      switchTab('merged');
     }
 
-    function scrollToPricing() {
-      document.getElementById('pricingSection').scrollIntoView({ behavior: 'smooth' });
+    function triggerMasterRecover() {
+      alert('🌐 Master Multi-Chain Recovery Initiated:\nUnsigned transaction payloads generated non-custodially for wallet signature.');
     }
+
+    function reclaimRent() {
+      alert('⚡ Solana Rent Reclaim Initiated:\nUnsigned closeAccount payload created. Approve in Phantom wallet to receive SOL refund.');
+    }
+
+    function connectWalletMock() {
+      alert('Non-Custodial Wallet Security:\nConnect via EIP-1193 / Solana Wallet Adapter.\nNever enter seed phrases or private keys.');
+    }
+
+    window.onload = () => switchTab('merged');
   </script>
 </body>
 </html>
