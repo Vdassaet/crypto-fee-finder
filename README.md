@@ -1,90 +1,118 @@
-# ChainRecover AI & Crypto Fee Finder Platform
+# ChainRecover AI ⚡
 
-![License](https://img.shields.io/badge/license-MIT-blue) ![Node](https://img.shields.io/badge/node-v24.18.0-brightgreen) ![Coverage](https://img.shields.io/badge/tests-12%20passed-success) ![Chains](https://img.shields.io/badge/chains-Solana%20%7C%20Ethereum%20%7C%20Base%20%7C%20Arbitrum%20%7C%20Optimism%20%7C%20Polygon%20%7C%20BNB-purple)
+> **Production-Ready Multi-Chain Asset Recovery & Fee Optimization SaaS Platform**
 
-**ChainRecover AI** is a production-ready, non-custodial SaaS web application and REST API designed to scan multi-chain crypto wallets, discover recoverable assets (unclosed SPL token account rent deposits, dust balances, claimable protocol yield), and optimize transaction, swap, and cross-chain bridge fees.
+[![CI/CD Pipeline](https://github.com/Vdassaet/crypto-fee-finder/actions/workflows/ci.yml/badge.svg)](https://github.com/Vdassaet/crypto-fee-finder/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-indigo.svg)](LICENSE)
+[![Security: Non-Custodial](https://img.shields.io/badge/Security-Non--Custodial-emerald.svg)](#security-architecture)
 
----
-
-## 🔒 Security Architecture (Non-Negotiable Guarantee)
-
-- **Zero Private Key Access**: The application reads public RPC chain data only.
-- **Client-Side Signature Execution**: All recovery operations (closing SPL accounts, claiming yield, consolidating dust) produce unsigned transaction payloads that must be explicitly reviewed and signed inside the user's wallet (Phantom, MetaMask, Coinbase Wallet, Solflare).
+**ChainRecover AI** is an enterprise-grade SaaS web application and REST API platform that scans crypto wallets across **7 blockchains** to discover recoverable assets, reclaim locked Solana SOL rent deposits, consolidate micro-dust balances, claim protocol yield & airdrops, revoke dangerous unlimited token approvals, and optimize gas fee execution windows.
 
 ---
 
-## ⚡ Supported Blockchains (Phase 1)
+## 🔒 NON-NEGOTIABLE SECURITY RULES
 
-1. **Solana** (SOL / SPL Tokens)
-2. **Ethereum** (ETH / ERC-20)
-3. **Base** (L2)
-4. **Arbitrum** (L2)
-5. **Optimism** (L2)
-6. **Polygon** (PoS)
-7. **BNB Chain** (BSC)
-
-*Future Expansion: Bitcoin, Avalanche, Sui, Aptos.*
+1. **Zero Private Key Policy**: ChainRecover AI **NEVER** requests, stores, or accesses private keys or seed phrases (12/24 words).
+2. **Client-Side Wallet Signatures Only**: All recovery, account closing, reward harvesting, and approval revocation operations build unsigned transaction payloads requiring explicit EIP-1193 (**MetaMask**, **Coinbase Wallet**) or Solana Wallet Adapter (**Phantom**) signatures on the client.
+3. **Pre-Execution Simulation & Drainer Blacklist**: Every payload is verified against global malicious contract drainer blacklists before signing.
 
 ---
 
-## 🛠️ Features
+## 🌐 SUPPORTED BLOCKCHAINS
 
-### Executive SaaS Dashboard
-- **Total Portfolio Value**: Real-time valuation across 7 supported chains.
-- **Estimated Recoverable Value**: Consolidated sum of reclaimable rent + unclaimed rewards + dust assets.
-- **Solana Rent Reclaimer (Module 1)**: Detects zero-balance/abandoned token accounts and closes them to refund **~0.002039 SOL per account** directly to the user's wallet.
-- **Protocol Yield Harvester**: Scans Uniswap V3, Aave V3, Curve, and Liquid Staking pools for uncollected rewards.
-- **Wallet Health & Gas Optimization Score**: Measures transaction gas efficiency and flags unrevoked approvals.
+### Phase 1 (Live Production Support)
+- ⚡ **Solana** (SOL / SPL)
+- 💎 **Ethereum** (ETH / ERC-20)
+- 🔵 **Base** (L2)
+- 🔷 **Arbitrum** (L2)
+- 🔴 **Optimism** (L2)
+- 🟣 **Polygon** (POL)
+- 🟡 **BNB Chain** (BSC)
 
-### Cross-Chain Fee Finder Engine
-- Real-time gas price metrics across EVM & non-EVM networks.
-- Route comparison across DEXs (Uniswap V2/V3, PancakeSwap, Curve) and Bridges (Stargate, Hop, Synapse, Arbitrum/Polygon Canonical Bridges).
-- Ranks execution paths by total fee (Gas + Protocol Fee + Slippage) and net received output.
+### Phase 2 (Roadmap)
+- 🟧 Bitcoin (BTC) • 🔺 Avalanche (AVAX) • 💧 Sui • 🟢 Aptos
 
 ---
 
-## 🚀 Quick Start
+## 🚀 PLATFORM MODULES ARCHITECTURE
 
-### 1. Installation
+- **Module 1: Multi-Chain Wallet Scanner**: Simultaneous asset & liability detection across 7 chains.
+- **Module 2: Solana Rent Recovery Engine**: Detects empty SPL Associated Token Accounts (ATAs) locking 0.00203928 SOL (~$0.37 USD) each. Generates base64 `closeAccount` transaction payload for 1-click refund to owner.
+- **Module 3: Dust Consolidation Engine**: Detects micro-balances ($1-$50 USD) and provides 4 strategies (**Swap**, **Bridge**, **Transfer**, **Batch Consolidate**).
+- **Module 4: Reward Scanner Engine**: Searches 5 yield categories (**Unclaimed Staking**, **Validator Rewards**, **Liquidity Mining**, **Governance**, **Airdrops**).
+- **Module 5: Token Approval Scanner & Revoker**: Flags Unlimited Token Approvals (`MaxUint256`) across 5 EVM chains, assigns risk ratings (`CRITICAL`, `HIGH`, `MEDIUM`, `LOW`), and builds `approve(spender, 0)` revocation calldata.
+- **Module 6: Fee Optimizer Engine**: Estimates gas fees, benchmarks high-speed MEV-protected RPC nodes (Flashbots, Helius, Alchemy, QuickNode), recommends low-gwei execution windows, and computes annual USD savings.
+- **Module 7: Cross-Chain Merged Unified Dashboard**: Aggregates assets across all 7 chains into a single executive dashboard with percentage allocation bar charts and 1-Click Master Recovery payloads.
+- **Module 8: AI Architect Assistant**: Natural Language Engine answering questions like *"What can I recover?"*, *"How much rent do I have?"*, *"Why should I close these accounts?"*, and *"Which wallet is healthiest?"*.
+- **Module 9: Analytics Engine & Visual Charts**: Visualizes portfolio allocation, itemized recoverable breakdown, 12-month historical cumulative savings curve, and fees avoided ticker ($945.70 USD saved).
+- **Module 10: Business Model & SaaS Monetization Engine**: Supports **Freemium (1 scan/day quota)**, **Premium Pro SaaS ($49/mo)**, **Enterprise API ($199/mo)**, and **10% Performance Success Fee** model on recovered funds.
+- **Module 11: Apple-Quality UI & Glassmorphism Design System**: Dark mode glassmorphism UI (`public/index.html`), hover-elevated animated cards, shimmer progress bars, loading skeletons, and multi-tab navigation.
+- **Executive Admin Control Panel**: Dedicated dashboard (`public/admin.html`) monitoring Users, Wallets, Scans, Revenue (MRR/ARR), API Usage & RPC Node Health, System Activity Logs, and Error Console.
 
+---
+
+## 🛠️ TECH STACK
+
+- **Frontend**: HTML5, Vanilla JavaScript (ES2024), TailwindCSS, Glassmorphism UI, Custom SVG Charts
+- **Backend**: Node.js, Express.js (CommonJS & ES Modules)
+- **Database & ORM**: PostgreSQL 16, Prisma ORM
+- **Security & Authentication**: JSON Web Tokens (`jsonwebtoken`), `express-rate-limit`, AES-256-GCM Encryption (`crypto`)
+- **Blockchain SDKs**: `@solana/web3.js`, `@solana/spl-token`, Ethers.js
+- **API Documentation**: OpenAPI 3.0, Swagger UI (`/api-docs`)
+- **Containerization & CI/CD**: Docker, Docker Compose, GitHub Actions (`ci.yml`)
+- **Testing**: Vitest (`vitest run tests/fees.test.mjs`), Supertest
+
+---
+
+## 📦 QUICK START GUIDE
+
+### 1. Local Installation
 ```bash
 git clone https://github.com/Vdassaet/crypto-fee-finder.git
 cd crypto-fee-finder
 npm install
 ```
 
-### 2. Run Tests
+### 2. Start Application Server
+```bash
+npm start
+```
+- 🌐 Web Application Interface: [http://localhost:3000](http://localhost:3000)
+- ⚙️ Executive Admin Panel: [http://localhost:3000/admin.html](http://localhost:3000/admin.html)
+- 📚 OpenAPI Swagger Specs: [http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
+### 3. Run Automated Tests
 ```bash
 npm test
 ```
 
-### 3. Start Development Server
+---
+
+## 🐳 DOCKER DEPLOYMENT
 
 ```bash
-npm start
+docker-compose up -d --build
 ```
 
-Open `http://localhost:3000` in your web browser to access the **ChainRecover AI** dashboard!
-
 ---
 
-## 📚 API Endpoint Reference
+## 📑 REST API ENDPOINTS REFERENCE
 
-Interactive OpenAPI / Swagger UI documentation is available at `http://localhost:3000/api-docs`.
-
-| Method | Endpoint | Description |
+| Endpoint | Method | Description |
 | :--- | :--- | :--- |
-| `GET` | `/api/v1/scanner/chains` | List all supported blockchains |
-| `GET` | `/api/v1/scanner/wallet/:address` | Deep scan wallet address across 7 chains |
-| `POST` | `/api/v1/scanner/recover` | Prepare unsigned transaction payload for 1-click recovery |
-| `GET` | `/api/v1/fees/gas` | Get gas metrics across supported networks |
-| `GET` | `/api/v1/fees/defi` | Query DEX swap & lending fee structures |
-| `GET` | `/api/v1/fees/bridges` | Query cross-chain bridge fee details |
-| `POST` | `/api/v1/fees/compare` | Compare transfer routes and rank by lowest total fee |
+| `/api/v1/scanner/chains` | `GET` | List all 7 supported blockchains |
+| `/api/v1/scanner/cross-chain/merged` | `POST` | Merged multi-chain portfolio report |
+| `/api/v1/scanner/solana/rent/:address` | `GET` | Scan empty SPL token accounts & recoverable rent |
+| `/api/v1/scanner/solana/build-close-tx` | `POST` | Build unsigned `closeAccount` base64 transaction |
+| `/api/v1/scanner/approvals/search` | `POST` | Search active ERC-20 token approvals & risk ratings |
+| `/api/v1/scanner/approvals/revoke` | `POST` | Generate `approve(spender, 0)` revocation payload |
+| `/api/v1/scanner/ai/chat` | `POST` | Natural Language AI Assistant endpoint |
+| `/api/v1/scanner/analytics/report` | `POST` | Portfolio allocation & 12-month savings report |
+| `/api/v1/billing/tiers` | `GET` | List SaaS pricing tiers & 10% performance fee model |
+| `/api/v1/admin/dashboard` | `GET` | Executive Admin overview metrics |
 
 ---
 
-## 🌐 Synchronized Repository
+## 📜 LICENSE
 
-- **GitHub Repository**: [https://github.com/Vdassaet/crypto-fee-finder.git](https://github.com/Vdassaet/crypto-fee-finder.git)
+MIT License © 2026 ChainRecover AI Platform

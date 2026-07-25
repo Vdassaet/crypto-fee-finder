@@ -1,0 +1,141 @@
+// Prisma Schema - ChainRecover AI Production PostgreSQL Database Model
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum SubscriptionTier {
+  FREE_TIER
+  PREMIUM_PRO
+  ENTERPRISE_API
+}
+
+enum RiskRating {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum RecoveryModule {
+  SOLANA_RENT
+  DUST_CONSOLIDATION
+  REWARD_HARVEST
+  APPROVAL_REVOKE
+  MASTER_MULTI_CHAIN
+}
+
+model User {
+  id              String           @id @default(uuid())
+  email           String?          @unique
+  name            String?
+  tier            SubscriptionTier @default(FREE_TIER)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  wallets         Wallet[]
+  subscriptions   Subscription[]
+  auditLogs       AuditLog[]
+
+  @@map("users")
+}
+
+model Wallet {
+  id                  String     @id @default(uuid())
+  userId              String?
+  address             String     @unique
+  chainType           String     // "SOLANA" or "EVM"
+  totalPortfolioUsd   Float      @default(0.0)
+  totalRecoveredUsd   Float      @default(0.0)
+  rentReclaimedSol    Float      @default(0.0)
+  lastScannedAt       DateTime?
+  createdAt           DateTime   @default(now())
+
+  user                User?      @relation(fields: [userId], references: [id], onDelete: SetNull)
+  scans               Scan[]
+  recoveries          Recovery[]
+  approvals           Approval[]
+
+  @@map("wallets")
+}
+
+model Scan {
+  id                  String   @id @default(uuid())
+  walletId            String
+  supportedChainsCount Int     @default(7)
+  assetsFoundCount    Int      @default(0)
+  totalRecoverableUsd Float    @default(0.0)
+  scanDurationMs      Int      @default(0)
+  createdAt           DateTime @default(now())
+
+  wallet              Wallet   @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@map("scans")
+}
+
+model Recovery {
+  id                  String         @id @default(uuid())
+  walletId            String
+  module              RecoveryModule
+  grossAmountUsd      Float          @default(0.0)
+  netAmountUsd        Float          @default(0.0)
+  commissionUsd       Float          @default(0.0)
+  txHash              String?
+  status              String         @default("COMPLETED") // PENDING, COMPLETED, FAILED
+  createdAt           DateTime       @default(now())
+
+  wallet              Wallet         @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@map("recoveries")
+}
+
+model Approval {
+  id                  String     @id @default(uuid())
+  walletId            String
+  chain               String     // "ethereum", "base", "polygon", "arbitrum", "optimism"
+  tokenAddress        String
+  tokenSymbol         String
+  spenderAddress      String
+  spenderName         String?
+  allowance           String     // "MaxUint256" or numeric
+  riskRating          RiskRating @default(LOW)
+  isRevoked           Boolean    @default(false)
+  createdAt           DateTime   @default(now())
+
+  wallet              Wallet     @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@map("approvals")
+}
+
+model Subscription {
+  id                  String           @id @default(uuid())
+  userId              String
+  tier                SubscriptionTier
+  amountPaidUsd       Float
+  billingCycle        String           @default("Monthly")
+  active              Boolean          @default(true)
+  startDate           DateTime         @default(now())
+  endDate             DateTime?
+
+  user                User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model AuditLog {
+  id                  String   @id @default(uuid())
+  userId              String?
+  action              String
+  ipAddress           String?
+  details             String?
+  timestamp           DateTime @default(now())
+
+  user                User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
