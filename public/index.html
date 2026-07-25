@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Institutional Financial & Recovery Terminal</title>
+  <title>ChainRecover AI | The Singulant Standard</title>
 
-  <!-- SEO & Open Graph Metadata -->
   <meta name="description" content="ChainRecover AI is an enterprise financial terminal and blockchain recovery platform analyzing crypto wallets across 7 blockchains to reclaim SOL rent deposits, yield, dust, and revokable allowances non-custodially.">
-  <meta property="og:title" content="ChainRecover AI - Institutional Blockchain Recovery Terminal">
-  <meta property="og:description" content="Surgical asset discovery, Solana rent reclamation, and wallet health analysis. Zero private keys required.">
+  <meta property="og:title" content="ChainRecover AI - The Singulant Standard">
+  <meta property="og:description" content="Empowering AI Evolution for Blockchain Asset Discovery.">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
 
   <!-- Tailwind CSS & Professional Typography -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,72 +19,104 @@
       theme: {
         extend: {
           colors: {
-            terminal: {
-              bg: '#090A0F',
-              surface: '#11141C',
-              elevated: '#1C1F26',
-              border: 'rgba(255, 255, 255, 0.06)',
-              indigo: '#4F46E5',
-              emerald: '#10B981',
-              rose: '#F43F5E',
-              amber: '#F59E0B'
+            brand: {
+              black: '#000000',
+              darker: '#050505',
+              dark: '#0a0a0a',
+              gray: '#171717',
+              lightGray: '#262626',
+              border: 'rgba(255, 255, 255, 0.1)',
+              silver: '#A3A3A3',
+              white: '#FFFFFF'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['"Red Hat Display"', 'Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          },
+          animation: {
+            'marquee': 'marquee 25s linear infinite',
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-100%)' },
             }
           }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Red+Hat+Display:wght@700;900&display=swap" rel="stylesheet">
 
   <style>
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #090A0F;
-      color: #E4E1EE;
+      background-color: #050505;
+      color: #FFFFFF;
       overflow-x: hidden;
     }
-    .font-mono { font-family: 'JetBrains Mono', monospace; }
-
-    /* Stripe/Linear Financial Terminal Glassmorphism */
-    .terminal-card {
-      background: #11141C;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
-      border-radius: 8px;
-    }
-    .terminal-card-hover {
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .terminal-card-hover:hover {
-      border-color: rgba(79, 70, 229, 0.4);
-      box-shadow: 0 12px 35px -5px rgba(79, 70, 229, 0.15);
-    }
-    .terminal-pill {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 4px;
+    
+    /* Ultra-large Display Typography */
+    .text-display-giant {
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: clamp(3rem, 10vw, 12rem);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
     }
 
-    /* Tabular lining digits */
-    .tabular-nums { font-variant-numeric: tabular-nums; }
+    .text-display-medium {
+      font-family: 'Red Hat Display', sans-serif;
+      font-size: clamp(2rem, 5vw, 6rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
 
-    /* Shimmer Progress Animations */
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
+    /* Minimalist Glassmorphism (Grayscale) */
+    .glass-card {
+      background: rgba(23, 23, 23, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 24px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .shimmer-progress {
-      background: linear-gradient(90deg, #4F46E5 0%, #10B981 50%, #6366F1 100%);
-      background-size: 200% 100%;
-      animation: shimmer 3s infinite linear;
+    .glass-card:hover {
+      background: rgba(38, 38, 38, 0.8);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-4px);
     }
-    .skeleton-loader {
-      background: linear-gradient(90deg, rgba(255,255,255,0.02) 25%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0.02) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite ease-in-out;
+
+    /* Premium Button */
+    .btn-premium {
+      background: #FFFFFF;
+      color: #000000;
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .btn-premium:hover {
+      background: #D4D4D4;
+      transform: scale(1.05);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      padding: 16px 32px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.4);
+    }
 
     /* Geometric 3D Floating Animations */
     @keyframes float-slow {
@@ -104,70 +135,63 @@
     .animate-float-slow { animation: float-slow 25s ease-in-out infinite; }
     .animate-float-medium { animation: float-medium 18s ease-in-out infinite; }
     .animate-float-fast { animation: float-fast 12s ease-in-out infinite; }
+
+    /* Hide scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-indigo-600 selection:text-white antialiased text-xs relative z-0">
+<body class="min-h-screen flex flex-col selection:bg-white selection:text-black antialiased relative z-0 font-sans">
 
-  <!-- BACKGROUND: 3D Ovals and Triangles in fine grays -->
-  <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#090A0F]">
+  <!-- BACKGROUND: Animated 3D Grayscale Shapes -->
+  <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none bg-[#050505]">
     
-    <!-- Ambient Glassmorphism Blobs -->
+    <!-- Ambient Glassmorphism Blobs (Grayscale) -->
     <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-white/[0.015] blur-[120px] animate-float-slow"></div>
     <div class="absolute bottom-[-20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-white/[0.01] blur-[140px] animate-float-medium"></div>
-    <div class="absolute top-[40%] left-[30%] w-[40vw] h-[40vw] rounded-full bg-indigo-500/[0.01] blur-[150px] animate-float-fast"></div>
+    <div class="absolute top-[40%] left-[30%] w-[40vw] h-[40vw] rounded-full bg-white/[0.015] blur-[150px] animate-float-fast"></div>
     
     <!-- 3D Triangle 1 (Top Right) -->
-    <svg class="absolute top-[10%] right-[15%] w-64 h-64 opacity-[0.03] animate-float-medium" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="absolute top-[10%] right-[15%] w-64 h-64 opacity-[0.04] animate-float-medium" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M50 10L90 80H10L50 10Z" fill="url(#grad1)"/>
       <path d="M50 10L90 80H50V10Z" fill="url(#grad2)"/>
     </svg>
 
     <!-- 3D Triangle 2 (Bottom Left) -->
-    <svg class="absolute bottom-[15%] left-[10%] w-72 h-72 opacity-[0.02] animate-float-slow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-35deg);">
+    <svg class="absolute bottom-[15%] left-[10%] w-72 h-72 opacity-[0.03] animate-float-slow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-35deg);">
       <path d="M50 90L10 20H90L50 90Z" fill="url(#grad3)"/>
       <path d="M50 90L10 20H50V90Z" fill="url(#grad4)"/>
     </svg>
 
     <!-- 3D Triangle 3 (Center Right) -->
-    <svg class="absolute top-[45%] right-[5%] w-48 h-48 opacity-[0.025] animate-float-fast" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(65deg);">
+    <svg class="absolute top-[45%] right-[5%] w-48 h-48 opacity-[0.03] animate-float-fast" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(65deg);">
       <path d="M50 10L90 80H10L50 10Z" fill="url(#grad1)"/>
       <path d="M50 10L90 80H50V10Z" fill="url(#grad2)"/>
     </svg>
 
-    <!-- 3D Triangle 4 (Top Left) -->
-    <svg class="absolute top-[5%] left-[25%] w-32 h-32 opacity-[0.02] animate-float-medium" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-15deg);">
-      <path d="M50 90L10 20H90L50 90Z" fill="url(#grad3)"/>
-      <path d="M50 90L10 20H50V90Z" fill="url(#grad4)"/>
-    </svg>
-
     <!-- 3D Oval 1 (Center Left) -->
-    <svg class="absolute top-[60%] left-[20%] w-32 h-64 opacity-[0.02] animate-float-slow" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(45deg);">
+    <svg class="absolute top-[60%] left-[20%] w-32 h-64 opacity-[0.025] animate-float-slow" viewBox="0 0 100 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(45deg);">
       <ellipse cx="50" cy="100" rx="40" ry="90" fill="url(#grad5)"/>
     </svg>
 
-    <!-- 3D Oval 2 (Bottom Right) -->
-    <svg class="absolute bottom-[5%] right-[30%] w-40 h-40 opacity-[0.015] animate-float-fast" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="transform: rotate(-20deg);">
-      <ellipse cx="50" cy="50" rx="30" ry="45" fill="url(#grad5)"/>
-    </svg>
-
-    <!-- Global Gradients Definitions -->
+    <!-- Global Gradients Definitions (Strictly Grayscale) -->
     <svg width="0" height="0" class="absolute">
       <defs>
         <linearGradient id="grad1" x1="10" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffffff" stop-opacity="0.8"/>
+          <stop stop-color="#ffffff" stop-opacity="0.9"/>
           <stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/>
         </linearGradient>
         <linearGradient id="grad2" x1="90" y1="80" x2="50" y2="10" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#000000" stop-opacity="0.6"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.2"/>
+          <stop stop-color="#000000" stop-opacity="0.7"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0.25"/>
         </linearGradient>
         <linearGradient id="grad3" x1="10" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#ffffff" stop-opacity="0.6"/>
+          <stop stop-color="#ffffff" stop-opacity="0.7"/>
           <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
         </linearGradient>
         <linearGradient id="grad4" x1="90" y1="20" x2="50" y2="90" gradientUnits="userSpaceOnUse">
-          <stop stop-color="#000000" stop-opacity="0.8"/>
-          <stop offset="1" stop-color="#ffffff" stop-opacity="0.1"/>
+          <stop stop-color="#000000" stop-opacity="0.85"/>
+          <stop offset="1" stop-color="#ffffff" stop-opacity="0.15"/>
         </linearGradient>
         <linearGradient id="grad5" x1="10" y1="10" x2="90" y2="190" gradientUnits="userSpaceOnUse">
           <stop stop-color="#ffffff" stop-opacity="1"/>
@@ -177,461 +201,167 @@
     </svg>
   </div>
 
-  <!-- 1. EXECUTIVE HEADER -->
-  <header class="border-b border-white/5 bg-[#090A0F]/90 backdrop-blur-xl sticky top-0 z-50">
-    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-      
-      <!-- LOGO & BRAND -->
+  <!-- HEADER -->
+  <header class="fixed top-0 inset-x-0 z-50 px-6 py-6 transition-all duration-300 bg-transparent">
+    <div class="max-w-[1600px] mx-auto flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-7 h-7 rounded bg-indigo-600 flex items-center justify-center font-black text-sm text-white shadow-md shadow-indigo-600/30">
-          ⚡
+        <div class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center font-bold text-lg bg-black/40 backdrop-blur-md">
+          CR
         </div>
-        <div class="flex items-center space-x-2">
-          <span class="font-bold text-sm tracking-tight text-white">ChainRecover</span>
-          <span class="font-mono text-[10px] text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 py-0.5 rounded font-semibold uppercase">
-            TERMINAL v2.4
-          </span>
-        </div>
+        <span class="font-bold text-xl tracking-tight hidden sm:block">ChainRecover AI</span>
       </div>
-
-      <!-- RPC LATENCY TICKER & PROTOCOL STATUS -->
-      <div class="hidden lg:flex items-center space-x-6 text-[11px] font-mono text-gray-400">
-        <div class="flex items-center space-x-2">
-          <span class="text-gray-500">RPC LATENCY:</span>
-          <span class="flex items-center space-x-1 text-emerald-400">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Solana: 12ms</span>
-          </span>
-          <span class="text-gray-600">•</span>
-          <span class="text-amber-400">ETH: 48ms</span>
-          <span class="text-gray-600">•</span>
-          <span class="text-emerald-400">ARB: 14ms</span>
-        </div>
-
-        <div class="flex items-center space-x-2 border-l border-white/10 pl-6 text-emerald-400">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span class="font-semibold uppercase tracking-wider text-[10px]">SECURITY: ACTIVE (NON-CUSTODIAL)</span>
-        </div>
-      </div>
-
-      <!-- CONNECT WALLET ACTION -->
-      <div class="flex items-center space-x-3">
-        <button onclick="openEarlyAccessModal()" class="hidden sm:block text-[11px] font-mono text-gray-400 hover:text-white px-3 py-1.5 transition">
-          [API KEYS]
-        </button>
-        <button onclick="openWalletModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-mono font-bold text-[11px] px-4 py-1.5 rounded transition shadow-md shadow-indigo-600/20 flex items-center space-x-2">
-          <span>🔒 Connect Non-Custodial Wallet</span>
+      <nav class="hidden md:flex space-x-10">
+        <a href="#platform" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Platform</a>
+        <a href="#technology" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Technology</a>
+        <a href="#security" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Security</a>
+      </nav>
+      <div class="flex items-center space-x-4">
+        <a href="/admin.html" class="text-sm font-medium text-brand-silver hover:text-white hidden sm:block">Admin</a>
+        <button class="btn-premium py-3 px-6 text-sm">
+          Launch App
         </button>
       </div>
     </div>
   </header>
 
-  <!-- MAIN TERMINAL LAYOUT -->
-  <main class="max-w-[1440px] mx-auto px-4 sm:px-6 py-6 flex-grow w-full space-y-6">
-
-    <!-- 2. EXECUTIVE HERO METRICS GRID -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-      
-      <!-- Metric 1: Tracked Net Worth -->
-      <div class="terminal-card p-4 text-left border-l-2 border-l-indigo-500">
-        <div class="flex items-center justify-between text-[11px] font-mono text-gray-400 mb-1 uppercase tracking-wider">
-          <span>TOTAL TRACKED NET WORTH</span>
-          <span class="text-indigo-400">💼 Assets</span>
-        </div>
-        <div class="text-2xl font-bold text-white font-mono tabular-nums" id="heroNetWorth">$14,143.10</div>
-        <div class="text-[11px] text-gray-400 mt-1 font-mono">Scanned across 7 blockchains</div>
-      </div>
-
-      <!-- Metric 2: Capital Net Recoverable -->
-      <div class="terminal-card p-4 text-left border-l-2 border-l-emerald-500">
-        <div class="flex items-center justify-between text-[11px] font-mono text-emerald-400 mb-1 uppercase tracking-wider font-bold">
-          <span>CAPITAL NET RECOVERABLE</span>
-          <span>⚡ Reclaimable</span>
-        </div>
-        <div class="text-2xl font-bold text-emerald-400 font-mono tabular-nums" id="heroRecoverable">$260.19</div>
-        <div class="text-[11px] text-emerald-300/80 mt-1 font-mono">0.0102 SOL Rent + Yield + Dust</div>
-      </div>
-
-      <!-- Metric 3: Health Score -->
-      <div class="terminal-card p-4 text-left border-l-2 border-l-purple-500">
-        <div class="flex items-center justify-between text-[11px] font-mono text-gray-400 mb-1 uppercase tracking-wider">
-          <span>WALLET HEALTH INDEX</span>
-          <span class="text-emerald-400 font-bold">Grade A+</span>
-        </div>
-        <div class="text-2xl font-bold text-indigo-300 font-mono tabular-nums" id="heroHealth">94 / 100</div>
-        <div class="text-[11px] text-gray-400 mt-1 font-mono">Low execution risk score</div>
-      </div>
-
-      <!-- Metric 4: Approvals Flagged -->
-      <div class="terminal-card p-4 text-left border-l-2 border-l-rose-500">
-        <div class="flex items-center justify-between text-[11px] font-mono text-rose-400 mb-1 uppercase tracking-wider font-bold">
-          <span>ALLOWANCES FLAGGED</span>
-          <span>🚨 Security Alert</span>
-        </div>
-        <div class="text-2xl font-bold text-white font-mono tabular-nums" id="heroApprovals">4 Flagged</div>
-        <div class="text-[11px] text-rose-400 mt-1 font-mono font-semibold">1 CRITICAL Risk (DAI Spender)</div>
-      </div>
-
+  <!-- MAIN HERO -->
+  <main class="flex-grow pt-32 pb-20 px-6 relative flex flex-col items-center justify-center min-h-screen text-center">
+    
+    <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-12">
+      <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+      <span class="text-xs font-mono text-brand-silver uppercase tracking-widest">System Operational v2.0</span>
     </div>
 
-    <!-- 3. INPUT SCANNER BAR -->
-    <div class="terminal-card p-4">
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
-        <div class="md:col-span-5">
-          <label class="block text-[10px] font-mono text-gray-400 uppercase tracking-wider mb-1">Solana Public Key (Base58)</label>
-          <input type="text" id="solanaAddrInput" value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU" class="w-full bg-[#0D0F14] border border-white/10 text-white font-mono text-xs px-3 py-2 rounded outline-none focus:border-indigo-500">
-        </div>
-        <div class="md:col-span-5">
-          <label class="block text-[10px] font-mono text-gray-400 uppercase tracking-wider mb-1">EVM Account Address (0x...)</label>
-          <input type="text" id="evmAddrInput" value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045" class="w-full bg-[#0D0F14] border border-white/10 text-indigo-300 font-mono text-xs px-3 py-2 rounded outline-none focus:border-indigo-500">
-        </div>
-        <div class="md:col-span-2 pt-4 md:pt-0">
-          <button onclick="executeTerminalScan()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-mono font-bold text-xs py-2 rounded transition shadow-md shadow-indigo-600/30">
-            ⚡ SCAN TERMINAL
-          </button>
-        </div>
-      </div>
-    </div>
+    <h1 class="text-display-giant font-black mb-8 max-w-[1400px] mx-auto">
+      EMPOWERING <br>
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-brand-silver to-gray-500">
+        ASSET RECOVERY
+      </span>
+    </h1>
 
-    <!-- 4. SEGMENTED CONTROL MODULE SWITCHER -->
-    <div class="flex items-center space-x-1 border-b border-white/10 overflow-x-auto no-scrollbar font-mono text-[11px] pb-1">
-      <button onclick="switchTerminalTab('overview')" id="tab-overview" class="bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-t transition">
-        OVERVIEW
+    <p class="text-xl md:text-2xl text-brand-silver max-w-3xl mx-auto mb-16 font-light leading-relaxed">
+      Surgical intelligence to discover, optimize, and reclaim lost capital across the Web3 ecosystem. Non-custodial, high-performance architecture.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+      <button class="btn-premium text-lg px-8 py-4">
+        Start Scanning Now
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
       </button>
-      <button onclick="switchTerminalTab('solana')" id="tab-solana" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        SOLANA RENT RECLAIM
-      </button>
-      <button onclick="switchTerminalTab('dust')" id="tab-dust" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        DUST CONSOLIDATION
-      </button>
-      <button onclick="switchTerminalTab('rewards')" id="tab-rewards" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        DEFI YIELD & REWARDS
-      </button>
-      <button onclick="switchTerminalTab('approvals')" id="tab-approvals" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        APPROVAL REVOKER
-      </button>
-      <button onclick="switchTerminalTab('optimizer')" id="tab-optimizer" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        FEE OPTIMIZER
-      </button>
-      <button onclick="switchTerminalTab('ai')" id="tab-ai" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        AI ASSISTANT
-      </button>
-      <button onclick="switchTerminalTab('analytics')" id="tab-analytics" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        ANALYTICS & CHARTS
-      </button>
-      <button onclick="switchTerminalTab('pricing')" id="tab-pricing" class="text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition">
-        SAAS PRICING TIERS
+      <button class="btn-outline text-lg px-8 py-4">
+        View Enterprise API
       </button>
     </div>
-
-    <!-- 5. TERMINAL MAIN DISPLAY AREA -->
-    <div id="terminalDisplayArea" class="space-y-4">
-      <!-- Dynamically populated via JS -->
-    </div>
-
-    <!-- 6. MULTI-CHAIN PORTFOLIO MATRIX -->
-    <div class="terminal-card p-5 space-y-3">
-      <div class="flex items-center justify-between border-b border-white/10 pb-2">
-        <span class="font-mono text-xs font-bold text-white uppercase tracking-wider">Multi-Chain Asset Allocation Matrix</span>
-        <span class="font-mono text-[10px] text-gray-400">7 BLOCKCHAINS INDEXED</span>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
-        <div class="space-y-2">
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Ethereum (ETH)</span>
-              <span class="text-gray-400 tabular-nums">$7,280.00 USD (51.5%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-indigo-500 rounded" style="width: 51.5%"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Solana (SOL)</span>
-              <span class="text-gray-400 tabular-nums">$3,423.60 USD (24.2%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-purple-500 rounded" style="width: 24.2%"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Arbitrum (ARB)</span>
-              <span class="text-gray-400 tabular-nums">$1,712.50 USD (12.1%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-blue-500 rounded" style="width: 12.1%"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="space-y-2">
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Base (L2)</span>
-              <span class="text-gray-400 tabular-nums">$820.00 USD (5.8%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-emerald-500 rounded" style="width: 5.8%"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Polygon (POL)</span>
-              <span class="text-gray-400 tabular-nums">$597.00 USD (4.2%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-pink-500 rounded" style="width: 4.2%"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] mb-1">
-              <span class="text-white font-semibold">Optimism (OP)</span>
-              <span class="text-gray-400 tabular-nums">$310.00 USD (2.2%)</span>
-            </div>
-            <div class="w-full bg-[#0D0F14] h-2 rounded overflow-hidden">
-              <div class="h-2 bg-rose-500 rounded" style="width: 2.2%"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7. EXECUTION LOGS TERMINAL FOOTER -->
-    <div class="bg-black/90 border border-white/10 rounded p-3 font-mono text-[10px] space-y-1">
-      <div class="flex items-center justify-between text-gray-500 border-b border-white/10 pb-1 mb-2">
-        <span>SYSTEM AUDIT CONSOLE & EXECUTION STREAM</span>
-        <span>STATUS: 200 OK</span>
-      </div>
-      <div class="text-emerald-400">[2026-07-25T02:08:40Z] [AUDIT: LOGGED] Pre-execution simulation passed 100/100 (Zero Risk).</div>
-      <div class="text-indigo-400">[2026-07-25T02:08:41Z] [SOLANA RENT] 5 empty SPL accounts detected. Unsigned closeAccount Base64 ready.</div>
-      <div class="text-amber-400">[2026-07-25T02:08:42Z] [SECURITY] 1 CRITICAL DAI approval flagged. Revocation payload generated.</div>
-    </div>
-
   </main>
 
+  <!-- INFINITE MARQUEE -->
+  <div class="border-y border-white/10 py-6 overflow-hidden bg-brand-dark flex whitespace-nowrap">
+    <div class="animate-marquee flex gap-12 items-center">
+      <!-- Group 1 -->
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Automated Yield</span>
+      <span class="text-2xl text-white">✦</span>
+      <!-- Duplicate for smooth loop -->
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
+      <span class="text-2xl text-white">✦</span>
+      <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Automated Yield</span>
+      <span class="text-2xl text-white">✦</span>
+    </div>
+  </div>
+  <style>
+    .text-stroke-white {
+      -webkit-text-stroke: 1px rgba(255,255,255,0.8);
+      color: transparent;
+    }
+  </style>
+
+  <!-- PLATFORM FEATURES -->
+  <section id="platform" class="py-32 px-6 max-w-[1600px] mx-auto w-full">
+    <div class="text-center mb-24">
+      <h2 class="text-display-medium font-bold mb-6">INTELLIGENCE SUITE</h2>
+      <p class="text-xl text-brand-silver max-w-2xl mx-auto">Proprietary engines built for maximum value extraction with uncompromising security standards.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Feature 1 -->
+      <div class="glass-card p-10 flex flex-col h-full group">
+        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+        </div>
+        <h3 class="text-3xl font-display font-bold mb-4">Solana Rent</h3>
+        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
+          Instantly detect and reclaim SOL locked in empty token accounts, unused serum orders, and abandoned programs.
+        </p>
+        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
+          <span>Explore Engine</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="glass-card p-10 flex flex-col h-full group">
+        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+        </div>
+        <h3 class="text-3xl font-display font-bold mb-4">Cross-Chain</h3>
+        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
+          Unified scanning architecture covering Ethereum, Arbitrum, Optimism, Base, and BSC for forgotten liquidity.
+        </p>
+        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
+          <span>View Coverage</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="glass-card p-10 flex flex-col h-full group">
+        <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        </div>
+        <h3 class="text-3xl font-display font-bold mb-4">Zero Trust</h3>
+        <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">
+          Absolute cryptographic security. We never ask for seed phrases. Every transaction is constructed for manual wallet approval.
+        </p>
+        <a href="#" class="inline-flex items-center space-x-2 text-white font-semibold uppercase tracking-wider text-sm hover:opacity-70 transition-opacity">
+          <span>Security Protocol</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CALL TO ACTION -->
+  <section class="py-32 px-6 border-t border-white/5 bg-brand-gray/30">
+    <div class="max-w-[1200px] mx-auto text-center">
+      <h2 class="text-display-medium font-bold mb-10">THE NEW ERA OF WEALTH OPTIMIZATION</h2>
+      <button class="btn-premium text-xl px-12 py-5 shadow-2xl shadow-white/10">
+        Initialize Terminal
+      </button>
+    </div>
+  </section>
+
   <!-- FOOTER -->
-  <footer class="border-t border-white/5 bg-[#090A0F] py-6 text-center text-[11px] font-mono text-gray-500">
-    ChainRecover AI Financial Terminal &copy; 2026 • Non-Custodial Architecture Enforced
+  <footer class="py-12 px-6 border-t border-white/10 bg-brand-dark">
+    <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-sm font-mono text-brand-silver">
+      <p>© 2026 ChainRecover AI. All rights reserved.</p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        <a href="#" class="hover:text-white transition-colors">API Documentation</a>
+      </div>
+    </div>
   </footer>
 
-  <!-- MODALS -->
-  <div id="walletModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-    <div class="terminal-card p-5 max-w-sm w-full font-mono text-xs space-y-3">
-      <div class="flex justify-between items-center border-b border-white/10 pb-2">
-        <span class="font-bold text-white uppercase">Connect Web3 Wallet</span>
-        <button onclick="closeWalletModal()" class="text-gray-400 hover:text-white font-bold">✕</button>
-      </div>
-      <p class="text-[11px] text-gray-400">All transactions are signed locally in your client wallet.</p>
-      
-      <div class="space-y-2">
-        <button onclick="selectWallet('Phantom')" class="w-full bg-[#0D0F14] hover:bg-slate-800 border border-white/10 p-2.5 rounded flex justify-between text-white transition">
-          <span>⚡ Phantom (Solana)</span>
-          <span class="text-emerald-400">Detected</span>
-        </button>
-        <button onclick="selectWallet('MetaMask')" class="w-full bg-[#0D0F14] hover:bg-slate-800 border border-white/10 p-2.5 rounded flex justify-between text-white transition">
-          <span>🦊 MetaMask (EVM)</span>
-          <span class="text-emerald-400">Detected</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="earlyAccessModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-    <div class="terminal-card p-5 max-w-sm w-full font-mono text-xs space-y-3">
-      <div class="flex justify-between items-center border-b border-white/10 pb-2">
-        <span class="font-bold text-white uppercase">Request API Key Access</span>
-        <button onclick="closeEarlyAccessModal()" class="text-gray-400 hover:text-white font-bold">✕</button>
-      </div>
-      <input type="email" id="modalEmail" placeholder="developer@firm.com" class="w-full bg-[#0D0F14] border border-white/10 text-white p-2.5 rounded outline-none">
-      <button onclick="submitModalAccess()" class="w-full bg-indigo-600 text-white font-bold py-2 rounded">Generate API Key</button>
-      <div id="modalMsg" class="hidden text-[10px] text-emerald-400"></div>
-    </div>
-  </div>
-
-  <!-- TERMINAL JAVASCRIPT LOGIC -->
-  <script>
-    let activeTab = 'overview';
-
-    async function switchTerminalTab(tabName) {
-      activeTab = tabName;
-      document.querySelectorAll('[id^="tab-"]').forEach(btn => {
-        btn.className = 'text-gray-400 hover:text-white font-semibold px-3 py-1.5 rounded-t transition';
-      });
-      document.getElementById(`tab-${tabName}`).className = 'bg-indigo-600 text-white font-bold px-3 py-1.5 rounded-t transition shadow-sm';
-
-      const container = document.getElementById('terminalDisplayArea');
-      container.innerHTML = '<div class="terminal-card p-6 text-center font-mono text-xs text-gray-500">Querying Blockchain Nodes...</div>';
-
-      const solanaAddress = document.getElementById('solanaAddrInput').value.trim();
-      const evmAddress = document.getElementById('evmAddrInput').value.trim();
-
-      if (tabName === 'overview') {
-        const res = await fetch('/api/v1/scanner/cross-chain/merged', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ solanaAddress, evmAddress })
-        });
-        const data = await res.json();
-        const d = data.data;
-
-        container.innerHTML = `
-          <div class="terminal-card p-5 text-left font-mono text-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-              <div>
-                <div class="font-bold text-sm text-white uppercase">INSTITUTIONAL PORTFOLIO CONSOLE</div>
-                <div class="text-[10px] text-gray-400 mt-0.5">Aggregated multi-chain wallet status</div>
-              </div>
-              <button onclick="triggerMasterRecover()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded transition shadow-md">
-                ⚡ 1-Click Master Recover ($${d.unifiedSummary.totalMergedRecoverableUsd.toFixed(2)})
-              </button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-              <div class="bg-[#0D0F14] p-3 rounded border border-white/10">
-                <div class="text-[10px] text-gray-400 uppercase">Tracked Assets</div>
-                <div class="text-lg font-bold text-white">$${d.unifiedSummary.totalMergedPortfolioUsd.toLocaleString()} USD</div>
-              </div>
-              <div class="bg-[#0D0F14] p-3 rounded border border-emerald-500/40">
-                <div class="text-[10px] text-emerald-400 font-bold uppercase">Recoverable Capital</div>
-                <div class="text-lg font-bold text-emerald-400">$${d.unifiedSummary.totalMergedRecoverableUsd.toFixed(2)} USD</div>
-              </div>
-              <div class="bg-[#0D0F14] p-3 rounded border border-white/10">
-                <div class="text-[10px] text-indigo-400 uppercase">Solana Rent SOL</div>
-                <div class="text-lg font-bold text-indigo-300">${d.unifiedSummary.solanaRentRecoverableSol} SOL</div>
-              </div>
-              <div class="bg-[#0D0F14] p-3 rounded border border-white/10">
-                <div class="text-[10px] text-purple-400 uppercase">Unclaimed Yield</div>
-                <div class="text-lg font-bold text-purple-300">$${d.unifiedSummary.unclaimedRewardsUsd} USD</div>
-              </div>
-            </div>
-          </div>
-        `;
-      } else if (tabName === 'solana') {
-        const res = await fetch(`/api/v1/scanner/solana/rent/${solanaAddress}`);
-        const data = await res.json();
-        const d = data.data;
-
-        container.innerHTML = `
-          <div class="terminal-card p-5 text-left font-mono text-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-              <div>
-                <div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div>
-                <div class="text-[10px] text-gray-400 mt-0.5">Reclaim 0.00203928 SOL per empty SPL token storage account</div>
-              </div>
-              <button onclick="reclaimRent()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded transition">
-                ⚡ Reclaim ${d.netRefundSol} SOL ($${d.netRefundUsd} USD)
-              </button>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div class="bg-[#0D0F14] p-3 rounded border border-white/10">
-                <div class="text-[10px] text-gray-400">Empty Accounts</div>
-                <div class="text-xl font-bold text-white">${d.totalEmptyAccountsCount} Accounts</div>
-              </div>
-              <div class="bg-[#0D0F14] p-3 rounded border border-white/10">
-                <div class="text-[10px] text-indigo-400">Gross Rent Deposit</div>
-                <div class="text-xl font-bold text-indigo-300">${d.totalRentDepositSol} SOL</div>
-              </div>
-              <div class="bg-[#0D0F14] p-3 rounded border border-emerald-500/40">
-                <div class="text-[10px] text-emerald-400 font-bold">Net Refund SOL</div>
-                <div class="text-xl font-bold text-emerald-400">${d.netRefundSol} SOL</div>
-              </div>
-            </div>
-          </div>
-        `;
-      } else if (tabName === 'approvals') {
-        const res = await fetch('/api/v1/scanner/approvals/search', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ walletAddress: evmAddress, chain: 'ALL' })
-        });
-        const data = await res.json();
-        const d = data.data;
-
-        container.innerHTML = `
-          <div class="terminal-card p-5 text-left font-mono text-xs space-y-4">
-            <div class="flex items-center justify-between border-b border-white/10 pb-3">
-              <div class="font-bold text-sm text-white uppercase">ERC-20 TOKEN APPROVAL REVOKER</div>
-              <span class="text-rose-400 font-bold">${d.summary.criticalRiskCount} CRITICAL ALERT</span>
-            </div>
-
-            <div class="space-y-2">
-              ${d.approvals.map(a => `
-                <div class="flex items-center justify-between bg-[#0D0F14] p-3 rounded border ${a.riskRating === 'CRITICAL' ? 'border-rose-500/50' : 'border-white/10'}">
-                  <div>
-                    <span class="font-bold text-white">${a.tokenSymbol}</span>
-                    <span class="text-gray-400 ml-2">Spender: ${a.spenderName} (${a.spenderAddress.slice(0, 10)}...)</span>
-                  </div>
-                  <div class="flex items-center space-x-3">
-                    <span class="px-2 py-0.5 rounded text-[10px] ${a.riskRating === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30 font-bold' : 'bg-gray-800 text-gray-300'}">${a.riskRating}</span>
-                    <button onclick="revokeApproval('${a.tokenAddress}', '${a.spenderAddress}')" class="bg-rose-600 hover:bg-rose-500 text-white font-bold text-[10px] px-3 py-1 rounded">Revoke</button>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      } else if (tabName === 'ai') {
-        container.innerHTML = `
-          <div class="terminal-card p-5 text-left font-mono text-xs space-y-3">
-            <div class="font-bold text-sm text-white uppercase">AI ARCHITECT ASSISTANT</div>
-            <div class="flex gap-2">
-              <input type="text" id="aiQuery" placeholder="Ask: 'What can I recover?' or 'Which wallet is healthiest?'" class="w-full bg-[#0D0F14] border border-white/10 text-white px-3 py-2 rounded">
-              <button onclick="runAiChat()" class="bg-indigo-600 text-white font-bold px-4 py-2 rounded">Ask</button>
-            </div>
-            <div id="aiResponseText" class="bg-[#0D0F14] p-3 rounded border border-white/10 text-gray-200 leading-relaxed whitespace-pre-line font-sans">
-              Enter your question above or click 'Ask'.
-            </div>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <div class="terminal-card p-5 text-left font-mono text-xs">
-            <div class="font-bold text-sm text-white uppercase">Module Active</div>
-            <p class="text-gray-400 mt-1">Terminal module operating under non-custodial rules.</p>
-          </div>
-        `;
-      }
-    }
-
-    async function runAiChat() {
-      const query = document.getElementById('aiQuery').value || 'What can I recover?';
-      const solanaAddress = document.getElementById('solanaAddrInput').value.trim();
-
-      const res = await fetch('/api/v1/scanner/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ walletAddress: solanaAddress, query })
-      });
-      const data = await res.json();
-      if (data.success) {
-        document.getElementById('aiResponseText').innerText = data.data.explanation;
-      }
-    }
-
-    function executeTerminalScan() { switchTerminalTab('overview'); }
-    function triggerMasterRecover() { alert('⚡ Master Recovery Payload Created Non-Custodially!'); }
-    function reclaimRent() { alert('⚡ Solana Rent Reclaim Payload Base64 Built for Wallet Signature!'); }
-    function revokeApproval(t, s) { alert(`🛡️ approve(spender, 0) Calldata generated for token ${t.slice(0, 8)}...`); }
-    function openWalletModal() { document.getElementById('walletModal').classList.remove('hidden'); }
-    function closeWalletModal() { document.getElementById('walletModal').classList.add('hidden'); }
-    function selectWallet(w) { closeWalletModal(); alert(`🔒 Connected to ${w}!`); }
-    function openEarlyAccessModal() { document.getElementById('earlyAccessModal').classList.remove('hidden'); }
-    function closeEarlyAccessModal() { document.getElementById('earlyAccessModal').classList.add('hidden'); }
-    function submitModalAccess() {
-      const e = document.getElementById('modalEmail').value;
-      document.getElementById('modalMsg').classList.remove('hidden');
-      document.getElementById('modalMsg').innerText = `API Key Issued for ${e}: KEY-` + Math.random().toString(36).substring(2, 10).toUpperCase();
-    }
-
-    window.onload = () => switchTerminalTab('overview');
-  </script>
 </body>
 </html>
