@@ -1,7 +1,7 @@
 /**
  * Express REST API Routes for ChainRecover AI Scanner:
  * Module 2 (Solana Rent), Module 3 (Dust Consolidation), Module 4 (Reward Scanner), 
- * Module 5 (Approval Revoker), & Module 6 (Fee Optimizer)
+ * Module 5 (Approval Revoker), Module 6 (Fee Optimizer), & Module 7 (Cross-chain Unified Dashboard)
  */
 
 const express = require('express');
@@ -27,6 +27,11 @@ const {
 const {
   analyzeFeeOptimization
 } = require('../services/optimizerService');
+const {
+  getMergedCrossChainPortfolio,
+  buildMasterRecoveryPayload,
+  ALL_7_CHAINS
+} = require('../services/crossChainService');
 
 /**
  * GET /api/v1/scanner/chains
@@ -158,7 +163,6 @@ router.post('/approvals/revoke', (req, res, next) => {
 
 /**
  * MODULE 6: Fee Optimizer Endpoints
- * Estimates gas, recommends cheaper time window, recommends RPC node, calculates estimated savings
  */
 router.post('/optimizer/analyze', (req, res, next) => {
   try {
@@ -168,6 +172,31 @@ router.post('/optimizer/analyze', (req, res, next) => {
       transactionType: transactionType || 'SWAP',
       txCountPerYear: txCountPerYear || 120
     });
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 7: Cross-chain Scanner & Merged Unified Dashboard Endpoints
+ */
+router.post('/cross-chain/merged', async (req, res, next) => {
+  try {
+    const { solanaAddress, evmAddress } = req.body;
+    const result = await getMergedCrossChainPortfolio(solanaAddress, evmAddress);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+router.post('/cross-chain/master-recover', (req, res, next) => {
+  try {
+    const { solanaAddress, evmAddress } = req.body;
+    const result = buildMasterRecoveryPayload(solanaAddress, evmAddress);
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;

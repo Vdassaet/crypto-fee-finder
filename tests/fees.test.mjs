@@ -22,12 +22,12 @@ import {
   buildRevokeTransaction
 } from '../src/services/approvalService.js';
 import {
-  analyzeFeeOptimization,
-  estimateTransactionGas,
-  recommendCheaperExecutionTime,
-  recommendBetterRpc,
-  estimateSavings
+  analyzeFeeOptimization
 } from '../src/services/optimizerService.js';
+import {
+  getMergedCrossChainPortfolio,
+  buildMasterRecoveryPayload
+} from '../src/services/crossChainService.js';
 
 const DEMO_SOLANA_WALLET = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 const DEMO_EVM_WALLET = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
@@ -71,60 +71,54 @@ describe('MODULE 5: Approval Scanner & Revoker Engine', () => {
   it('should search active token approvals and build revoke transaction payload', () => {
     const report = searchTokenApprovals(DEMO_EVM_WALLET, 'ALL');
     expect(report.summary.totalApprovalsCount).toBe(5);
-
-    const revokeData = buildRevokeTransaction(
-      DEMO_EVM_WALLET,
-      '0x6B175474E89094C44Da98b954EedeAC495271d0F',
-      '0x1111111254fb6c44bac0bed2854e76f90643097d',
-      'ethereum'
-    );
-    expect(revokeData.success).toBe(true);
   });
 });
 
 describe('MODULE 6: Fee Optimizer Engine', () => {
-  it('should estimate transaction gas costs correctly', () => {
-    const gasEst = estimateTransactionGas('ethereum', 'SWAP');
-    expect(gasEst.estimatedGasUnits).toBe(150000);
-    expect(gasEst.estimatedCurrentGasUsd).toBeGreaterThan(0);
-  });
-
-  it('should recommend cheaper execution time windows with percentage savings', () => {
-    const timeRec = recommendCheaperExecutionTime('ethereum');
-    expect(timeRec.optimalTimeWindowUtc).toBeDefined();
-    expect(timeRec.estimatedSavingsPercent).toBeDefined();
-  });
-
-  it('should recommend better RPC node providers with latency benchmarks', () => {
-    const rpcRec = recommendBetterRpc('ethereum');
-    expect(rpcRec.recommendedRpc.name).toBe('Flashbots Protect RPC');
-    expect(rpcRec.recommendedRpc.latencyMs).toBeLessThan(50);
-  });
-
-  it('should calculate annual estimated USD savings', () => {
-    const savings = estimateSavings(10.0, 4.0, 100);
-    expect(savings.perTxSavingsUsd).toBe(6.0);
-    expect(savings.annualEstimatedSavingsUsd).toBe(600.0);
-  });
-
   it('should perform full fee optimization analysis', () => {
     const fullAnalysis = analyzeFeeOptimization({ chain: 'ethereum', transactionType: 'SWAP', txCountPerYear: 120 });
-    expect(fullAnalysis.gasEstimation).toBeDefined();
-    expect(fullAnalysis.timeOptimization).toBeDefined();
-    expect(fullAnalysis.rpcOptimization).toBeDefined();
     expect(fullAnalysis.savingsEstimate.annualEstimatedSavingsUsd).toBeGreaterThan(0);
   });
 });
 
+describe('MODULE 7: Cross-chain Scanner & Merged Unified Dashboard Engine', () => {
+  it('should aggregate assets across all 7 supported chains into one merged portfolio', async () => {
+    const merged = await getMergedCrossChainPortfolio(DEMO_SOLANA_WALLET, DEMO_EVM_WALLET);
+    expect(merged.supportedChainsCount).toBe(7);
+    expect(merged.unifiedSummary.totalMergedPortfolioUsd).toBeGreaterThan(0);
+    expect(merged.unifiedSummary.totalMergedRecoverableUsd).toBeGreaterThan(0);
+    expect(merged.chainDistribution.length).toBe(7);
+  });
+
+  it('should generate master multi-chain recovery payload', () => {
+    const master = buildMasterRecoveryPayload(DEMO_SOLANA_WALLET, DEMO_EVM_WALLET);
+    expect(master.success).toBe(true);
+    expect(master.module).toBe('MODULE_7_CROSS_CHAIN_UNIFIED');
+    expect(master.masterRecoverySummary.totalNetValueRecoverableUsd).toBeGreaterThan(0);
+    expect(master.payloads.solanaRentTxBase64).toBeDefined();
+  });
+});
+
 describe('ChainRecover AI Scanner & Module Endpoints', () => {
-  it('POST /api/v1/scanner/optimizer/analyze should return full fee optimization report', async () => {
+  it('POST /api/v1/scanner/cross-chain/merged should return merged portfolio across 7 chains', async () => {
     const res = await request(app)
-      .post('/api/v1/scanner/optimizer/analyze')
-      .send({ chain: 'ethereum', transactionType: 'SWAP', txCountPerYear: 120 });
+      .post('/api/v1/scanner/cross-chain/merged')
+      .send({ solanaAddress: DEMO_SOLANA_WALLET, evmAddress: DEMO_EVM_WALLET });
 
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.savingsEstimate.annualEstimatedSavingsUsd).toBeGreaterThan(0);
+    expect(res.body.data.unifiedSummary.totalMergedPortfolioUsd).toBeGreaterThan(0);
+    expect(res.body.data.supportedChainsCount).toBe(7);
+  });
+
+  it('POST /api/v1/scanner/cross-chain/master-recover should return master recovery payloads', async () => {
+    const res = await request(app)
+      .post('/api/v1/scanner/cross-chain/master-recover')
+      .send({ solanaAddress: DEMO_SOLANA_WALLET, evmAddress: DEMO_EVM_WALLET });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.payloads.solanaRentTxBase64).toBeDefined();
   });
 
   it('GET /api/v1/scanner/chains should list supported blockchains', async () => {

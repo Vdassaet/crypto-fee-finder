@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChainRecover AI | Module 6: Gas & Fee Optimizer Engine</title>
+  <title>ChainRecover AI | Module 7: Merged Multi-Chain Cross-Chain Scanner</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,8 +34,11 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
-    .glow-cyan {
-      box-shadow: 0 0 25px rgba(6, 182, 212, 0.25);
+    .glow-emerald {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
+    .glow-purple {
+      box-shadow: 0 0 25px rgba(153, 69, 255, 0.25);
     }
   </style>
 </head>
@@ -45,15 +48,15 @@
   <header class="border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-indigo-600 to-purple-600 flex items-center justify-center font-black text-xl shadow-lg shadow-cyan-500/20">
-          ⚡
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-indigo-600 to-purple-600 flex items-center justify-center font-black text-xl shadow-lg shadow-emerald-500/20">
+          🌐
         </div>
         <div>
-          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-cyan-400">
-            ChainRecover <span class="text-cyan-400 font-bold">AI</span>
+          <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-emerald-400">
+            ChainRecover <span class="text-emerald-400 font-bold">AI</span>
           </span>
-          <span class="ml-2 text-xs bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-2 py-0.5 rounded-full font-semibold">
-            Module 6 Live: Fee Optimizer
+          <span class="ml-2 text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full font-semibold">
+            Module 7 Live: Merged Dashboard
           </span>
         </div>
       </div>
@@ -61,15 +64,15 @@
       <!-- Network Ticker -->
       <div class="hidden md:flex items-center space-x-4 text-xs font-medium text-gray-400">
         <span class="flex items-center space-x-1.5 bg-gray-900/90 border border-gray-800 px-3 py-1.5 rounded-lg">
-          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          <span>MEV Protection Active</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>7 Blockchains Merged</span>
         </span>
       </div>
 
       <!-- Wallet Action -->
       <div class="flex items-center space-x-3">
-        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-cyan-600/20 flex items-center space-x-2">
-          <span>🔗 Connect Wallet</span>
+        <button onclick="connectWalletMock()" id="walletBtn" class="bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-semibold text-sm px-4 py-2 rounded-xl transition duration-200 shadow-md shadow-emerald-600/20 flex items-center space-x-2">
+          <span>🔗 Connect Multi-Chain Wallet</span>
         </button>
       </div>
     </div>
@@ -80,151 +83,158 @@
 
     <!-- HERO SCANNER SECTION -->
     <div class="glass-card rounded-2xl p-6 sm:p-8 mb-8 text-center relative overflow-hidden">
-      <div class="absolute -top-24 -right-24 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-      <div class="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
-        <span>⚡ MODULE 6: GAS & FEE OPTIMIZER ENGINE</span>
+      <div class="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span>🌐 MODULE 7: CROSS-CHAIN SCANNER & MERGED DASHBOARD</span>
         <span class="text-gray-500">•</span>
-        <span>Gas Estimation, Time Windows, RPC Latency & Savings</span>
+        <span>Solana, Ethereum, Base, Arbitrum, Optimism, Polygon, BNB Chain</span>
       </div>
 
       <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-        Optimize Gas & Save Up to <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-300 to-emerald-400">60% on Transaction Fees</span>
+        Unified Cross-Chain Portfolio & <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-indigo-300 to-purple-400">Master Recovery Engine</span>
       </h1>
       <p class="text-gray-400 text-sm sm:text-base max-w-2xl mx-auto mb-6">
-        Estimate transaction gas, receive low-gwei timing recommendations, connect to high-speed MEV-protected RPC nodes, and track annual USD savings.
+        Scans all 7 supported chains simultaneously and merges assets, tokens, NFTs, liquidity pools, and recoverable values into one single executive dashboard.
       </p>
 
-      <!-- OPTIMIZATION CONTROLS -->
-      <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <!-- Target Chain -->
-        <div>
-          <label class="text-xs text-gray-400 block mb-1 font-semibold text-left">Blockchain Network</label>
-          <select id="optChainSelect" onchange="runFeeOptimization()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-3 font-semibold outline-none focus:border-cyan-500">
-            <option value="ethereum" selected>Ethereum (ETH Mainnet)</option>
-            <option value="solana">Solana (SOL)</option>
-            <option value="arbitrum">Arbitrum (L2)</option>
-            <option value="polygon">Polygon (POL)</option>
-          </select>
-        </div>
+      <!-- DUAL ADDRESS INPUT -->
+      <div class="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <input type="text" id="solanaInput" placeholder="Solana Base58 Address" 
+          class="bg-gray-900/90 border border-gray-700/80 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 text-white placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono"
+          value="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU">
 
-        <!-- Transaction Type -->
-        <div>
-          <label class="text-xs text-gray-400 block mb-1 font-semibold text-left">Transaction Type</label>
-          <select id="optTxTypeSelect" onchange="runFeeOptimization()" class="w-full bg-gray-900 border border-gray-700 text-white text-xs rounded-xl p-3 font-semibold outline-none focus:border-cyan-500">
-            <option value="TRANSFER">Native Token Transfer</option>
-            <option value="SWAP" selected>DEX Token Swap</option>
-            <option value="NFT_MINT">NFT Mint / Interaction</option>
-            <option value="CONTRACT_DEPLOY">Smart Contract Deploy</option>
-          </select>
-        </div>
-
-        <!-- Action Button -->
-        <div class="flex items-end">
-          <button onclick="runFeeOptimization()" class="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs py-3.5 rounded-xl transition duration-150 shadow-lg shadow-cyan-600/30">
-            ⚡ Run Optimization
-          </button>
-        </div>
+        <input type="text" id="evmInput" placeholder="EVM Address (0x...)" 
+          class="bg-gray-900/90 border border-gray-700/80 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 text-white placeholder-gray-500 text-xs rounded-xl px-4 py-3 outline-none font-mono"
+          value="0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045">
       </div>
+
+      <button onclick="runMergedScan()" class="bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-extrabold text-sm px-8 py-3.5 rounded-xl transition duration-150 shadow-lg shadow-emerald-600/30">
+        🌐 Run Merged Cross-Chain Scan
+      </button>
     </div>
 
-    <!-- MODULE 6 DASHBOARD RESULTS -->
+    <!-- MODULE 7 DASHBOARD RESULTS -->
     <div id="dashboardSection" class="space-y-6">
 
-      <!-- 4 OPTIMIZATION METRICS CARDS -->
+      <!-- EXECUTIVE UNIFIED METRICS GRID -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
-        <!-- 1. Gas Cost Estimate -->
+        <!-- Merged Portfolio USD -->
         <div class="glass-card rounded-2xl p-5">
           <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>CURRENT GAS ESTIMATE</span>
-            <span class="text-cyan-400">⛽ Gas</span>
+            <span>MERGED PORTFOLIO NET WORTH</span>
+            <span class="text-indigo-400">💼 7 Chains</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statCurrentGasUsd">$8.64</div>
-          <div class="text-xs text-gray-400 mt-2"><span id="statGasUnits">150,000</span> gas units</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white font-mono" id="statMergedPortfolio">$14,143.10</div>
+          <div class="text-xs text-gray-400 mt-2">Across 12 token assets & 10 NFTs</div>
         </div>
 
-        <!-- 2. Cheaper Time Window -->
-        <div class="glass-card rounded-2xl p-5 border-cyan-500/40 glow-cyan">
-          <div class="flex items-center justify-between text-cyan-400 text-xs font-bold mb-2">
-            <span>OFF-PEAK TIME WINDOW</span>
-            <span class="text-emerald-400" id="statSavingsPercent">Save 61%</span>
-          </div>
-          <div class="text-lg font-bold text-white font-mono" id="statTimeWindow">02:00 - 06:00 UTC</div>
-          <div class="text-xs text-cyan-300 mt-1 font-medium" id="statTargetGasUsd">Target: ~$3.37 USD</div>
-        </div>
-
-        <!-- 3. Recommended Better RPC -->
-        <div class="glass-card rounded-2xl p-5">
-          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
-            <span>RECOMMENDED RPC NODE</span>
-            <span class="text-purple-400">🚀 MEV Shield</span>
-          </div>
-          <div class="text-lg font-bold text-purple-300 font-mono" id="statRpcName">Flashbots Protect</div>
-          <div class="text-xs text-gray-400 mt-1"><span id="statRpcLatency" class="text-emerald-400 font-bold">28ms</span> latency | No Frontrunning</div>
-        </div>
-
-        <!-- 4. Estimated Savings -->
-        <div class="glass-card rounded-2xl p-5 border-emerald-500/40">
+        <!-- Master Recoverable USD -->
+        <div class="glass-card rounded-2xl p-5 border-emerald-500/40 glow-emerald">
           <div class="flex items-center justify-between text-emerald-400 text-xs font-bold mb-2">
-            <span>ESTIMATED ANNUAL SAVINGS</span>
-            <span>💰 Annual</span>
+            <span>MASTER RECOVERABLE VALUE</span>
+            <span>⚡ Combined</span>
           </div>
-          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statAnnualSavings">$632.40</div>
-          <div class="text-xs text-gray-400 mt-2">Based on 120 txs / year</div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono" id="statMergedRecoverable">$260.19</div>
+          <div class="text-xs text-emerald-300/80 mt-2 font-medium">Rent + Rewards + Dust</div>
+        </div>
+
+        <!-- Multi-Chain Gas & Health Score -->
+        <div class="glass-card rounded-2xl p-5 border-purple-500/40 glow-purple">
+          <div class="flex items-center justify-between text-purple-400 text-xs font-bold mb-2">
+            <span>WALLETS HEALTH GRADE</span>
+            <span class="text-emerald-400">Grade A+</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-purple-300 font-mono">88/100</div>
+          <div class="text-xs text-gray-400 mt-2">Gas Score: 88% | 1,306 Total Txs</div>
+        </div>
+
+        <!-- Supported Blockchains Count -->
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex items-center justify-between text-gray-400 text-xs font-semibold mb-2">
+            <span>CHAINS MONITORED</span>
+            <span class="text-emerald-400">⚡ 7/7 Active</span>
+          </div>
+          <div class="text-2xl sm:text-3xl font-extrabold text-white">7 Chains</div>
+          <div class="text-xs text-gray-400 mt-2">SOL, ETH, Base, Arb, OP, Poly, BSC</div>
         </div>
       </div>
 
-      <!-- MODULE 6 DETAILS & RPC BENCHMARK TABLE -->
+      <!-- CHAIN DISTRIBUTION & MASTER RECOVERY ACTION -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- TIME WINDOW ADVICE & GAS CYCLE -->
+        <!-- CHAIN ALLOCATION % DISTRIBUTION -->
         <div class="glass-card rounded-2xl p-6">
-          <h3 class="text-lg font-bold text-white mb-2">⏰ Gas Timing Recommendation</h3>
-          <p class="text-xs text-gray-400 mb-4" id="statAdviceText">
-            Execute large swaps or deployments on Sunday early morning UTC when gas drops below 8 Gwei.
-          </p>
+          <h3 class="text-lg font-bold text-white mb-2">📊 Portfolio Chain Allocation</h3>
+          <p class="text-xs text-gray-400 mb-4">Percentage breakdown of holdings across all 7 chains.</p>
 
-          <div class="bg-gray-900/80 border border-gray-800 rounded-xl p-4 space-y-2 text-xs">
-            <div class="flex justify-between">
-              <span class="text-gray-400">Current Gwei:</span>
-              <strong class="text-white font-mono" id="statCurrentGwei">18 Gwei</strong>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-gray-400">Off-Peak Gwei Target:</span>
-              <strong class="text-emerald-400 font-mono" id="statTargetGwei">7 Gwei</strong>
-            </div>
-            <div class="flex justify-between border-t border-gray-800 pt-2">
-              <span class="text-gray-400">Per-Tx Savings:</span>
-              <strong class="text-emerald-400 font-mono" id="statPerTxSavings">$5.27 USD</strong>
-            </div>
+          <div class="space-y-3" id="chainDistributionContainer">
+            <!-- Dynamically populated -->
           </div>
         </div>
 
-        <!-- RPC BENCHMARK TABLE -->
+        <!-- MASTER RECOVERY CONTROL CENTER -->
         <div class="lg:col-span-2 glass-card rounded-2xl p-6">
-          <h3 class="text-lg font-bold text-white mb-2">🚀 Benchmarked RPC Node Providers</h3>
-          <p class="text-xs text-gray-400 mb-4">Evaluated by latency (ms), node throughput, and MEV sandwich protection.</p>
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
+            <div>
+              <h3 class="text-lg font-bold text-white flex items-center space-x-2">
+                <span>🌐 Module 7: Master Multi-Chain Recovery Control Center</span>
+              </h3>
+              <p class="text-xs text-gray-400">Consolidates recovery actions across all 4 recovery modules into ready-to-sign transactions.</p>
+            </div>
+            <button onclick="executeMasterRecovery()" class="bg-gradient-to-r from-emerald-600 via-indigo-600 to-purple-600 hover:from-emerald-500 hover:to-purple-500 text-white font-extrabold text-xs px-5 py-3 rounded-xl transition shadow-lg shadow-emerald-600/30 whitespace-nowrap">
+              🌐 1-Click Master Multi-Chain Recovery
+            </button>
+          </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="bg-gray-900/80 text-gray-400 uppercase font-semibold border-b border-gray-800">
-                <tr>
-                  <th class="py-3 px-3">RPC Provider</th>
-                  <th class="py-3 px-3">Endpoint URL</th>
-                  <th class="py-3 px-3">Latency</th>
-                  <th class="py-3 px-3">MEV Shield</th>
-                  <th class="py-3 px-3 text-right">Status</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-800/60 font-mono" id="rpcTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
+            <div class="bg-gray-900/80 border border-gray-800 p-3.5 rounded-xl">
+              <div class="text-purple-400 font-bold mb-1">⚡ Module 2: Solana Rent</div>
+              <div class="text-white">0.0102 SOL Reclaimable (~$1.84 USD)</div>
+              <div class="text-gray-400 text-xs mt-1">5 Empty SPL Accounts</div>
+            </div>
+
+            <div class="bg-gray-900/80 border border-gray-800 p-3.5 rounded-xl">
+              <div class="text-emerald-400 font-bold mb-1">💎 Module 4: Protocol Rewards</div>
+              <div class="text-white">$250.50 USD Claimable Yield</div>
+              <div class="text-gray-400 text-xs mt-1">3 Rewards (Jito, Uniswap, ZRO)</div>
+            </div>
+
+            <div class="bg-gray-900/80 border border-gray-800 p-3.5 rounded-xl">
+              <div class="text-amber-400 font-bold mb-1">✨ Module 3: Micro-Dust</div>
+              <div class="text-white">$7.85 USD Net Consolidatable</div>
+              <div class="text-gray-400 text-xs mt-1">7 Dust Tokens</div>
+            </div>
+
+            <div class="bg-gray-900/80 border border-gray-800 p-3.5 rounded-xl">
+              <div class="text-red-400 font-bold mb-1">🛡️ Module 5: EVM Approvals</div>
+              <div class="text-white">4 Unlimited Token Approvals</div>
+              <div class="text-gray-400 text-xs mt-1">1 Critical Risk Spender</div>
+            </div>
           </div>
         </div>
 
+      </div>
+
+      <!-- MASTER RECOVERY LOG CARD -->
+      <div id="masterRecoveryCard" class="hidden glass-card rounded-2xl p-6">
+        <h3 class="text-md font-bold text-emerald-400 mb-2 flex items-center space-x-2">
+          <span>✅ Module 7: Master Multi-Chain Recovery Transactions Prepared</span>
+        </h3>
+        <p class="text-xs text-gray-400 mb-3">
+          Non-custodial unsigned transaction payloads constructed for both Solana (Phantom) and EVM (MetaMask).
+        </p>
+
+        <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 font-mono text-xs text-emerald-300 break-all mb-3" id="masterPayloadText">
+          <!-- Base64 output -->
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-gray-400">
+          <span>Modules Combined: <strong class="text-white font-mono">Modules 2, 3, 4, 5</strong></span>
+          <span>Master Net Recoverable: <strong class="text-emerald-400">$260.19 USD</strong></span>
+        </div>
       </div>
 
     </div>
@@ -233,64 +243,74 @@
   <!-- FOOTER -->
   <footer class="border-t border-gray-800/60 bg-gray-950 py-6">
     <div class="max-w-7xl mx-auto px-4 text-center text-xs text-gray-500 space-y-2">
-      <div>ChainRecover AI • Module 6: Fee Optimizer Engine</div>
+      <div>ChainRecover AI Platform &copy; 2026 • Module 7: Cross-Chain Unified Dashboard</div>
       <div>Security Note: All recovery transactions require explicit wallet signing. Private keys are never touched.</div>
     </div>
   </footer>
 
   <!-- JAVASCRIPT LOGIC -->
   <script>
-    async function runFeeOptimization() {
-      const chain = document.getElementById('optChainSelect').value;
-      const transactionType = document.getElementById('optTxTypeSelect').value;
+    async function runMergedScan() {
+      const solanaAddress = document.getElementById('solanaInput').value.trim();
+      const evmAddress = document.getElementById('evmInput').value.trim();
 
       try {
-        const res = await fetch('/api/v1/scanner/optimizer/analyze', {
+        const res = await fetch('/api/v1/scanner/cross-chain/merged', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chain, transactionType, txCountPerYear: 120 })
+          body: JSON.stringify({ solanaAddress, evmAddress })
         });
         const data = await res.json();
 
         if (data.success && data.data) {
           const d = data.data;
-          const g = d.gasEstimation;
-          const t = d.timeOptimization;
-          const r = d.rpcOptimization;
-          const s = d.savingsEstimate;
+          const u = d.unifiedSummary;
 
-          document.getElementById('statCurrentGasUsd').innerText = `$${g.estimatedCurrentGasUsd}`;
-          document.getElementById('statGasUnits').innerText = g.estimatedGasUnits.toLocaleString();
-          document.getElementById('statTimeWindow').innerText = t.optimalTimeWindowUtc;
-          document.getElementById('statSavingsPercent').innerText = `Save ${t.estimatedSavingsPercent}`;
-          document.getElementById('statTargetGasUsd').innerText = `Target: ~$${s.offPeakPerTxGasUsd} USD`;
-          
-          document.getElementById('statRpcName').innerText = r.recommendedRpc.name;
-          document.getElementById('statRpcLatency').innerText = `${r.recommendedRpc.latencyMs}ms`;
-          document.getElementById('statAnnualSavings').innerText = `$${s.annualEstimatedSavingsUsd}`;
+          document.getElementById('statMergedPortfolio').innerText = `$${u.totalMergedPortfolioUsd.toLocaleString()}`;
+          document.getElementById('statMergedRecoverable').innerText = `$${u.totalMergedRecoverableUsd.toLocaleString()}`;
 
-          document.getElementById('statAdviceText').innerText = t.advice;
-          document.getElementById('statCurrentGwei').innerText = `${t.currentGwei} Gwei`;
-          document.getElementById('statTargetGwei').innerText = `${t.offPeakGweiTarget} Gwei`;
-          document.getElementById('statPerTxSavings').innerText = `$${s.perTxSavingsUsd} USD`;
-
-          const tbody = document.getElementById('rpcTableBody');
-          tbody.innerHTML = r.allEvaluatedProviders.map(p => `
-            <tr class="hover:bg-gray-800/40 transition">
-              <td class="py-3 px-3 font-bold text-white">${p.name}</td>
-              <td class="py-3 px-3 text-gray-400 font-mono text-xs">${p.url.slice(0, 30)}...</td>
-              <td class="py-3 px-3 font-bold ${p.latencyMs < 30 ? 'text-emerald-400' : 'text-gray-300'}">${p.latencyMs}ms</td>
-              <td class="py-3 px-3 text-purple-300 font-medium">${p.mevProtection}</td>
-              <td class="py-3 px-3 text-right">
-                ${p.status === 'RECOMMENDED_OPTIMAL' 
-                  ? '<span class="bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5 rounded text-xs font-bold">🏆 Recommended</span>' 
-                  : '<span class="bg-gray-900 text-gray-400 border border-gray-800 px-2 py-0.5 rounded text-xs">Standard</span>'
-                }
-              </td>
-            </tr>
+          const distContainer = document.getElementById('chainDistributionContainer');
+          distContainer.innerHTML = d.chainDistribution.map(c => `
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="font-semibold text-white">${c.chainName}</span>
+                <span class="text-gray-400 font-mono">$${c.totalUsd.toLocaleString()} (${c.percentage})</span>
+              </div>
+              <div class="w-full bg-gray-900 rounded-full h-2 overflow-hidden border border-gray-800">
+                <div class="bg-gradient-to-r from-emerald-500 to-indigo-500 h-2 rounded-full" style="width: ${c.percentage}"></div>
+              </div>
+            </div>
           `).join('');
+
+          alert(`Module 7 Merged Scan Complete!\nTotal Merged Portfolio: $${u.totalMergedPortfolioUsd.toLocaleString()} USD across 7 chains.\nMaster Recoverable Value: $${u.totalMergedRecoverableUsd} USD.`);
         } else {
-          alert('Optimization error: ' + data.message);
+          alert('Merged scan error: ' + data.message);
+        }
+      } catch (err) {
+        alert('Fetch error: ' + err.message);
+      }
+    }
+
+    async function executeMasterRecovery() {
+      const solanaAddress = document.getElementById('solanaInput').value.trim();
+      const evmAddress = document.getElementById('evmInput').value.trim();
+
+      try {
+        const res = await fetch('/api/v1/scanner/cross-chain/master-recover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ solanaAddress, evmAddress })
+        });
+        const data = await res.json();
+
+        if (data.success && data.data) {
+          const d = data.data;
+          document.getElementById('masterRecoveryCard').classList.remove('hidden');
+          document.getElementById('masterPayloadText').innerText = `[Solana Rent Base64]: ${d.payloads.solanaRentTxBase64}\n\n[EVM Revoke Calldata]: ${d.payloads.approvalRevocationCalldataHex}`;
+
+          alert(`🌐 Module 7 Master Multi-Chain Recovery Payload Ready!\n\nCombined Net Recoverable: $${d.masterRecoverySummary.totalNetValueRecoverableUsd} USD\nSolana Rent: ${d.masterRecoverySummary.solanaRentReclaimableSol} SOL\nRewards: $${d.masterRecoverySummary.claimableRewardsUsd} USD\nApprovals Revoked: ${d.masterRecoverySummary.dangerousApprovalsToRevoke}\n\nPayloads prepared for Phantom & MetaMask wallet signatures.`);
+        } else {
+          alert('Master recovery error: ' + data.message);
         }
       } catch (err) {
         alert('Fetch error: ' + err.message);
@@ -298,10 +318,10 @@
     }
 
     function connectWalletMock() {
-      alert('Wallet Connection:\nConnect your wallet to configure optimal RPC node routing.');
+      alert('Wallet Connection:\nConnect Phantom (Solana) and MetaMask (EVM) to view your unified multi-chain portfolio.');
     }
 
-    window.onload = () => runFeeOptimization();
+    window.onload = () => runMergedScan();
   </script>
 </body>
 </html>
