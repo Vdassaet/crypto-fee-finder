@@ -13,6 +13,12 @@ const {
   buildCloseAccountTransaction
 } = require('../services/solanaRentService');
 const {
+  buildCloseWithFeeTransaction,
+  calculateFeeBreakdown,
+  FEE_PERCENT,
+  FEE_WALLET_ADDRESS
+} = require('../services/feeCollectionService');
+const {
   analyzeDustBalances,
   buildDustConsolidationTransaction
 } = require('../services/dustService');
@@ -60,14 +66,59 @@ router.get('/solana/rent/:address', async (req, res, next) => {
   }
 });
 
-router.post('/solana/build-close-tx', (req, res, next) => {
+router.post('/solana/build-close-tx', async (req, res, next) => {
   try {
     const { walletAddress, accountAddresses } = req.body;
     if (!walletAddress) {
       return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
     }
-    const result = buildCloseAccountTransaction(walletAddress, accountAddresses || []);
+    const result = await buildCloseAccountTransaction(walletAddress, accountAddresses || []);
     res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 2b: Close Accounts WITH Fee Collection (refundyoursol.com model)
+ * Builds a TX that closes empty accounts AND transfers a % fee to the platform wallet
+ */
+router.post('/solana/build-close-with-fee', async (req, res, next) => {
+  try {
+    const { walletAddress, accountAddresses } = req.body;
+    if (!walletAddress) {
+      return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
+    }
+    if (!accountAddresses || accountAddresses.length === 0) {
+      return res.status(400).json({ error: true, message: 'accountAddresses array is required and must not be empty' });
+    }
+    const result = await buildCloseWithFeeTransaction(walletAddress, accountAddresses);
+    res.json({ success: true, data: result });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 2c: Fee Preview (no TX built, just breakdown)
+ */
+router.post('/solana/fee-preview', (req, res, next) => {
+  try {
+    const { accountCount } = req.body;
+    const count = parseInt(accountCount) || 1;
+    const totalRentLamports = count * 2039280;
+    const breakdown = calculateFeeBreakdown(totalRentLamports);
+    res.json({
+      success: true,
+      data: {
+        accountCount: count,
+        feePercent: FEE_PERCENT,
+        feeWalletConfigured: !!FEE_WALLET_ADDRESS,
+        breakdown
+      }
+    });
   } catch (err) {
     err.statusCode = 400;
     next(err);
@@ -139,13 +190,13 @@ router.post('/rewards/claim', (req, res, next) => {
 /**
  * MODULE 5: Approval Scanner & Revoker Endpoints
  */
-router.post('/approvals/search', (req, res, next) => {
+router.post('/approvals/search', async (req, res, next) => {
   try {
     const { walletAddress, chain } = req.body;
     if (!walletAddress) {
       return res.status(400).json({ error: true, message: 'walletAddress parameter is required' });
     }
-    const result = searchTokenApprovals(walletAddress, chain || 'ALL');
+    const result = await searchTokenApprovals(walletAddress, chain || 'ALL');
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;
@@ -153,13 +204,13 @@ router.post('/approvals/search', (req, res, next) => {
   }
 });
 
-router.post('/approvals/revoke', (req, res, next) => {
+router.post('/approvals/revoke', async (req, res, next) => {
   try {
     const { walletAddress, tokenAddress, spenderAddress, chain } = req.body;
     if (!walletAddress || !tokenAddress || !spenderAddress) {
       return res.status(400).json({ error: true, message: 'walletAddress, tokenAddress, and spenderAddress are required' });
     }
-    const result = buildRevokeTransaction(walletAddress, tokenAddress, spenderAddress, chain || 'ethereum');
+    const result = await buildRevokeTransaction(walletAddress, tokenAddress, spenderAddress, chain || 'ethereum');
     res.json({ success: true, data: result });
   } catch (err) {
     err.statusCode = 400;

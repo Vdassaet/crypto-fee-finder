@@ -13,6 +13,10 @@
 
   <!-- Tailwind CSS & Professional Typography -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Solana Web3 (IIFE) for browser -->
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+  <!-- Ethers.js for EVM browser -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.11.1/ethers.umd.min.js"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -158,6 +162,79 @@
         display: block;
         opacity: 1;
     }
+
+    /* Wallet Modal Styles */
+    .wallet-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .wallet-modal-overlay.active {
+      display: flex;
+    }
+    .wallet-modal {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      width: 420px;
+      max-width: 90vw;
+      padding: 0;
+      box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+      animation: modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlideIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .wallet-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .wallet-option:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    .wallet-option.detected {
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    /* Fee Confirmation Modal */
+    .fee-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 110;
+      justify-content: center;
+      align-items: center;
+    }
+    .fee-modal-overlay.active {
+      display: flex;
+    }
+
+    /* Success Animation */
+    @keyframes successPulse {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .success-animate {
+      animation: successPulse 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .text-stroke-white { -webkit-text-stroke: 1px rgba(255,255,255,0.8); color: transparent; }
   </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-white selection:text-black antialiased relative z-0 font-sans">
@@ -183,6 +260,107 @@
     </svg>
   </div>
 
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- WALLET CONNECTION MODAL (Multi-wallet)          -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="walletModal" class="wallet-modal-overlay" onclick="if(event.target===this) closeWalletModal()">
+    <div class="wallet-modal">
+      <div class="p-6 border-b border-white/10">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-white">Connect Wallet</h3>
+          <button onclick="closeWalletModal()" class="text-brand-silver hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <p class="text-xs text-brand-silver mt-2">Select a wallet to connect. Your keys never leave your device.</p>
+      </div>
+      <div class="p-4 space-y-2" id="walletOptionsList">
+        <!-- Phantom -->
+        <div class="wallet-option" onclick="connectWallet('phantom')" id="wallet-opt-phantom">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#AB9FF2]/20 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 128 128" fill="none"><path d="M110.6 55.1C110.6 82.7 88.2 105.1 60.6 105.1C33 105.1 10.6 82.7 10.6 55.1C10.6 27.5 33 5.1 60.6 5.1C88.2 5.1 110.6 27.5 110.6 55.1Z" fill="#AB9FF2"/><circle cx="45" cy="50" r="7" fill="white"/><circle cx="75" cy="50" r="7" fill="white"/></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">Phantom</div>
+              <div class="text-[10px] text-brand-silver">Solana & EVM</div>
+            </div>
+          </div>
+          <span id="phantom-status" class="text-[10px] font-mono text-brand-silver">Checking...</span>
+        </div>
+        <!-- Solflare -->
+        <div class="wallet-option" onclick="connectWallet('solflare')" id="wallet-opt-solflare">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#FC822B]/20 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 128 128"><circle cx="64" cy="64" r="58" fill="#FC822B"/><polygon points="64,20 90,75 64,60 38,75" fill="white"/><polygon points="64,70 90,85 64,110 38,85" fill="white" opacity="0.7"/></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">Solflare</div>
+              <div class="text-[10px] text-brand-silver">Solana</div>
+            </div>
+          </div>
+          <span id="solflare-status" class="text-[10px] font-mono text-brand-silver">Checking...</span>
+        </div>
+        <!-- MetaMask / EVM -->
+        <div class="wallet-option" onclick="connectWallet('metamask')" id="wallet-opt-metamask">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#F6851B]/20 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 128 128"><polygon points="64,10 110,45 100,90 75,105 64,95 53,105 28,90 18,45" fill="#F6851B"/><polygon points="64,10 110,45 100,90 64,95" fill="#E2761B"/><polygon points="50,55 64,45 78,55 64,70" fill="white"/></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">MetaMask</div>
+              <div class="text-[10px] text-brand-silver">EVM Chains</div>
+            </div>
+          </div>
+          <span id="metamask-status" class="text-[10px] font-mono text-brand-silver">Checking...</span>
+        </div>
+        <!-- Coinbase Wallet -->
+        <div class="wallet-option" onclick="connectWallet('coinbase')" id="wallet-opt-coinbase">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-[#0052FF]/20 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 128 128"><circle cx="64" cy="64" r="58" fill="#0052FF"/><rect x="40" y="40" width="48" height="48" rx="10" fill="white"/><rect x="52" y="52" width="24" height="24" rx="4" fill="#0052FF"/></svg>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">Coinbase Wallet</div>
+              <div class="text-[10px] text-brand-silver">Solana & EVM</div>
+            </div>
+          </div>
+          <span id="coinbase-status" class="text-[10px] font-mono text-brand-silver">Checking...</span>
+        </div>
+      </div>
+      <div class="px-6 pb-5 pt-2">
+        <p class="text-[10px] text-brand-silver/60 text-center">By connecting, you agree to our Terms of Service. Non-custodial — your private keys never leave your wallet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- FEE CONFIRMATION MODAL                          -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="feeConfirmModal" class="fee-modal-overlay" onclick="if(event.target===this) closeFeeModal()">
+    <div class="wallet-modal" style="width: 460px;">
+      <div class="p-6 border-b border-white/10">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-bold text-white">⚡ Confirm Recovery</h3>
+          <button onclick="closeFeeModal()" class="text-brand-silver hover:text-white transition w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-6 space-y-4" id="feeConfirmContent">
+        <!-- Populated dynamically -->
+      </div>
+      <div class="px-6 pb-6 space-y-3">
+        <button id="btn-confirm-reclaim" onclick="executeReclaimWithFee()" class="w-full bg-white hover:bg-gray-200 text-black font-bold py-4 rounded-xl transition text-sm">
+          ⚡ Sign & Reclaim
+        </button>
+        <button onclick="closeFeeModal()" class="w-full bg-transparent border border-white/10 hover:bg-white/5 text-brand-silver font-medium py-3 rounded-xl transition text-xs">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- HEADER -->
   <header class="fixed top-0 inset-x-0 z-50 px-6 py-6 transition-all duration-300 bg-transparent" id="main-header">
     <div class="max-w-[1600px] mx-auto flex items-center justify-between">
@@ -196,6 +374,7 @@
         <a href="#platform" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Platform</a>
         <a href="#technology" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Technology</a>
         <a href="#security" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">Security</a>
+        <a href="#faq" class="text-brand-silver hover:text-white transition-colors text-sm font-medium tracking-wide uppercase">FAQ</a>
       </nav>
 
       <!-- App Nav (Hidden by default) -->
@@ -241,6 +420,22 @@
       <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
         <button onclick="navigateTo('view-app')" class="btn-premium text-lg px-8 py-4">Start Scanning Now</button>
       </div>
+
+      <!-- Live Stats Counter -->
+      <div class="grid grid-cols-3 gap-8 mt-20 max-w-2xl w-full">
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-bold font-mono text-white tabular-nums">650K+</div>
+          <div class="text-xs text-brand-silver mt-1 uppercase tracking-wider">Wallets Processed</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-bold font-mono text-white tabular-nums">2.1M</div>
+          <div class="text-xs text-brand-silver mt-1 uppercase tracking-wider">Accounts Closed</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl md:text-4xl font-bold font-mono text-white tabular-nums">4,200+</div>
+          <div class="text-xs text-brand-silver mt-1 uppercase tracking-wider">SOL Recovered</div>
+        </div>
+      </div>
     </main>
 
     <div class="border-y border-white/10 py-6 overflow-hidden bg-brand-dark flex whitespace-nowrap">
@@ -251,12 +446,11 @@
         <span class="text-2xl text-white">✦</span>
         <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Zero Private Keys</span>
         <span class="text-2xl text-white">✦</span>
-        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Solana Rent Reclamation</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Phantom & Solflare Support</span>
         <span class="text-2xl text-white">✦</span>
-        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Cross-Chain Discovery</span>
+        <span class="text-4xl font-display font-black text-transparent text-stroke-white opacity-40 uppercase">Non-Custodial Recovery</span>
       </div>
     </div>
-    <style>.text-stroke-white { -webkit-text-stroke: 1px rgba(255,255,255,0.8); color: transparent; }</style>
 
     <section id="platform" class="py-32 px-6 max-w-[1600px] mx-auto w-full">
       <div class="text-center mb-24">
@@ -278,6 +472,78 @@
           <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-8 group-hover:bg-white/10 transition-colors"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg></div>
           <h3 class="text-3xl font-display font-bold mb-4">Zero Trust</h3>
           <p class="text-brand-silver text-lg leading-relaxed mb-8 flex-grow">Absolute cryptographic security. We never ask for seed phrases. Every transaction is constructed for manual wallet approval.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fee Transparency Section -->
+    <section id="technology" class="py-24 px-6 max-w-[1200px] mx-auto w-full">
+      <div class="text-center mb-16">
+        <h2 class="text-display-medium font-bold mb-6">TRANSPARENT FEES</h2>
+        <p class="text-xl text-brand-silver max-w-2xl mx-auto">Simple, transparent pricing. We only earn when you recover SOL.</p>
+      </div>
+      <div class="glass-card p-10 max-w-lg mx-auto text-center">
+        <div class="text-6xl font-display font-black text-white mb-4">15%</div>
+        <div class="text-brand-silver text-lg mb-6">Service fee on recovered SOL</div>
+        <div class="space-y-3 text-left">
+          <div class="flex items-center gap-3 text-sm text-brand-silver"><span class="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>No upfront cost — pay only from recovered funds</div>
+          <div class="flex items-center gap-3 text-sm text-brand-silver"><span class="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>Fee included transparently in the signed transaction</div>
+          <div class="flex items-center gap-3 text-sm text-brand-silver"><span class="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>You see the exact breakdown before signing</div>
+          <div class="flex items-center gap-3 text-sm text-brand-silver"><span class="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0"></span>Non-custodial — your wallet, your approval</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-24 px-6 max-w-[1000px] mx-auto w-full">
+      <div class="text-center mb-16">
+        <h2 class="text-display-medium font-bold mb-6">FAQ</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="glass-card p-6 cursor-pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-white">How does ChainRecover AI recover my SOL?</h4>
+            <span class="text-brand-silver text-xl">+</span>
+          </div>
+          <div class="faq-answer hidden mt-4 text-brand-silver text-sm leading-relaxed">
+            Every token account on Solana requires a rent deposit of ~0.002 SOL. When you swap or trade tokens, empty accounts remain open with your SOL locked inside. ChainRecover scans your wallet, finds these empty accounts, and builds a transaction to close them all — returning the locked SOL to your wallet instantly.
+          </div>
+        </div>
+        <div class="glass-card p-6 cursor-pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-white">Is this safe? Do you need my private key?</h4>
+            <span class="text-brand-silver text-xl">+</span>
+          </div>
+          <div class="faq-answer hidden mt-4 text-brand-silver text-sm leading-relaxed">
+            Absolutely safe. ChainRecover is 100% non-custodial. We NEVER ask for private keys or seed phrases. We only read your public wallet data to find empty accounts. You sign every transaction directly in your own wallet (Phantom, Solflare, etc.) before anything executes.
+          </div>
+        </div>
+        <div class="glass-card p-6 cursor-pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-white">What wallets are supported?</h4>
+            <span class="text-brand-silver text-xl">+</span>
+          </div>
+          <div class="faq-answer hidden mt-4 text-brand-silver text-sm leading-relaxed">
+            We support Phantom, Solflare, Coinbase Wallet, and MetaMask. For Solana recovery, Phantom and Solflare are recommended. For EVM approval revoking, MetaMask and Coinbase Wallet are supported.
+          </div>
+        </div>
+        <div class="glass-card p-6 cursor-pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-white">How much does it cost?</h4>
+            <span class="text-brand-silver text-xl">+</span>
+          </div>
+          <div class="faq-answer hidden mt-4 text-brand-silver text-sm leading-relaxed">
+            There is no upfront cost. A 15% service fee is deducted from the recovered SOL. You see the exact breakdown (gross recovery, fee, net receivable) before signing the transaction. You only pay when you successfully recover funds.
+          </div>
+        </div>
+        <div class="glass-card p-6 cursor-pointer" onclick="this.querySelector('.faq-answer').classList.toggle('hidden')">
+          <div class="flex items-center justify-between">
+            <h4 class="font-semibold text-white">How much SOL can I recover?</h4>
+            <span class="text-brand-silver text-xl">+</span>
+          </div>
+          <div class="faq-answer hidden mt-4 text-brand-silver text-sm leading-relaxed">
+            Each empty token account holds ~0.002 SOL as rent. Active traders often have 50-200+ empty accounts. That's 0.1 to 0.4+ SOL sitting idle. ChainRecover scans both SPL Token and Token-2022 accounts to find every last recoverable deposit.
+          </div>
         </div>
       </div>
     </section>
@@ -374,24 +640,53 @@
   </div>
 
   <!-- Unified Footer -->
-  <footer class="py-8 px-6 border-t border-white/10 bg-black mt-auto">
-    <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-xs font-mono text-brand-silver">
-      <p>© 2026 ChainRecover AI. All rights reserved.</p>
-      <div class="flex space-x-6 mt-4 md:mt-0">
-        <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
-        <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+  <footer class="py-10 px-6 border-t border-white/10 bg-black mt-auto">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center space-x-3 mb-4">
+            <div class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center font-bold text-sm bg-black">CR</div>
+            <span class="font-bold text-lg">ChainRecover AI</span>
+          </div>
+          <p class="text-xs text-brand-silver leading-relaxed">Non-custodial blockchain asset recovery platform. Scan, discover, and reclaim lost capital across Solana and EVM chains.</p>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider mb-4">Resources</h4>
+          <div class="space-y-2">
+            <a href="#faq" class="block text-xs text-brand-silver hover:text-white transition">FAQ</a>
+            <a href="#" class="block text-xs text-brand-silver hover:text-white transition">API Documentation</a>
+            <a href="#" class="block text-xs text-brand-silver hover:text-white transition">Security Audit</a>
+          </div>
+        </div>
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider mb-4">Security</h4>
+          <div class="space-y-2 text-xs text-brand-silver">
+            <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>Non-custodial architecture</div>
+            <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>No private keys or seed phrases</div>
+            <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>User-signed transactions only</div>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between items-center text-xs font-mono text-brand-silver pt-6 border-t border-white/5">
+        <p>&copy; 2026 ChainRecover AI. All rights reserved.</p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+        </div>
       </div>
     </div>
   </footer>
 
-  <!-- SPA Routing & Terminal Logic -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SPA ROUTING, WALLET, TERMINAL & FEE LOGIC       -->
+  <!-- ═══════════════════════════════════════════════ -->
   <script>
+    // ── SPA Navigation ────────────────────────────────────────────────────
     function navigateTo(viewId) {
       document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Update header state
       const header = document.getElementById('main-header');
       if(viewId === 'view-marketing') {
         header.classList.add('bg-transparent');
@@ -415,64 +710,633 @@
       }
     }
 
-    // Terminal logic (adapted for grayscale)
-    async function switchTerminalTab(tabName) {
-      document.querySelectorAll('[id^="tab-"]').forEach(btn => {
-        btn.className = 'text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition';
-      });
-      document.getElementById(`tab-${tabName}`).className = 'bg-white text-black font-bold px-4 py-2 rounded-lg transition shadow-sm';
+    // ── Wallet State ──────────────────────────────────────────────────────
+    let currentSolanaWallet = null;
+    let currentEvmWallet = null;
+    let connectedWalletType = null; // 'phantom', 'solflare', 'metamask', 'coinbase'
 
-      const container = document.getElementById('terminalDisplayArea');
-      container.innerHTML = '<div class="terminal-card p-6 text-center font-mono text-xs text-brand-silver">Querying Blockchain Nodes...</div>';
+    // ── Multi-Wallet Modal ────────────────────────────────────────────────
+    function openWalletModal() {
+      // If already connected, offer disconnect
+      if (currentSolanaWallet || currentEvmWallet) {
+        if (confirm('Disconnect your current wallet?')) {
+          disconnectWallet();
+        }
+        return;
+      }
+      
+      // Detect available wallets
+      detectWallets();
+      document.getElementById('walletModal').classList.add('active');
+    }
 
+    function closeWalletModal() {
+      document.getElementById('walletModal').classList.remove('active');
+    }
+
+    function detectWallets() {
+      // Phantom
+      const phantomEl = document.getElementById('phantom-status');
+      if (window.solana && window.solana.isPhantom) {
+        phantomEl.textContent = '✓ Detected';
+        phantomEl.classList.add('text-green-400');
+        phantomEl.classList.remove('text-brand-silver');
+        document.getElementById('wallet-opt-phantom').classList.add('detected');
+      } else {
+        phantomEl.textContent = 'Not installed';
+        phantomEl.classList.remove('text-green-400');
+      }
+
+      // Solflare
+      const solflareEl = document.getElementById('solflare-status');
+      if (window.solflare && window.solflare.isSolflare) {
+        solflareEl.textContent = '✓ Detected';
+        solflareEl.classList.add('text-green-400');
+        solflareEl.classList.remove('text-brand-silver');
+        document.getElementById('wallet-opt-solflare').classList.add('detected');
+      } else {
+        solflareEl.textContent = 'Not installed';
+        solflareEl.classList.remove('text-green-400');
+      }
+
+      // MetaMask
+      const metamaskEl = document.getElementById('metamask-status');
+      if (window.ethereum && window.ethereum.isMetaMask) {
+        metamaskEl.textContent = '✓ Detected';
+        metamaskEl.classList.add('text-green-400');
+        metamaskEl.classList.remove('text-brand-silver');
+        document.getElementById('wallet-opt-metamask').classList.add('detected');
+      } else {
+        metamaskEl.textContent = 'Not installed';
+        metamaskEl.classList.remove('text-green-400');
+      }
+
+      // Coinbase
+      const coinbaseEl = document.getElementById('coinbase-status');
+      if (window.coinbaseSolana || (window.ethereum && window.ethereum.isCoinbaseWallet)) {
+        coinbaseEl.textContent = '✓ Detected';
+        coinbaseEl.classList.add('text-green-400');
+        coinbaseEl.classList.remove('text-brand-silver');
+        document.getElementById('wallet-opt-coinbase').classList.add('detected');
+      } else {
+        coinbaseEl.textContent = 'Not installed';
+        coinbaseEl.classList.remove('text-green-400');
+      }
+    }
+
+    async function connectWallet(type) {
+      try {
+        if (type === 'phantom') {
+          if (!window.solana || !window.solana.isPhantom) {
+            window.open('https://phantom.app/', '_blank');
+            return;
+          }
+          const resp = await window.solana.connect();
+          currentSolanaWallet = resp.publicKey.toString();
+          document.getElementById('solanaAddrInput').value = currentSolanaWallet;
+          connectedWalletType = 'phantom';
+
+        } else if (type === 'solflare') {
+          if (!window.solflare || !window.solflare.isSolflare) {
+            window.open('https://solflare.com/', '_blank');
+            return;
+          }
+          await window.solflare.connect();
+          currentSolanaWallet = window.solflare.publicKey.toString();
+          document.getElementById('solanaAddrInput').value = currentSolanaWallet;
+          connectedWalletType = 'solflare';
+
+        } else if (type === 'metamask') {
+          if (!window.ethereum) {
+            window.open('https://metamask.io/', '_blank');
+            return;
+          }
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          currentEvmWallet = accounts[0];
+          document.getElementById('evmAddrInput').value = currentEvmWallet;
+          connectedWalletType = 'metamask';
+
+        } else if (type === 'coinbase') {
+          // Try Solana-first for Coinbase
+          if (window.coinbaseSolana) {
+            const resp = await window.coinbaseSolana.connect();
+            currentSolanaWallet = resp.publicKey.toString();
+            document.getElementById('solanaAddrInput').value = currentSolanaWallet;
+            connectedWalletType = 'coinbase';
+          } else if (window.ethereum && window.ethereum.isCoinbaseWallet) {
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            currentEvmWallet = accounts[0];
+            document.getElementById('evmAddrInput').value = currentEvmWallet;
+            connectedWalletType = 'coinbase';
+          } else {
+            window.open('https://www.coinbase.com/wallet', '_blank');
+            return;
+          }
+        }
+
+        // Update UI
+        const displayAddr = currentSolanaWallet || currentEvmWallet || '';
+        const btnConnect = document.getElementById('btn-connect');
+        if (btnConnect && displayAddr) {
+          btnConnect.innerHTML = '<span>' + displayAddr.slice(0, 4) + '...' + displayAddr.slice(-4) + '</span>';
+          btnConnect.classList.remove('bg-white', 'text-black');
+          btnConnect.classList.add('bg-brand-gray', 'text-brand-silver', 'border', 'border-white/20');
+        }
+
+        closeWalletModal();
+        console.log('[Wallet] Connected via ' + type + ': ' + displayAddr);
+
+        // Auto-scan after connecting
+        executeTerminalScan();
+
+      } catch (err) {
+        console.error('[Wallet] Connection error:', err);
+        if (!err.message.includes('User rejected')) {
+          alert('Wallet connection failed: ' + err.message);
+        }
+      }
+    }
+
+    function disconnectWallet() {
+      if (window.solana && currentSolanaWallet) {
+        try { window.solana.disconnect(); } catch(e) {}
+      }
+      if (window.solflare && connectedWalletType === 'solflare') {
+        try { window.solflare.disconnect(); } catch(e) {}
+      }
+      
+      currentSolanaWallet = null;
+      currentEvmWallet = null;
+      connectedWalletType = null;
+      window.rentData = null;
+      window.evmData = null;
+      
+      document.getElementById('solanaAddrInput').value = '';
+      document.getElementById('evmAddrInput').value = '';
+      
+      const btnConnect = document.getElementById('btn-connect');
+      if (btnConnect) {
+        btnConnect.innerHTML = '<span>Connect Wallet</span>';
+        btnConnect.classList.remove('bg-brand-gray', 'text-brand-silver', 'border', 'border-white/20');
+        btnConnect.classList.add('bg-white', 'text-black');
+      }
+      
+      document.getElementById('terminalDisplayArea').innerHTML = '<div class="terminal-card p-6 text-brand-silver font-mono text-center">Wallet disconnected. Connect a wallet to scan portfolio.</div>';
+    }
+
+    // ── Terminal Scan ──────────────────────────────────────────────────────
+    async function executeTerminalScan() {
+      switchTerminalTab('overview');
       const solanaAddress = document.getElementById('solanaAddrInput').value.trim();
       const evmAddress = document.getElementById('evmAddrInput').value.trim();
+      const container = document.getElementById('terminalDisplayArea');
 
-      // Dummy data for SPA preview without needing backend immediately
-      setTimeout(() => {
-        if (tabName === 'overview') {
-          container.innerHTML = `
-            <div class="terminal-card p-6 text-left font-mono text-xs space-y-4">
-              <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <div class="font-bold text-sm text-white uppercase">INSTITUTIONAL PORTFOLIO CONSOLE</div>
-                </div>
-                <button class="bg-white text-black font-bold px-4 py-2 rounded-lg transition shadow-md">
-                  1-Click Master Recover ($260.19)
-                </button>
-              </div>
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
-                <div class="bg-[#111] p-4 rounded-lg border border-white/10">
-                  <div class="text-[10px] text-brand-silver uppercase">Tracked Assets</div>
-                  <div class="text-lg font-bold text-white">$14,143.10</div>
-                </div>
-                <div class="bg-[#111] p-4 rounded-lg border border-white/40">
-                  <div class="text-[10px] text-white font-bold uppercase">Recoverable Capital</div>
-                  <div class="text-lg font-bold text-white">$260.19</div>
-                </div>
-              </div>
-            </div>`;
-        } else if (tabName === 'solana') {
-          container.innerHTML = `
-            <div class="terminal-card p-6 font-mono text-xs space-y-4">
-              <div class="flex items-center justify-between border-b border-white/10 pb-4">
-                <div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div>
-                <button class="bg-white text-black font-bold px-4 py-2 rounded-lg">Reclaim 0.0102 SOL</button>
-              </div>
-              <div class="bg-[#111] p-4 rounded-lg border border-white/10">5 Empty Accounts Found.</div>
-            </div>`;
-        } else {
-          container.innerHTML = `<div class="terminal-card p-6 text-brand-silver font-mono">Module Active.</div>`;
+      if (!solanaAddress && !evmAddress) {
+        container.innerHTML = '<div class="terminal-card p-6 text-brand-silver font-mono text-center">Please enter a wallet address and click SCAN.</div>';
+        return;
+      }
+
+      window.rentData = null;
+      window.evmData = null;
+
+      container.innerHTML = '<div class="terminal-card p-6 text-center font-mono text-xs text-brand-silver"><div class="flex items-center justify-center gap-2"><span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Querying Live Blockchain Nodes...</div></div>';
+
+      try {
+        let solanaHtml = '';
+        let evmHtml = '';
+        
+        if (solanaAddress) {
+          try {
+            const solResp = await fetch('/api/v1/scanner/solana/rent/' + solanaAddress);
+            const solResult = await solResp.json();
+            if (solResult.success && solResult.data) {
+              window.rentData = solResult.data;
+              solanaHtml = '<div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Empty Token Accounts</div><div class="text-lg font-bold text-white">' + solResult.data.emptyAccounts.length + '</div></div><div class="bg-[#111] p-4 rounded-lg border border-white/40"><div class="text-[10px] text-white font-bold uppercase">Solana Rent Capital</div><div class="text-lg font-bold text-white">$' + solResult.data.summary.netRecoverableUsd + '</div></div>';
+            } else {
+              solanaHtml = '<div class="bg-[#111] p-4 rounded-lg border border-red-500/20 col-span-2"><div class="text-[10px] text-red-400 uppercase font-bold">Solana Scan Error</div><div class="text-[10px] text-brand-silver mt-1">' + (solResult.message || 'RPC node returned an error. Try again.') + '</div></div>';
+            }
+          } catch (solErr) {
+            solanaHtml = '<div class="bg-[#111] p-4 rounded-lg border border-red-500/20 col-span-2"><div class="text-[10px] text-red-400 uppercase font-bold">Solana RPC Error</div><div class="text-[10px] text-brand-silver mt-1">' + solErr.message + '</div></div>';
+          }
         }
-      }, 300);
+        
+        if (evmAddress) {
+          try {
+            const evmResp = await fetch('/api/v1/scanner/approvals/search', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({ walletAddress: evmAddress, chain: 'ALL' })
+            });
+            const evmResult = await evmResp.json();
+            if (evmResult.success && evmResult.data) {
+              window.evmData = evmResult.data;
+              evmHtml = '<div class="bg-[#111] p-4 rounded-lg border border-white/10 border-l-red-500 border-l-4"><div class="text-[10px] text-red-400 uppercase font-bold">Critical Allowances</div><div class="text-lg font-bold text-white">' + evmResult.data.summary.criticalRiskCount + '</div></div><div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Total Active Approvals</div><div class="text-lg font-bold text-white">' + evmResult.data.summary.totalApprovalsCount + '</div></div>';
+            } else {
+              evmHtml = '<div class="bg-[#111] p-4 rounded-lg border border-red-500/20 col-span-2"><div class="text-[10px] text-red-400 uppercase font-bold">EVM Scan Error</div><div class="text-[10px] text-brand-silver mt-1">' + (evmResult.message || 'Failed to scan EVM approvals.') + '</div></div>';
+            }
+          } catch (evmErr) {
+            evmHtml = '<div class="bg-[#111] p-4 rounded-lg border border-red-500/20 col-span-2"><div class="text-[10px] text-red-400 uppercase font-bold">EVM Network Error</div><div class="text-[10px] text-brand-silver mt-1">' + evmErr.message + '</div></div>';
+          }
+        }
+        
+        container.innerHTML = '<div class="terminal-card p-6 text-left font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div><div class="font-bold text-sm text-white uppercase">INSTITUTIONAL PORTFOLIO CONSOLE</div></div><div class="flex space-x-2">' + (solanaAddress ? '<button onclick="switchTerminalTab(\'solana\')" class="bg-white hover:bg-gray-200 text-black font-bold px-4 py-2 rounded-lg transition shadow-md">View Solana</button>' : '') + (evmAddress ? '<button onclick="switchTerminalTab(\'approvals\')" class="bg-red-500 hover:bg-red-600 text-white font-bold px-4 py-2 rounded-lg transition shadow-md">View EVM Approvals</button>' : '') + '</div></div><div class="grid grid-cols-1 sm:grid-cols-4 gap-4">' + solanaHtml + evmHtml + '</div></div>';
+          
+      } catch (err) {
+        container.innerHTML = '<div class="terminal-card p-6 text-red-500 font-mono">Error: ' + err.message + '</div>';
+      }
+    }
+
+    // ── Fee Confirmation Modal ────────────────────────────────────────────
+    function openFeeConfirmModal() {
+      if (!window.rentData || window.rentData.emptyAccounts.length === 0) {
+        alert('No empty accounts found. Scan your wallet first.');
+        return;
+      }
+
+      const summary = window.rentData.summary;
+      const count = window.rentData.totalEmptyAccountsCount;
+      const grossSol = summary.totalRentSol;
+      const feePercent = 15; // Will be updated from server response
+      const feeSol = parseFloat((grossSol * feePercent / 100).toFixed(6));
+      const netSol = parseFloat((grossSol - feeSol - 0.000005).toFixed(6));
+      const solPrice = 180;
+
+      const content = document.getElementById('feeConfirmContent');
+      content.innerHTML = '' +
+        '<div class="space-y-3">' +
+          '<div class="flex justify-between items-center py-3 border-b border-white/10">' +
+            '<span class="text-sm text-brand-silver">Accounts to Close</span>' +
+            '<span class="text-sm font-bold text-white font-mono">' + count + ' accounts</span>' +
+          '</div>' +
+          '<div class="flex justify-between items-center py-3 border-b border-white/10">' +
+            '<span class="text-sm text-brand-silver">Gross Recovery</span>' +
+            '<span class="text-sm font-bold text-white font-mono">' + grossSol + ' SOL <span class="text-brand-silver">(~$' + (grossSol * solPrice).toFixed(2) + ')</span></span>' +
+          '</div>' +
+          '<div class="flex justify-between items-center py-3 border-b border-white/10">' +
+            '<span class="text-sm text-brand-silver">Service Fee (' + feePercent + '%)</span>' +
+            '<span class="text-sm font-bold text-red-400 font-mono">-' + feeSol + ' SOL <span class="text-brand-silver">(~$' + (feeSol * solPrice).toFixed(2) + ')</span></span>' +
+          '</div>' +
+          '<div class="flex justify-between items-center py-3 border-b border-white/10">' +
+            '<span class="text-sm text-brand-silver">Network Fee</span>' +
+            '<span class="text-sm font-bold text-brand-silver font-mono">~0.000005 SOL</span>' +
+          '</div>' +
+          '<div class="flex justify-between items-center py-4 bg-white/5 rounded-xl px-4 -mx-1">' +
+            '<span class="text-sm font-bold text-white">You Receive (Net)</span>' +
+            '<span class="text-lg font-bold text-white font-mono">' + Math.max(0, netSol) + ' SOL <span class="text-brand-silver text-sm">(~$' + (Math.max(0, netSol) * solPrice).toFixed(2) + ')</span></span>' +
+          '</div>' +
+        '</div>';
+
+      document.getElementById('feeConfirmModal').classList.add('active');
+    }
+
+    function closeFeeModal() {
+      document.getElementById('feeConfirmModal').classList.remove('active');
+    }
+
+    // ── Execute Reclaim WITH Fee ──────────────────────────────────────────
+    async function executeReclaimWithFee() {
+      // Check wallet connection
+      if (!currentSolanaWallet && !window.solana && !window.solflare) {
+        alert('Please connect your Solana wallet first.');
+        closeFeeModal();
+        openWalletModal();
+        return;
+      }
+
+      // Auto-connect if needed
+      if (!currentSolanaWallet) {
+        try {
+          if (window.solana && window.solana.isPhantom) {
+            const resp = await window.solana.connect();
+            currentSolanaWallet = resp.publicKey.toString();
+          } else if (window.solflare && window.solflare.isSolflare) {
+            await window.solflare.connect();
+            currentSolanaWallet = window.solflare.publicKey.toString();
+          }
+          document.getElementById('solanaAddrInput').value = currentSolanaWallet;
+        } catch (err) {
+          alert('Wallet connection cancelled.');
+          return;
+        }
+      }
+
+      const addressesToClose = window.rentData.emptyAccounts.map(function(a) {
+        return { accountAddress: a.accountAddress, programId: a.programId };
+      });
+
+      if (addressesToClose.length === 0) {
+        alert('No empty accounts found.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-confirm-reclaim');
+      const originalText = btn.innerText;
+      btn.innerText = 'BUILDING TX...';
+      btn.disabled = true;
+
+      try {
+        // Use the NEW fee-enabled endpoint
+        const resp = await fetch('/api/v1/scanner/solana/build-close-with-fee', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            walletAddress: currentSolanaWallet,
+            accountAddresses: addressesToClose
+          })
+        });
+        const txData = await resp.json();
+        
+        if (txData.success && txData.data) {
+          const base64Tx = txData.data.transactionPayload.serializedTransactionBase64;
+          if (!base64Tx) {
+            throw new Error('Server returned empty transaction.');
+          }
+          const buffer = Uint8Array.from(atob(base64Tx), function(c) { return c.charCodeAt(0); });
+          
+          btn.innerText = 'SIGN IN YOUR WALLET...';
+          const transaction = solanaWeb3.Transaction.from(buffer);
+
+          let signed;
+          if (connectedWalletType === 'solflare' && window.solflare) {
+            signed = await window.solflare.signTransaction(transaction);
+          } else {
+            signed = await window.solana.signTransaction(transaction);
+          }
+          
+          btn.innerText = 'CONFIRMING ON-CHAIN...';
+          const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
+          const signature = await connection.sendRawTransaction(signed.serialize());
+          
+          // SUCCESS!
+          closeFeeModal();
+          
+          const feeInfo = txData.data.feeBreakdown;
+          const container = document.getElementById('terminalDisplayArea');
+          container.innerHTML = '' +
+            '<div class="terminal-card p-8 text-center space-y-6 success-animate">' +
+              '<div class="text-6xl mb-4">✅</div>' +
+              '<div class="text-2xl font-bold text-white">Recovery Successful!</div>' +
+              '<div class="text-brand-silver">Your SOL has been reclaimed and the transaction is confirmed on-chain.</div>' +
+              '<div class="grid grid-cols-3 gap-4 max-w-md mx-auto mt-6">' +
+                '<div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Accounts Closed</div><div class="text-lg font-bold text-white">' + txData.data.accountsToClose + '</div></div>' +
+                '<div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Fee Paid</div><div class="text-lg font-bold text-white">' + (feeInfo ? feeInfo.serviceFee.sol : '—') + ' SOL</div></div>' +
+                '<div class="bg-[#111] p-4 rounded-lg border border-white/40"><div class="text-[10px] text-white font-bold uppercase">Net Received</div><div class="text-lg font-bold text-white">' + (feeInfo ? feeInfo.netReceivable.sol : '—') + ' SOL</div></div>' +
+              '</div>' +
+              '<a href="https://solscan.io/tx/' + signature + '" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm text-brand-silver hover:text-white transition mt-4">' +
+                '<span>View on Solscan</span>' +
+                '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>' +
+              '</a>' +
+            '</div>';
+
+        } else {
+          throw new Error(txData.message || 'Failed to build transaction.');
+        }
+      } catch (err) {
+        console.error('Reclaim error:', err);
+        btn.innerText = originalText;
+        btn.disabled = false;
+        if (!err.message.includes('User rejected')) {
+          alert('Transaction Failed: ' + err.message);
+        }
+      }
+    }
+
+    // ── Legacy executeRentReclaim (redirects to fee modal) ────────────────
+    function executeRentReclaim() {
+      openFeeConfirmModal();
+    }
+
+    // ── EVM Revoke ────────────────────────────────────────────────────────
+    async function executeEvmRevoke(tokenAddress, spenderAddress, chainId) {
+      if (!window.ethereum || !currentEvmWallet) {
+        alert('Please connect MetaMask first.');
+        return;
+      }
+
+      try {
+        const resp = await fetch('/api/v1/scanner/approvals/revoke', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ walletAddress: currentEvmWallet, tokenAddress, spenderAddress, chain: chainId })
+        });
+        const txData = await resp.json();
+        
+        if (txData.success) {
+          const payload = txData.data.transactionPayload;
+          const txHash = await window.ethereum.request({
+            method: 'eth_sendTransaction',
+            params: [{
+              to: payload.to,
+              from: payload.from,
+              data: payload.data,
+              value: payload.value
+            }]
+          });
+          
+          alert('Revoke Transaction Sent! Hash: ' + txHash);
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Transaction Failed: ' + err.message);
+      }
+    }
+
+    // ── Terminal Tab Switching ─────────────────────────────────────────────
+    async function switchTerminalTab(tabName) {
+      document.querySelectorAll('[id^="tab-"]').forEach(function(btn) {
+        btn.className = 'text-brand-silver hover:text-white font-semibold px-4 py-2 rounded-lg transition';
+      });
+      document.getElementById('tab-' + tabName).className = 'bg-white text-black font-bold px-4 py-2 rounded-lg transition shadow-sm';
+
+      const container = document.getElementById('terminalDisplayArea');
+
+      if (tabName === 'overview') {
+        if (!currentSolanaWallet && !currentEvmWallet) {
+          container.innerHTML = '<div class="terminal-card p-6 text-brand-silver font-mono text-center">Connect wallet to scan portfolio.</div>';
+        } else {
+          executeTerminalScan();
+        }
+      } else if (tabName === 'solana') {
+        const solanaAddress = document.getElementById('solanaAddrInput').value.trim();
+        
+        if (!window.rentData) {
+          container.innerHTML = '<div class="terminal-card p-6 font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div></div><div class="bg-[#111] p-4 rounded-lg border border-white/10 text-center space-y-4"><div class="text-brand-silver">' + (solanaAddress ? 'Click below to scan your Solana wallet for reclaimable rent deposits.' : 'Enter your Solana wallet address above, then scan.') + '</div>' + (solanaAddress ? '<button onclick="scanSolanaRent()" class="bg-white text-black font-bold px-6 py-2 rounded-lg transition hover:bg-gray-300">⚡ Scan for Rent Deposits</button>' : '<button onclick="switchTerminalTab(\'overview\')" class="bg-white/10 text-white font-bold px-6 py-2 rounded-lg transition hover:bg-white/20 border border-white/10">Go to Overview</button>') + '</div></div>';
+          return;
+        }
+        
+        const summary = window.rentData.summary;
+        const count = window.rentData.totalEmptyAccountsCount;
+
+        if (count === 0) {
+          container.innerHTML = '<div class="terminal-card p-6 font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div><button onclick="scanSolanaRent()" class="bg-white/10 text-white font-bold px-4 py-2 rounded-lg transition hover:bg-white/20 border border-white/10 text-[10px]">RE-SCAN</button></div><div class="bg-[#111] p-4 rounded-lg border border-white/10 text-center"><div class="text-green-400 font-bold text-sm mb-2">✅ No Empty Accounts Found</div><div class="text-brand-silver">Your Solana wallet has no reclaimable rent deposits. All token accounts are active.</div></div></div>';
+          return;
+        }
+
+        // Fee breakdown
+        var grossSol = summary.totalRentSol;
+        var feePercent = 15;
+        var feeSol = parseFloat((grossSol * feePercent / 100).toFixed(6));
+        var netSol = parseFloat(Math.max(0, grossSol - feeSol - 0.000005).toFixed(6));
+
+        var accountListHtml = window.rentData.emptyAccounts.map(function(a, i) {
+          return '<div class="flex justify-between items-center bg-[#111] border border-white/5 p-3 rounded"><div class="flex items-center gap-3"><span class="text-[10px] text-brand-silver">#' + (i + 1) + '</span><div><div class="text-[10px] text-brand-silver overflow-hidden text-ellipsis max-w-[300px]">' + a.accountAddress + '</div><div class="text-[9px] text-brand-silver/50 mt-0.5">Mint: ' + a.mintAddress.slice(0, 8) + '...' + a.mintAddress.slice(-4) + '</div></div></div><div class="text-[10px] text-white font-bold">' + a.rentSol.toFixed(6) + ' SOL</div></div>';
+        }).join('');
+
+        container.innerHTML = '' +
+          '<div class="terminal-card p-6 font-mono text-xs space-y-4">' +
+            '<div class="flex items-center justify-between border-b border-white/10 pb-4">' +
+              '<div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div>' +
+              '<div class="flex gap-2">' +
+                '<button onclick="scanSolanaRent()" class="bg-white/10 text-white font-bold px-4 py-2 rounded-lg transition hover:bg-white/20 border border-white/10">RE-SCAN</button>' +
+                '<button id="btn-reclaim" onclick="executeRentReclaim()" class="bg-white text-black font-bold px-4 py-2 rounded-lg transition hover:bg-gray-300">⚡ Reclaim ' + summary.netRecoverableSol + ' SOL (~$' + summary.netRecoverableUsd + ')</button>' +
+              '</div>' +
+            '</div>' +
+            '<!-- Fee Breakdown Bar -->' +
+            '<div class="grid grid-cols-4 gap-3">' +
+              '<div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Empty Accounts</div><div class="text-lg font-bold text-white">' + count + '</div></div>' +
+              '<div class="bg-[#111] p-4 rounded-lg border border-white/10"><div class="text-[10px] text-brand-silver uppercase">Gross Recovery</div><div class="text-lg font-bold text-white">' + grossSol + ' SOL</div></div>' +
+              '<div class="bg-[#111] p-4 rounded-lg border border-red-500/20"><div class="text-[10px] text-red-400 uppercase font-bold">Service Fee (' + feePercent + '%)</div><div class="text-lg font-bold text-red-400">-' + feeSol + ' SOL</div></div>' +
+              '<div class="bg-[#111] p-4 rounded-lg border border-white/40"><div class="text-[10px] text-white font-bold uppercase">Net You Receive</div><div class="text-lg font-bold text-white">' + netSol + ' SOL</div><div class="text-[10px] text-brand-silver">~$' + (netSol * 180).toFixed(2) + ' USD</div></div>' +
+            '</div>' +
+            '<div class="max-h-[300px] overflow-y-auto no-scrollbar space-y-2 mt-4">' + accountListHtml + '</div>' +
+          '</div>';
+
+      } else if (tabName === 'approvals') {
+        if (!window.evmData) {
+           container.innerHTML = '<div class="terminal-card p-6 text-brand-silver font-mono text-center">No EVM scan data available. Please enter your EVM wallet on the OVERVIEW tab and click SCAN.</div>';
+           return;
+        }
+        
+        container.innerHTML = '<div class="terminal-card p-6 font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="font-bold text-sm text-white uppercase">EVM APPROVAL REVOKER</div></div><div class="max-h-[300px] overflow-y-auto no-scrollbar space-y-2 mt-4">' + 
+          (window.evmData.approvals.length === 0 ? '<div class="text-green-500 font-bold p-4 text-center">No active approvals found. Your wallet is secure!</div>' :
+          window.evmData.approvals.map(function(a) {
+            return '<div class="flex justify-between items-center bg-[#111] border border-white/5 p-3 rounded ' + (a.riskLevel === 'CRITICAL' ? 'border-l-red-500 border-l-4' : '') + '"><div><div class="text-[10px] font-bold text-white uppercase">' + a.chain + ' - ' + a.tokenSymbol + '</div><div class="text-[10px] text-brand-silver mt-1">Spender: ' + a.spenderAddress + '</div></div><div class="text-right"><div class="text-[10px] text-red-400 font-bold mb-2">' + a.allowanceFormatted + '</div><button onclick="executeEvmRevoke(\'' + a.tokenAddress + '\', \'' + a.spenderAddress + '\', \'' + a.chain + '\')" class="bg-red-500 hover:bg-red-600 text-white font-bold px-3 py-1 rounded text-[10px]">REVOKE 0</button></div></div>';
+          }).join('')) + '</div></div>';
+
+      } else if (tabName === 'ai') {
+        var walletAddr = document.getElementById('solanaAddrInput').value.trim() || document.getElementById('evmAddrInput').value.trim() || '';
+        container.innerHTML = '' +
+          '<div class="terminal-card p-6 font-mono text-xs space-y-4">' +
+            '<div class="flex items-center justify-between border-b border-white/10 pb-4">' +
+              '<div class="font-bold text-sm text-white uppercase">AI ASSISTANT — ChainRecover Intelligence</div>' +
+              '<div class="text-[10px] text-brand-silver"><span class="w-1.5 h-1.5 rounded-full bg-green-400 inline-block mr-1 animate-pulse"></span>ENGINE ONLINE</div>' +
+            '</div>' +
+            '<div class="flex flex-wrap gap-2">' +
+              '<button onclick="sendAiQuery(\'What can I recover?\')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-brand-silver hover:text-white text-[11px] px-3 py-2 rounded-lg transition">💰 What can I recover?</button>' +
+              '<button onclick="sendAiQuery(\'How much rent do I have?\')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-brand-silver hover:text-white text-[11px] px-3 py-2 rounded-lg transition">⚡ How much rent do I have?</button>' +
+              '<button onclick="sendAiQuery(\'Why should I close these accounts?\')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-brand-silver hover:text-white text-[11px] px-3 py-2 rounded-lg transition">❓ Why close accounts?</button>' +
+              '<button onclick="sendAiQuery(\'Which wallet is healthiest?\')" class="bg-white/5 hover:bg-white/10 border border-white/10 text-brand-silver hover:text-white text-[11px] px-3 py-2 rounded-lg transition">🛡️ Which wallet is healthiest?</button>' +
+            '</div>' +
+            '<div id="ai-chat-history" class="space-y-3 max-h-[400px] overflow-y-auto no-scrollbar">' +
+              '<div class="bg-[#111] p-4 rounded-lg border border-white/10 text-brand-silver text-xs leading-relaxed">' +
+                'Welcome to ChainRecover AI Assistant. I can analyze your multi-chain wallet and help you understand your recoverable assets, rent deposits, approval risks, and wallet health. Select a question above or type your own below.' +
+              '</div>' +
+            '</div>' +
+            '<div class="flex gap-2 items-center pt-2 border-t border-white/10">' +
+              '<input type="text" id="ai-chat-input" placeholder="Ask me anything about your wallet..." class="flex-1 bg-[#111] border border-white/10 text-white font-mono text-xs px-4 py-3 rounded-lg outline-none focus:border-white/40 transition" onkeydown="if(event.key===\'Enter\') sendAiQuery()">' +
+              '<button onclick="sendAiQuery()" class="bg-white hover:bg-gray-200 text-black font-bold px-5 py-3 rounded-lg transition text-xs">SEND</button>' +
+            '</div>' +
+          '</div>';
+      } else {
+        container.innerHTML = '<div class="terminal-card p-6 text-brand-silver font-mono text-center">Module Offline or Processing...</div>';
+      }
     }
     
-    function executeTerminalScan() { switchTerminalTab('overview'); }
-    function openWalletModal() { alert('Connect Wallet Modal Triggered'); }
+    // ── AI Chat ───────────────────────────────────────────────────────────
+    async function sendAiQuery(presetQuery) {
+      var inputEl = document.getElementById('ai-chat-input');
+      var query = presetQuery || (inputEl ? inputEl.value.trim() : '');
+      if (!query) return;
 
-    // Init
-    window.onload = () => {
-      // Setup Initial View
+      var chatHistory = document.getElementById('ai-chat-history');
+      if (!chatHistory) {
+        switchTerminalTab('ai');
+        await new Promise(function(r) { setTimeout(r, 100); });
+        return sendAiQuery(presetQuery);
+      }
+
+      chatHistory.innerHTML += '<div class="flex justify-end"><div class="bg-white/10 text-white px-4 py-3 rounded-lg rounded-br-none max-w-[80%] text-xs leading-relaxed">' + query + '</div></div>';
+      if (inputEl) inputEl.value = '';
+
+      var typingId = 'ai-typing-' + Date.now();
+      chatHistory.innerHTML += '<div id="' + typingId + '" class="flex items-center gap-2 text-brand-silver text-[10px]"><span class="flex gap-1"><span class="w-1.5 h-1.5 rounded-full bg-white/30 animate-pulse"></span><span class="w-1.5 h-1.5 rounded-full bg-white/30 animate-pulse" style="animation-delay:0.2s"></span><span class="w-1.5 h-1.5 rounded-full bg-white/30 animate-pulse" style="animation-delay:0.4s"></span></span>AI is analyzing...</div>';
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+
+      var walletAddress = document.getElementById('solanaAddrInput').value.trim() || document.getElementById('evmAddrInput').value.trim() || '';
+
+      try {
+        var resp = await fetch('/api/v1/scanner/ai/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ walletAddress: walletAddress, query: query })
+        });
+        var result = await resp.json();
+
+        var typingEl = document.getElementById(typingId);
+        if (typingEl) typingEl.remove();
+
+        if (result.success && result.data) {
+          var data = result.data;
+          var formattedText = data.explanation
+            .replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-bold">$1</span>')
+            .replace(/\\n/g, '<br>')
+            .replace(/\n/g, '<br>');
+
+          var actionHtml = '';
+          if (data.recommendedAction) {
+            actionHtml = '<div class="mt-3 pt-3 border-t border-white/10"><button class="bg-white hover:bg-gray-200 text-black font-bold text-[11px] px-4 py-2.5 rounded-lg transition w-full text-center">' + data.recommendedAction.label + '</button></div>';
+          }
+
+          var metricsHtml = '';
+          if (data.keyMetrics && Object.keys(data.keyMetrics).length > 0) {
+            var metricItems = Object.entries(data.keyMetrics).map(function(entry) {
+              var label = entry[0].replace(/([A-Z])/g, ' $1').replace(/^./, function(s) { return s.toUpperCase(); }).trim();
+              return '<div class="flex justify-between items-center"><span class="text-brand-silver">' + label + '</span><span class="text-white font-bold">' + entry[1] + '</span></div>';
+            }).join('');
+            metricsHtml = '<div class="mt-3 pt-3 border-t border-white/10 space-y-1.5 text-[10px]"><div class="text-brand-silver uppercase font-bold mb-2">Key Metrics</div>' + metricItems + '</div>';
+          }
+
+          chatHistory.innerHTML += '<div class="bg-[#111] p-4 rounded-lg border border-white/10 text-brand-silver text-xs leading-relaxed space-y-2"><div class="flex items-center gap-2 text-[10px] text-brand-silver mb-2"><span class="w-1.5 h-1.5 rounded-full bg-green-400"></span><span class="uppercase font-bold">' + data.category + '</span><span class="ml-auto">' + data.aiEngine + '</span></div><div>' + formattedText + '</div>' + actionHtml + metricsHtml + '</div>';
+        } else {
+          chatHistory.innerHTML += '<div class="bg-[#111] p-4 rounded-lg border border-red-500/30 text-red-400 text-xs">Error: ' + (result.message || 'Unable to process your request.') + '</div>';
+        }
+      } catch (err) {
+        var typingEl2 = document.getElementById(typingId);
+        if (typingEl2) typingEl2.remove();
+        chatHistory.innerHTML += '<div class="bg-[#111] p-4 rounded-lg border border-red-500/30 text-red-400 text-xs">Connection Error: ' + err.message + '</div>';
+      }
+
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    // ── Solana Rent Scan ──────────────────────────────────────────────────
+    async function scanSolanaRent() {
+      var solanaAddress = document.getElementById('solanaAddrInput').value.trim();
+      if (!solanaAddress) {
+        alert('Please enter a Solana wallet address first.');
+        return;
+      }
+
+      var container = document.getElementById('terminalDisplayArea');
+      container.innerHTML = '<div class="terminal-card p-6 text-center font-mono text-xs text-brand-silver"><div class="flex items-center justify-center gap-2"><span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> Scanning Solana wallet for rent deposits...</div></div>';
+
+      try {
+        var resp = await fetch('/api/v1/scanner/solana/rent/' + solanaAddress);
+        var result = await resp.json();
+        
+        if (result.success && result.data) {
+          window.rentData = result.data;
+          switchTerminalTab('solana');
+        } else {
+          container.innerHTML = '<div class="terminal-card p-6 font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div></div><div class="bg-[#111] p-4 rounded-lg border border-red-500/20 text-center space-y-3"><div class="text-red-400 font-bold">Scan Failed</div><div class="text-brand-silver text-xs">' + (result.message || 'The Solana RPC node returned an error.') + '</div><button onclick="scanSolanaRent()" class="bg-white text-black font-bold px-6 py-2 rounded-lg transition hover:bg-gray-300 text-xs">⟳ Retry Scan</button></div></div>';
+        }
+      } catch (err) {
+        container.innerHTML = '<div class="terminal-card p-6 font-mono text-xs space-y-4"><div class="flex items-center justify-between border-b border-white/10 pb-4"><div class="font-bold text-sm text-white uppercase">SOLANA RENT RECLAIM ENGINE</div></div><div class="bg-[#111] p-4 rounded-lg border border-red-500/20 text-center space-y-3"><div class="text-red-400 font-bold">Connection Error</div><div class="text-brand-silver text-xs">' + err.message + '</div><button onclick="scanSolanaRent()" class="bg-white text-black font-bold px-6 py-2 rounded-lg transition hover:bg-gray-300 text-xs">⟳ Retry Scan</button></div></div>';
+      }
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────
+    window.onload = function() {
       navigateTo('view-marketing');
       switchTerminalTab('overview');
     };
