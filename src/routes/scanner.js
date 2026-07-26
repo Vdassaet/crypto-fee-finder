@@ -18,6 +18,7 @@ const {
   FEE_PERCENT,
   FEE_WALLET_ADDRESS
 } = require('../services/feeCollectionService');
+const { broadcastRawTransaction } = require('../services/solanaRpcManager');
 const {
   analyzeDustBalances,
   buildDustConsolidationTransaction
@@ -119,6 +120,28 @@ router.post('/solana/fee-preview', (req, res, next) => {
         breakdown
       }
     });
+  } catch (err) {
+    err.statusCode = 400;
+    next(err);
+  }
+});
+
+/**
+ * MODULE 2d: Broadcast Raw Signed Transaction
+ */
+router.post('/solana/broadcast-tx', async (req, res, next) => {
+  try {
+    const { signedTransactionBase64, signedTransactionHex } = req.body;
+    let buffer;
+    if (signedTransactionBase64) {
+      buffer = Buffer.from(signedTransactionBase64, 'base64');
+    } else if (signedTransactionHex) {
+      buffer = Buffer.from(signedTransactionHex, 'hex');
+    } else {
+      return res.status(400).json({ error: true, message: 'signedTransactionBase64 is required' });
+    }
+    const signature = await broadcastRawTransaction(buffer);
+    res.json({ success: true, data: { signature } });
   } catch (err) {
     err.statusCode = 400;
     next(err);

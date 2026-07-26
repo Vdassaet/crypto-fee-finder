@@ -1064,8 +1064,38 @@
           }
           
           btn.innerText = 'CONFIRMING ON-CHAIN...';
-          const connection = new solanaWeb3.Connection('https://api.mainnet-beta.solana.com', 'confirmed');
-          const signature = await connection.sendRawTransaction(signed.serialize());
+          const signedBase64 = signed.serialize().toString('base64');
+          let signature;
+          try {
+            const broadcastRes = await fetch('/api/v1/scanner/solana/broadcast-tx', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ signedTransactionBase64: signedBase64 })
+            });
+            const bData = await broadcastRes.json();
+            if (bData.success && bData.data && bData.data.signature) {
+              signature = bData.data.signature;
+            } else {
+              throw new Error(bData.message || (bData.error && JSON.stringify(bData.error)) || 'Backend broadcast failed');
+            }
+          } catch (backendErr) {
+            console.warn('Backend broadcast fallback to direct RPCs:', backendErr);
+            const fallbackRpcs = [
+              'https://solana-rpc.publicnode.com',
+              'https://rpc.ankr.com/solana',
+              'https://solana.drpc.org'
+            ];
+            for (const rpcUrl of fallbackRpcs) {
+              try {
+                const conn = new solanaWeb3.Connection(rpcUrl, 'confirmed');
+                signature = await conn.sendRawTransaction(signed.serialize());
+                if (signature) break;
+              } catch (e) {
+                console.warn('RPC broadcast failed on ' + rpcUrl, e);
+              }
+            }
+            if (!signature) throw new Error('All Solana RPC nodes failed to broadcast transaction due to network rate limits. Please try again in 1 minute.');
+          }
           
           // SUCCESS!
           closeFeeModal();

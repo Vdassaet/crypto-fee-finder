@@ -9,9 +9,7 @@
 
 const { Connection, PublicKey, Transaction } = require('@solana/web3.js');
 const { createCloseAccountInstruction, TOKEN_PROGRAM_ID } = require('@solana/spl-token');
-
-const RPC_URL = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
-const connection = new Connection(RPC_URL, 'confirmed');
+const { getConnection, withRetry } = require('./solanaRpcManager');
 
 const TOKEN_2022_PROGRAM_ID = new PublicKey('TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb');
 
@@ -45,12 +43,13 @@ async function findEmptyTokenAccounts(walletPubKeyStr) {
 
   const owner = toPublicKey(walletPubKeyStr);
   
-  // Fetch SPL Token (classic)
-  const tokenAccounts = await connection.getParsedTokenAccountsByOwner(owner, { programId: TOKEN_PROGRAM_ID });
-  // Fetch SPL Token 2022
-  const token2022Accounts = await connection.getParsedTokenAccountsByOwner(owner, { programId: TOKEN_2022_PROGRAM_ID });
-  
-  const allAccounts = [...tokenAccounts.value, ...token2022Accounts.value];
+  // Fetch SPL Token (classic) + Token 2022 with retry/rotation on rate limit
+  const allAccounts = await withRetry(async function(conn) {
+    const tokenAccounts = await conn.getParsedTokenAccountsByOwner(owner, { programId: TOKEN_PROGRAM_ID });
+    const token2022Accounts = await conn.getParsedTokenAccountsByOwner(owner, { programId: TOKEN_2022_PROGRAM_ID });
+    return [...tokenAccounts.value, ...token2022Accounts.value];
+  });
+
   const emptyAccounts = [];
 
   for (const account of allAccounts) {
@@ -141,8 +140,10 @@ async function buildCloseAccountTransaction(walletPubKeyStr, accountAddressesToC
     }
   }
 
-  // Get live blockhash
-  const { blockhash } = await connection.getLatestBlockhash('confirmed');
+  // Get live blockhash with retry
+  const { blockhash } = await withRetry(async function(conn) {
+    return conn.getLatestBlockhash('confirmed');
+  });
   transaction.recentBlockhash = blockhash;
   transaction.feePayer = walletOwnerPubKey;
 

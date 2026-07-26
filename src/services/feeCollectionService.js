@@ -9,18 +9,15 @@
  */
 
 const {
-  Connection,
   PublicKey,
   Transaction,
   SystemProgram,
   LAMPORTS_PER_SOL
 } = require('@solana/web3.js');
 const { createCloseAccountInstruction, TOKEN_PROGRAM_ID } = require('@solana/spl-token');
+const { withRetry } = require('./solanaRpcManager');
 
 // ── Configuration ──────────────────────────────────────────────────────────
-const RPC_URL = process.env.SOLANA_RPC_URL || 'https://api.mainnet-beta.solana.com';
-const connection = new Connection(RPC_URL, 'confirmed');
-
 const FEE_WALLET_ADDRESS = process.env.FEE_WALLET_ADDRESS || '';
 const FEE_PERCENT = parseFloat(process.env.FEE_PERCENT) || 15;
 
@@ -154,7 +151,9 @@ async function buildCloseWithFeeTransaction(walletPubKeyStr, accountAddressesToC
   }
 
   // ── Step 3: Set blockhash and serialize ────────────────────────────────
-  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('confirmed');
+  const { blockhash, lastValidBlockHeight } = await withRetry(async function(conn) {
+    return conn.getLatestBlockhash('confirmed');
+  });
   transaction.recentBlockhash = blockhash;
   transaction.feePayer = walletOwnerPubKey;
 
